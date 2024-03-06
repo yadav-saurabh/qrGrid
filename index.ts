@@ -1,4 +1,7 @@
 const FINDER_PATTERN_SIZE = 7;
+const ALIGNMENT_PATTERN_SIZE = 5;
+
+type PatternSize = typeof FINDER_PATTERN_SIZE | typeof ALIGNMENT_PATTERN_SIZE;
 
 class QR {
   data: Uint8Array;
@@ -8,13 +11,14 @@ class QR {
     this.size = size;
     this.data = new Uint8Array(size * size);
     this.fillBlock(FINDER_PATTERN_SIZE);
+    this.fillTimingPattern();
     this.print();
   }
 
-  // fill block
+  // fill block with 1
   // finderPattern -> patternSize : 7
-  // timelineBlock -> patternSize : 5
-  fillBlock(patternSize: number, x = 0, y = 0) {
+  // alignmentPattern -> patternSize : 5
+  fillBlock(patternSize: PatternSize, x = 0, y = 0) {
     const height = patternSize + x - 1;
     const width = patternSize + y - 1;
     for (let i = x; i <= height; i++) {
@@ -41,6 +45,18 @@ class QR {
           this.data[bottomLIndex] = 1;
         }
       }
+    }
+  }
+
+  // fill timingPattern with 1
+  fillTimingPattern() {
+    let length = this.size - FINDER_PATTERN_SIZE * 2 - 2;
+    for (let i = 1; i <= length; i = i + 2) {
+      const hIndex = FINDER_PATTERN_SIZE + i + this.size * 6;
+      const vIndex = (FINDER_PATTERN_SIZE + i) * this.size + 6;
+
+      this.data[hIndex] = 1;
+      this.data[vIndex] = 1;
     }
   }
 
