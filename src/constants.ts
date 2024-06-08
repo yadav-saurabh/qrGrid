@@ -104,6 +104,14 @@ export const MODE_INDICATOR = {
 };
 
 /**
+ * get version range of the qr based on the character count
+ * - index 0 : v < 9
+ * - index 1 : v < 26
+ * - index 2 : v < 40
+ */
+export const CHARACTER_COUNT_MAX_VERSION = [9, 26, 40];
+
+/**
  * Number of bits in Character Count Indicator for different mode and Qr version
  * - v 01-09 : index 0
  * - v 10-26 : index 1

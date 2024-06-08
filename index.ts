@@ -1,6 +1,6 @@
 // export * as default from "./src/index";
 
-import QR from "./src/index";
+import { QR } from "./src/index";
 
 // console.log("version: 1");
 // new QR(1);
@@ -15,7 +15,7 @@ import QR from "./src/index";
 // console.log("version: 6");
 // new QR(6);
 // console.log("version: 7");
-new QR("Hello123 HHBC", { errorCorrection: "M" });
+new QR("Hello 1234", { errorCorrection: "M" });
 // console.log("version: 8");
 // new QR(8);
 // console.log("version: 9");
