@@ -22,14 +22,21 @@ export const regexString = {
 export function getBitsLength(data: Segments[0]) {
   if (data.mode === Mode.Numeric) {
     return (
-      MODE_BITS[Mode.Numeric][2] * Math.floor(data.value.length / 3) +
-      (data.value.length % 3 ? (data.value.length % 3) * 3 + 1 : 0)
+      MODE_BITS[Mode.Numeric][2] *
+        Math.floor(data.value.length / MODE_BITS[Mode.Numeric].length) +
+      (data.value.length % MODE_BITS[Mode.Numeric].length
+        ? (data.value.length % MODE_BITS[Mode.Numeric].length) *
+            MODE_BITS[Mode.Numeric].length +
+          1
+        : 0)
     );
   }
   if (data.mode === Mode.AlphaNumeric) {
     return (
-      MODE_BITS[Mode.AlphaNumeric][1] * Math.floor(data.value.length / 2) +
-      MODE_BITS[Mode.AlphaNumeric][0] * (data.value.length % 2)
+      MODE_BITS[Mode.AlphaNumeric][1] *
+        Math.floor(data.value.length / MODE_BITS[Mode.AlphaNumeric].length) +
+      MODE_BITS[Mode.AlphaNumeric][0] *
+        (data.value.length % MODE_BITS[Mode.AlphaNumeric].length)
     );
   }
   return data.value.length * MODE_BITS[Mode.Byte][0];

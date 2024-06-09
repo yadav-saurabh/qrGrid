@@ -145,7 +145,11 @@ export const MODE_BITS = {
   [Mode.Kanji]: [13],
 };
 
-export const INPUT_DATA_CAPACITY = {
+type InputDataCapacity = Record<
+  Mode,
+  Record<ErrorCorrectionLevel, Array<number>>
+>;
+export const INPUT_DATA_CAPACITY: InputDataCapacity = {
   [Mode.Numeric]: {
     [ErrorCorrectionLevel.L]: [
       41, 77, 127, 187, 255, 322, 370, 461, 552, 652, 772, 883, 1022, 1101,
@@ -214,5 +218,11 @@ export const INPUT_DATA_CAPACITY = {
       310, 338, 382, 403, 439, 461, 511, 535, 593, 625, 658, 698, 742, 790, 842,
       898, 958, 983, 1051, 1093, 1139, 1219, 1273,
     ],
+  },
+  [Mode.Kanji]: {
+    [ErrorCorrectionLevel.L]: [],
+    [ErrorCorrectionLevel.M]: [],
+    [ErrorCorrectionLevel.Q]: [],
+    [ErrorCorrectionLevel.H]: [],
   },
 };
