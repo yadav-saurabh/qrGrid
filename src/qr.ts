@@ -53,23 +53,24 @@ export class QR {
     let version: number = 0;
 
     ccLoop: for (let ccIndex = 0; ccIndex < 3; ccIndex++) {
-      let bitSize: number = 0;
-      this.segments.forEach((d) => {
-        bitSize +=
-          MODE_INDICATOR_BITS + MODE_BITS[d.mode][ccIndex] + getBitsLength(d);
-      });
       const isMixedMode = this.segments.length > 1;
-      let maxCapacityIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex];
-      let mode = isMixedMode ? Mode.Byte : this.segments[0].mode;
-      let size = isMixedMode ? bitSize : this.segments[0].value.length;
-
+      const mode = isMixedMode ? Mode.Byte : this.segments[0].mode;
       const capacityArray = INPUT_DATA_CAPACITY[mode][this.errorCorrection];
+      const maxCapacityIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex];
+      let bitSize: number = isMixedMode ? 0 : this.segments[0].value.length;
 
       const maxDataCapacity = isMixedMode
         ? (capacityArray[maxCapacityIndex - 1] + 2) * 8
         : capacityArray[maxCapacityIndex - 1];
 
-      if (size <= maxDataCapacity) {
+      if (isMixedMode) {
+        this.segments.forEach((d) => {
+          bitSize +=
+            MODE_INDICATOR_BITS + MODE_BITS[d.mode][ccIndex] + getBitsLength(d);
+        });
+      }
+
+      if (bitSize <= maxDataCapacity) {
         let startIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex - 1] - 1 || 0;
 
         for (let i = startIndex; i < maxCapacityIndex; i++) {
@@ -77,7 +78,7 @@ export class QR {
             ? (capacityArray[i] + 2) * 8
             : capacityArray[i];
 
-          if (size <= capacity) {
+          if (bitSize <= capacity) {
             version = i + 1;
             break ccLoop;
           }

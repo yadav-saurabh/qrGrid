@@ -20,24 +20,22 @@ export const regexString = {
  * get the bit length for the given segment
  */
 export function getBitsLength(data: Segments[0]) {
+  const dataLength = data.value.length;
   if (data.mode === Mode.Numeric) {
+    const maxModeBit = MODE_BITS[Mode.AlphaNumeric][2];
+    const modeLength = MODE_BITS[Mode.Numeric].length;
     return (
-      MODE_BITS[Mode.Numeric][2] *
-        Math.floor(data.value.length / MODE_BITS[Mode.Numeric].length) +
-      (data.value.length % MODE_BITS[Mode.Numeric].length
-        ? (data.value.length % MODE_BITS[Mode.Numeric].length) *
-            MODE_BITS[Mode.Numeric].length +
-          1
-        : 0)
+      maxModeBit * Math.floor(dataLength / modeLength) +
+      (dataLength % modeLength ? (dataLength % modeLength) * modeLength + 1 : 0)
     );
   }
   if (data.mode === Mode.AlphaNumeric) {
+    const [firstBit, secondBit] = MODE_BITS[Mode.AlphaNumeric];
+    const modeLength = MODE_BITS[Mode.AlphaNumeric].length;
     return (
-      MODE_BITS[Mode.AlphaNumeric][1] *
-        Math.floor(data.value.length / MODE_BITS[Mode.AlphaNumeric].length) +
-      MODE_BITS[Mode.AlphaNumeric][0] *
-        (data.value.length % MODE_BITS[Mode.AlphaNumeric].length)
+      secondBit * Math.floor(dataLength / modeLength) +
+      firstBit * (dataLength % modeLength)
     );
   }
-  return data.value.length * MODE_BITS[Mode.Byte][0];
+  return dataLength * MODE_BITS[Mode.Byte][0];
 }
