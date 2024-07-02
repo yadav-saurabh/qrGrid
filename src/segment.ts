@@ -51,13 +51,13 @@ function getOptimizedSegments(segments: Segments): Segments {
     [GRAPH_START_NODE]: {},
   };
   let nodes: Record<string, Segments[0]> = {};
-  let previousKeys: string[] = [GRAPH_START_NODE];
+  let keys: string[] = [GRAPH_START_NODE];
 
   // generate a graph of all possible mode as nodes and bits as their weight
   for (let segmentIndex = 0; segmentIndex < segments.length; segmentIndex++) {
     const element = segments[segmentIndex];
     let connects: Segments = [element];
-    let keys: string[] = [];
+    let currentKeys: string[] = [];
 
     // add other possible mode types
     if (element.mode === Mode.Numeric) {
@@ -75,11 +75,11 @@ function getOptimizedSegments(segments: Segments): Segments {
       const connectElement = connects[connectIndex];
       const key = `${segmentIndex}${connectIndex}`;
       nodes[key] = connectElement;
-      keys.push(key);
+      currentKeys.push(key);
 
       // calculate bite and add to the previous nodes
-      for (let i = 0; i < previousKeys.length; i++) {
-        const graphKey = previousKeys[i];
+      for (let i = 0; i < keys.length; i++) {
+        const graphKey = keys[i];
         const bitLength = getBitsLength(connectElement);
 
         // if previous node is same as current then no mode indicator and character count indicator bits
@@ -89,14 +89,14 @@ function getOptimizedSegments(segments: Segments): Segments {
           graph[graphKey][key] =
             bitLength +
             MODE_INDICATOR_BITS +
-            CHARACTER_COUNT_INDICATOR[connectElement.mode][0];
+            CHARACTER_COUNT_INDICATOR[connectElement.mode][2]; // assuming the highest cc bit
         }
       }
       // if graph ends add end node
       graph[key] =
         segmentIndex === segments.length - 1 ? { [GRAPH_END_NODE]: 0 } : {};
     }
-    previousKeys = keys;
+    keys = currentKeys;
   }
 
   const result = dijkstra({ ...graph, end: {} }, GRAPH_START_NODE);

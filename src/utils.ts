@@ -22,10 +22,10 @@ export const regexString = {
 export function getBitsLength(data: Segments[0]) {
   const dataLength = data.value.length;
   if (data.mode === Mode.Numeric) {
-    const maxModeBit = MODE_BITS[Mode.AlphaNumeric][2];
+    const leastModeBit = MODE_BITS[Mode.Numeric][0];
     const modeLength = MODE_BITS[Mode.Numeric].length;
     return (
-      maxModeBit * Math.floor(dataLength / modeLength) +
+      leastModeBit * Math.floor(dataLength / modeLength) +
       (dataLength % modeLength ? (dataLength % modeLength) * modeLength + 1 : 0)
     );
   }

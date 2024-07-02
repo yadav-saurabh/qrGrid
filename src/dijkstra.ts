@@ -19,17 +19,15 @@ class PriorityQueue<T> {
 }
 
 type Graph = { [key: string]: { [key: string]: number } };
+type DijkstraReturn = {
+  distances: { [key: string]: number };
+  previous: { [key: string]: string | null };
+};
 
 /**
  * dijkstra implementation
  */
-export function dijkstra(
-  graph: Graph,
-  start: string
-): {
-  distances: { [key: string]: number };
-  previous: { [key: string]: string | null };
-} {
+export function dijkstra(graph: Graph, start: string): DijkstraReturn {
   const distances: { [key: string]: number } = {};
   const previous: { [key: string]: string | null } = {};
   const pq = new PriorityQueue<string>();

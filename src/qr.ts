@@ -52,6 +52,7 @@ export class QR {
   private getVersion() {
     let version: number = 0;
 
+    // outer loop character count (CHARACTER_COUNT_INDICATOR length max is 3)
     ccLoop: for (let ccIndex = 0; ccIndex < 3; ccIndex++) {
       const isMixedMode = this.segments.length > 1;
       const mode = isMixedMode ? Mode.Byte : this.segments[0].mode;
@@ -73,6 +74,7 @@ export class QR {
       if (bitSize <= maxDataCapacity) {
         let startIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex - 1] - 1 || 0;
 
+        // inner loop qr version
         for (let i = startIndex; i < maxCapacityIndex; i++) {
           const capacity = isMixedMode
             ? (capacityArray[i] + 2) * 8
