@@ -2,15 +2,23 @@ import {
   ALIGNMENT_PATTERN_DIFFS,
   ALIGNMENT_PATTERN_SIZE,
   ALIGNMENT_PATTERN_TOTALS,
+  CHARACTER_COUNT_INDICATOR,
   CHARACTER_COUNT_MAX_VERSION,
+  CODEWORDS,
+  ERROR_CORRECTION_CODEWORDS,
   FINDER_PATTERN_SIZE,
   INPUT_DATA_CAPACITY,
   MODE_BITS,
+  MODE_INDICATOR,
   MODE_INDICATOR_BITS,
 } from "./constants";
 import { ErrorCorrectionLevel, Mode } from "./enums";
 import { getSegments } from "./segment";
-import { getBitsLength } from "./utils";
+import {
+  getBinaryString,
+  getBitsLength,
+  getCharacterCountIndicator,
+} from "./utils";
 
 type PatternSize = typeof FINDER_PATTERN_SIZE | typeof ALIGNMENT_PATTERN_SIZE;
 export type Segments = Array<{ value: string; mode: Mode }>;
@@ -25,6 +33,7 @@ export class QR {
   noOfModules: number;
   version: number;
   errorCorrection: ErrorCorrectionLevel;
+  // private codeWord: Uint8Array;
 
   constructor(inputData: string, options?: QrOptions) {
     if (!inputData) {
@@ -40,13 +49,39 @@ export class QR {
     this.noOfModules = this.version * 4 + 17;
 
     this.data = new Uint8Array(this.noOfModules * this.noOfModules);
+    // this.codeWord = new Uint8Array();
 
     console.log(this);
 
+    this.encodeData();
     this.fillFinderPattern();
     this.fillTimingPattern();
     this.fillAlignmentPattern();
     this.print();
+  }
+
+  private encodeData() {
+    const codeWord = new Array();
+
+    for (let index = 0; index < this.segments.length; index++) {
+      const segment = this.segments[index];
+      codeWord.push(MODE_INDICATOR[segment.mode]);
+      const pad = getCharacterCountIndicator(segment.mode, this.version);
+      codeWord.push(this.inputData.length.toString(2).padStart(pad, "0"));
+      codeWord.push(...getBinaryString(segment));
+      // codeWord.push();
+      // console.log(Object.values(Mode).indexOf(segment.mode));
+    }
+    const totalCodeWord = CODEWORDS[this.version - 1];
+    const ecTotalCodeWord =
+      ERROR_CORRECTION_CODEWORDS[
+        (this.version - 1) * 4 +
+          Object.values(ErrorCorrectionLevel).indexOf(this.errorCorrection)
+      ];
+
+    console.log({ totalCodeWord, ecTotalCodeWord });
+
+    console.log(codeWord);
   }
 
   private getVersion() {

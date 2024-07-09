@@ -16,5 +16,5 @@ export enum Mode {
   Numeric = "Numeric",
   AlphaNumeric = "AlphaNumeric",
   Byte = "Byte",
-  Kanji = "kanji",
+  Kanji = "Kanji",
 }

@@ -1,5 +1,9 @@
 import { Segments } from "./qr";
-import { MODE_BITS } from "./constants";
+import {
+  ALPHANUMERIC_CHARSET,
+  CHARACTER_COUNT_INDICATOR,
+  MODE_BITS,
+} from "./constants";
 import { Mode } from "./enums";
 
 /**
@@ -38,4 +42,83 @@ export function getBitsLength(data: Segments[0]) {
     );
   }
   return dataLength * MODE_BITS[Mode.Byte][0];
+}
+
+/**
+ * get the bit of character count indicator
+ */
+export function getCharacterCountIndicator(mode: Mode, version: number) {
+  let index = 0;
+  if (version > 9) {
+    index = 1;
+  } else if (version > 26) {
+    index = 2;
+  }
+  return CHARACTER_COUNT_INDICATOR[mode][index];
+}
+
+/**
+ * get the binary string for the given mode
+ */
+export function getBinaryString(data: Segments[0]) {
+  let bitString: string[] = [];
+  const { value, mode } = data;
+
+  if (mode === Mode.Numeric) {
+    for (let i = 0; i < value.length; i = i + 3) {
+      const first = value[i];
+      const second = value[i + 1] || null;
+      const third = value[i + 2] || null;
+      let bitStringValue = "";
+
+      if (third !== null) {
+        let num = Number(first + second + third);
+        bitStringValue = num
+          .toString(2)
+          .padStart(MODE_BITS[Mode.Numeric][2], "0");
+      } else if (second !== null) {
+        let num = Number(first + second);
+        bitStringValue = num
+          .toString(2)
+          .padStart(MODE_BITS[Mode.Numeric][1], "0");
+      } else {
+        let num = Number(first);
+        bitStringValue = num
+          .toString(2)
+          .padStart(MODE_BITS[Mode.Numeric][0], "0");
+      }
+      bitString.push(bitStringValue);
+    }
+  }
+  if (mode === Mode.AlphaNumeric) {
+    for (let i = 0; i < value.length; i = i + 2) {
+      const first = ALPHANUMERIC_CHARSET.indexOf(value[i]);
+      const second = value[i + 1]
+        ? ALPHANUMERIC_CHARSET.indexOf(value[i])
+        : null;
+      let bitStringValue = "";
+      if (second !== null) {
+        let num = first * 45 + second;
+        bitStringValue = num
+          .toString(2)
+          .padStart(MODE_BITS[Mode.AlphaNumeric][1], "0");
+      } else {
+        let num = first;
+        bitStringValue = num
+          .toString(2)
+          .padStart(MODE_BITS[Mode.AlphaNumeric][0], "0");
+      }
+      bitString.push(bitStringValue);
+    }
+  }
+  if (mode === Mode.Byte) {
+    for (let i = 0; i < value.length; i++) {
+      let num = value.charCodeAt(i);
+      const bitStringValue = num
+        .toString(2)
+        .padStart(MODE_BITS[Mode.Byte][0], "0");
+      bitString.push(bitStringValue);
+    }
+  }
+  return bitString;
 }
