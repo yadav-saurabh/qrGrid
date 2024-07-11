@@ -95,6 +95,10 @@ export const MODE_INDICATOR_BITS = 4;
 
 /**
  * Mode Indicator values for different modes
+ * - Numeric:       0001 (0x1)
+ * - AlphaNumeric:  0010 (0x2)
+ * - Byte:          0100 (0x4)
+ * - Kanji:         1000 (08)
  */
 export const MODE_INDICATOR = {
   [Mode.Numeric]: "0001",
@@ -228,13 +232,21 @@ export const INPUT_DATA_CAPACITY: InputDataCapacity = {
 };
 
 /**
+ * Pad Codewords
+ * - 11101100 (0xEC) : index 0
+ * - 00010001 (0x11) : index 1
+ */
+export const PAD_CODEWORDS = [0xec, 0x11];
+
+/**
  * Number of data Codewords for Qr version
  * - v 1 : index 0
  * - v 2 : index 1
  * - v 3 : index 2
  * - ...
  * @example // to get the value of a specific version
- *   codewords = CODEWORDS[version - 1]
+ *   index = version - 1
+ *   codewords = CODEWORDS[index]
  */
 export const CODEWORDS = [
   26, 44, 70, 100, 134, 172, 196, 242, 292, 346, 404, 466, 532, 581, 655, 733,
@@ -259,6 +271,8 @@ export const CODEWORDS = [
  *   codewords = ERROR_CORRECTION_CODEWORDS[(version - 1) * 4 + 3]
  */
 export const ERROR_CORRECTION_CODEWORDS = [
+  // [ErrorCorrectionLevel.L]: [
+  // ],
   7, 10, 13, 17, 10, 16, 22, 28, 15, 26, 36, 44, 20, 36, 52, 64, 26, 48, 72, 88,
   36, 64, 96, 112, 40, 72, 108, 130, 48, 88, 132, 156, 60, 110, 160, 192, 72,
   130, 192, 224, 80, 150, 224, 264, 96, 176, 260, 308, 104, 198, 288, 352, 120,
@@ -270,4 +284,31 @@ export const ERROR_CORRECTION_CODEWORDS = [
   1350, 1620, 540, 980, 1440, 1710, 570, 1036, 1530, 1800, 570, 1064, 1590,
   1890, 600, 1120, 1680, 1980, 630, 1204, 1770, 2100, 660, 1260, 1860, 2220,
   720, 1316, 1950, 2310, 750, 1372, 2040, 2430,
+];
+
+/**
+ * Number of data Codewords for different error correction level and Qr version
+ * - ErrorCorrectionLevel L : ERROR_CORRECTION_BLOCK[(version - 1) * 4 + 0]
+ * - ErrorCorrectionLevel M : ERROR_CORRECTION_BLOCK[(version - 1) * 4 + 1]
+ * - ErrorCorrectionLevel H : ERROR_CORRECTION_BLOCK[(version - 1) * 4 + 2]
+ * - ErrorCorrectionLevel Q : ERROR_CORRECTION_BLOCK[(version - 1) * 4 + 3]
+ * @example // to get the value of a specific mode and version
+ * if ErrorCorrectionLevel === L
+ *   codewords = ERROR_CORRECTION_BLOCK[(version - 1) * 4 + 0]
+ * if ErrorCorrectionLevel === M
+ *   codewords = ERROR_CORRECTION_BLOCK[(version - 1) * 4 + 1]
+ * if ErrorCorrectionLevel === Q
+ *   codewords = ERROR_CORRECTION_BLOCK[(version - 1) * 4 + 2]
+ * if ErrorCorrectionLevel === H
+ *   codewords = ERROR_CORRECTION_BLOCK[(version - 1) * 4 + 3]
+ */
+export const ERROR_CORRECTION_BLOCK = [
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 2, 4, 1, 2, 4, 4, 2, 4, 4, 4, 2, 4,
+  6, 5, 2, 4, 6, 6, 2, 5, 8, 8, 4, 5, 8, 8, 4, 5, 8, 11, 4, 8, 10, 11, 4, 9, 12,
+  16, 4, 9, 16, 16, 6, 10, 12, 18, 6, 10, 17, 16, 6, 11, 16, 19, 6, 13, 18, 21,
+  7, 14, 21, 25, 8, 16, 20, 25, 8, 17, 23, 25, 9, 17, 23, 34, 9, 18, 25, 30, 10,
+  20, 27, 32, 12, 21, 29, 35, 12, 23, 34, 37, 12, 25, 34, 40, 13, 26, 35, 42,
+  14, 28, 38, 45, 15, 29, 40, 48, 16, 31, 43, 51, 17, 33, 45, 54, 18, 35, 48,
+  57, 19, 37, 51, 60, 19, 38, 53, 63, 20, 40, 56, 66, 21, 43, 59, 70, 22, 45,
+  62, 74, 24, 47, 65, 77, 25, 49, 68, 81,
 ];

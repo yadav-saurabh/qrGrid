@@ -2,17 +2,19 @@ import {
   ALIGNMENT_PATTERN_DIFFS,
   ALIGNMENT_PATTERN_SIZE,
   ALIGNMENT_PATTERN_TOTALS,
-  CHARACTER_COUNT_INDICATOR,
   CHARACTER_COUNT_MAX_VERSION,
   CODEWORDS,
+  ERROR_CORRECTION_BLOCK,
   ERROR_CORRECTION_CODEWORDS,
   FINDER_PATTERN_SIZE,
   INPUT_DATA_CAPACITY,
   MODE_BITS,
   MODE_INDICATOR,
   MODE_INDICATOR_BITS,
+  PAD_CODEWORDS,
 } from "./constants";
 import { ErrorCorrectionLevel, Mode } from "./enums";
+import { rsEncode } from "./reed-solomon";
 import { getSegments } from "./segment";
 import {
   getBinaryString,
@@ -61,27 +63,45 @@ export class QR {
   }
 
   private encodeData() {
-    const codeWord = new Array();
+    let bitString = "";
 
     for (let index = 0; index < this.segments.length; index++) {
       const segment = this.segments[index];
-      codeWord.push(MODE_INDICATOR[segment.mode]);
-      const pad = getCharacterCountIndicator(segment.mode, this.version);
-      codeWord.push(this.inputData.length.toString(2).padStart(pad, "0"));
-      codeWord.push(...getBinaryString(segment));
-      // codeWord.push();
-      // console.log(Object.values(Mode).indexOf(segment.mode));
+      const miBitString = MODE_INDICATOR[segment.mode];
+      const _pad = getCharacterCountIndicator(segment.mode, this.version);
+      const ccBitString = this.inputData.length.toString(2).padStart(_pad, "0");
+      const segBitString = getBinaryString(segment);
+      bitString += miBitString + ccBitString + segBitString.join("");
     }
     const totalCodeWord = CODEWORDS[this.version - 1];
-    const ecTotalCodeWord =
-      ERROR_CORRECTION_CODEWORDS[
-        (this.version - 1) * 4 +
-          Object.values(ErrorCorrectionLevel).indexOf(this.errorCorrection)
-      ];
+    const ecTotalCodeWordIndex =
+      (this.version - 1) * 4 +
+      Object.values(ErrorCorrectionLevel).indexOf(this.errorCorrection);
+    const ecTotalCodeWord = ERROR_CORRECTION_CODEWORDS[ecTotalCodeWordIndex];
 
-    console.log({ totalCodeWord, ecTotalCodeWord });
+    const dataTotalCodewords = totalCodeWord - ecTotalCodeWord;
+    const dataTotalCodewordsBits = dataTotalCodewords * 8;
 
-    console.log(codeWord);
+    if (bitString.length + 4 <= dataTotalCodewordsBits) {
+      bitString += "0000";
+    }
+
+    while (bitString.length % 8 !== 0) {
+      bitString += "0";
+    }
+
+    const codeWord: number[] = [];
+    for (let i = 0; i < bitString.length; i += 8) {
+      codeWord.push(parseInt(bitString.slice(i, i + 8), 2));
+    }
+
+    const remainingByte = (dataTotalCodewordsBits - bitString.length) / 8;
+    for (let i = 0; i < remainingByte; i++) {
+      codeWord.push(PAD_CODEWORDS[i % 2]);
+    }
+
+    const ecCodeWord = rsEncode(codeWord, ecTotalCodeWord);
+    console.log({ codeWord, ecCodeWord });
   }
 
   private getVersion() {
