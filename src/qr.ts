@@ -4,10 +4,8 @@ import {
   ALIGNMENT_PATTERN_TOTALS,
   CHARACTER_COUNT_MAX_VERSION,
   CODEWORDS,
-  ERROR_CORRECTION_BLOCK,
   ERROR_CORRECTION_CODEWORDS,
   FINDER_PATTERN_SIZE,
-  INPUT_DATA_CAPACITY,
   MODE_BITS,
   MODE_INDICATOR,
   MODE_INDICATOR_BITS,
@@ -19,7 +17,8 @@ import { getSegments } from "./segment";
 import {
   getBinaryString,
   getBitsLength,
-  getCharacterCountIndicator,
+  getCapacity,
+  getCharCountIndicator,
 } from "./utils";
 
 type PatternSize = typeof FINDER_PATTERN_SIZE | typeof ALIGNMENT_PATTERN_SIZE;
@@ -68,16 +67,14 @@ export class QR {
     for (let index = 0; index < this.segments.length; index++) {
       const segment = this.segments[index];
       const miBitString = MODE_INDICATOR[segment.mode];
-      const _pad = getCharacterCountIndicator(segment.mode, this.version);
+      const _pad = getCharCountIndicator(segment.mode, this.version);
       const ccBitString = this.inputData.length.toString(2).padStart(_pad, "0");
       const segBitString = getBinaryString(segment);
       bitString += miBitString + ccBitString + segBitString.join("");
     }
     const totalCodeWord = CODEWORDS[this.version - 1];
-    const ecTotalCodeWordIndex =
-      (this.version - 1) * 4 +
-      Object.values(ErrorCorrectionLevel).indexOf(this.errorCorrection);
-    const ecTotalCodeWord = ERROR_CORRECTION_CODEWORDS[ecTotalCodeWordIndex];
+    const ecTotalCodeWord =
+      ERROR_CORRECTION_CODEWORDS[this.errorCorrection][this.version - 1];
 
     const dataTotalCodewords = totalCodeWord - ecTotalCodeWord;
     const dataTotalCodewordsBits = dataTotalCodewords * 8;
@@ -110,14 +107,15 @@ export class QR {
     // outer loop character count (CHARACTER_COUNT_INDICATOR length max is 3)
     ccLoop: for (let ccIndex = 0; ccIndex < 3; ccIndex++) {
       const isMixedMode = this.segments.length > 1;
-      const mode = isMixedMode ? Mode.Byte : this.segments[0].mode;
-      const capacityArray = INPUT_DATA_CAPACITY[mode][this.errorCorrection];
-      const maxCapacityIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex];
+      const mode = isMixedMode ? "Mixed" : this.segments[0].mode;
+      const maxCapacityVersion = CHARACTER_COUNT_MAX_VERSION[ccIndex];
       let bitSize: number = isMixedMode ? 0 : this.segments[0].value.length;
 
-      const maxDataCapacity = isMixedMode
-        ? (capacityArray[maxCapacityIndex - 1] + 2) * 8
-        : capacityArray[maxCapacityIndex - 1];
+      const maxDataCapacity = getCapacity(
+        maxCapacityVersion,
+        this.errorCorrection,
+        mode
+      );
 
       if (isMixedMode) {
         this.segments.forEach((d) => {
@@ -127,16 +125,14 @@ export class QR {
       }
 
       if (bitSize <= maxDataCapacity) {
-        let startIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex - 1] - 1 || 0;
+        let startIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex - 1] - 1 || 1;
 
         // inner loop qr version
-        for (let i = startIndex; i < maxCapacityIndex; i++) {
-          const capacity = isMixedMode
-            ? (capacityArray[i] + 2) * 8
-            : capacityArray[i];
+        for (let i = startIndex; i < maxCapacityVersion; i++) {
+          const capacity = getCapacity(i, this.errorCorrection, mode);
 
           if (bitSize <= capacity) {
-            version = i + 1;
+            version = i;
             break ccLoop;
           }
         }

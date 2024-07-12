@@ -2,9 +2,12 @@ import { Segments } from "./qr";
 import {
   ALPHANUMERIC_CHARSET,
   CHARACTER_COUNT_INDICATOR,
+  CODEWORDS,
+  ERROR_CORRECTION_CODEWORDS,
   MODE_BITS,
+  MODE_INDICATOR_BITS,
 } from "./constants";
-import { Mode } from "./enums";
+import { ErrorCorrectionLevel, Mode } from "./enums";
 
 /**
  * special characters used in Alpha Numeric character in QR
@@ -47,7 +50,7 @@ export function getBitsLength(data: Segments[0]) {
 /**
  * get the bit of character count indicator
  */
-export function getCharacterCountIndicator(mode: Mode, version: number) {
+export function getCharCountIndicator(mode: Mode, version: number) {
   let index = 0;
   if (version > 9) {
     index = 1;
@@ -55,6 +58,44 @@ export function getCharacterCountIndicator(mode: Mode, version: number) {
     index = 2;
   }
   return CHARACTER_COUNT_INDICATOR[mode][index];
+}
+
+/**
+ * get the capacity
+ */
+export function getCapacity(
+  version: number,
+  errorCorrectionLevel: ErrorCorrectionLevel,
+  mode: Mode | "Mixed"
+) {
+  const totalCodeWord = CODEWORDS[version - 1];
+  const ecTotalCodeWord =
+    ERROR_CORRECTION_CODEWORDS[errorCorrectionLevel][version - 1];
+
+  const dataTotalCodewordsBits = (totalCodeWord - ecTotalCodeWord) * 8;
+
+  if (mode === "Mixed") {
+    return dataTotalCodewordsBits;
+  }
+
+  const usableBits =
+    dataTotalCodewordsBits -
+    (getCharCountIndicator(mode, version) + MODE_INDICATOR_BITS);
+
+  switch (mode) {
+    case Mode.Numeric: {
+      return Math.floor((usableBits / 10) * 3);
+    }
+    case Mode.AlphaNumeric: {
+      return Math.floor((usableBits / 11) * 2);
+    }
+    case Mode.Kanji: {
+      return Math.floor(usableBits / 13);
+    }
+    case Mode.Byte: {
+      return Math.floor(usableBits / 8);
+    }
+  }
 }
 
 /**
