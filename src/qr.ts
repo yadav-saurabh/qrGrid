@@ -68,7 +68,7 @@ export class QR {
       const segment = this.segments[index];
       const miBitString = MODE_INDICATOR[segment.mode];
       const _pad = getCharCountIndicator(segment.mode, this.version);
-      const ccBitString = this.inputData.length.toString(2).padStart(_pad, "0");
+      const ccBitString = segment.value.length.toString(2).padStart(_pad, "0");
       const segBitString = getBinaryString(segment);
       bitString += miBitString + ccBitString + segBitString.join("");
     }
