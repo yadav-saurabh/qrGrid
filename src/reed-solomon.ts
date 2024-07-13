@@ -41,12 +41,13 @@ function generateGenerator(n: number) {
 }
 
 // Encode message
-export function rsEncode(msg: number[], ecBytes: number) {
+export function rsEncode(data: Uint8Array, ecBytes: number) {
   initTables();
   const generator = generateGenerator(ecBytes);
-  const encoded = [...msg, ...new Array(ecBytes).fill(0)];
+  const encoded = new Uint8Array(data);
 
-  for (let i = 0; i < msg.length; i++) {
+  const messageBytes = data.length - ecBytes;
+  for (let i = 0; i < messageBytes; i++) {
     const coeff = encoded[i];
     if (coeff !== 0) {
       for (let j = 0; j < generator.length; j++) {

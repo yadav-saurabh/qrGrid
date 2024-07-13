@@ -9,53 +9,8 @@ import { ErrorCorrectionLevel, Mode } from "./enums";
  * - B : 11
  * - ...
  */
-export const ALPHANUMERIC_CHARSET = [
-  "0",
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-  "Q",
-  "R",
-  "S",
-  "T",
-  "U",
-  "V",
-  "W",
-  "X",
-  "Y",
-  "Z",
-  " ",
-  "$",
-  "%",
-  "*",
-  "+",
-  "-",
-  ".",
-  "/",
-  ":",
-];
+export const ALPHANUMERIC_CHARSET =
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:";
 
 /**
  * No of modules for outer dark square of Finder Pattern: `7 x 7`
@@ -98,13 +53,13 @@ export const MODE_INDICATOR_BITS = 4;
  * - Numeric:       0001 (0x1)
  * - AlphaNumeric:  0010 (0x2)
  * - Byte:          0100 (0x4)
- * - Kanji:         1000 (08)
+ * - Kanji:         1000 (0x8)
  */
 export const MODE_INDICATOR = {
-  [Mode.Numeric]: "0001",
-  [Mode.AlphaNumeric]: "0010",
-  [Mode.Byte]: "0100",
-  [Mode.Kanji]: "1000",
+  [Mode.Numeric]: 0b0001,
+  [Mode.AlphaNumeric]: 0b0010,
+  [Mode.Byte]: 0b0100,
+  [Mode.Kanji]: 0b1000,
 };
 
 /**
@@ -154,7 +109,7 @@ export const MODE_BITS = {
  * - 11101100 (0xEC) : index 0
  * - 00010001 (0x11) : index 1
  */
-export const PAD_CODEWORDS = [0xec, 0x11];
+export const PAD_CODEWORDS = [0xEC, 0x11];
 
 /**
  * Number of data Codewords for Qr version
