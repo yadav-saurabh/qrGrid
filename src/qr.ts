@@ -19,6 +19,7 @@ import {
   getBitsLength,
   getCapacity,
   getCharCountIndicator,
+  getVersionInfoBitString,
 } from "./utils";
 
 type PatternSize = typeof FINDER_PATTERN_SIZE | typeof ALIGNMENT_PATTERN_SIZE;
@@ -46,7 +47,7 @@ export class QR {
       ErrorCorrectionLevel[options?.errorCorrection || "M"];
 
     this.segments = getSegments(inputData);
-    this.version = this.getVersion();
+    this.version = this.#getVersion();
     this.noOfModules = this.version * 4 + 17;
 
     this.data = new Uint8Array(this.noOfModules * this.noOfModules);
@@ -54,14 +55,17 @@ export class QR {
 
     console.log(this);
 
-    this.encodeData();
-    this.fillFinderPattern();
-    this.fillTimingPattern();
-    this.fillAlignmentPattern();
+    this.#encodeData();
+    this.#fillFinderPattern();
+    this.#fillTimingPattern();
+    this.#fillAlignmentPattern();
+    if (this.version >= 7) {
+      this.#fillVersionInfo();
+    }
     this.print();
   }
 
-  private encodeData() {
+  #encodeData() {
     let bitString = "";
 
     for (let index = 0; index < this.segments.length; index++) {
@@ -101,7 +105,7 @@ export class QR {
     console.log({ codeWord, ecCodeWord });
   }
 
-  private getVersion() {
+  #getVersion() {
     let version: number = 0;
 
     // outer loop character count (CHARACTER_COUNT_INDICATOR length max is 3)
@@ -142,7 +146,7 @@ export class QR {
     return version;
   }
 
-  private fillBlock(x: number, y: number, size: PatternSize) {
+  #fillBlock(x: number, y: number, size: PatternSize) {
     const height = size + x - 1;
     const width = size + y - 1;
     for (let i = x; i <= height; i++) {
@@ -164,7 +168,7 @@ export class QR {
   }
 
   // fill timingPattern with 1
-  private fillTimingPattern() {
+  #fillTimingPattern() {
     let length = this.noOfModules - FINDER_PATTERN_SIZE * 2 - 2;
     for (let i = 1; i <= length; i = i + 2) {
       const hIndex = FINDER_PATTERN_SIZE + i + this.noOfModules * 6;
@@ -175,23 +179,26 @@ export class QR {
     }
   }
 
-  // fill finderPattern with 1
-  private fillFinderPattern() {
-    this.fillBlock(0, 0, FINDER_PATTERN_SIZE);
-    this.fillBlock(
-      this.noOfModules - FINDER_PATTERN_SIZE,
+  // fill finderPattern
+  #fillFinderPattern() {
+    // top-left finder pattern
+    this.#fillBlock(0, 0, FINDER_PATTERN_SIZE);
+    // top-right finder pattern
+    this.#fillBlock(
       0,
+      this.noOfModules - FINDER_PATTERN_SIZE,
       FINDER_PATTERN_SIZE
     );
-    this.fillBlock(
-      0,
+    // bottom-left finder pattern
+    this.#fillBlock(
       this.noOfModules - FINDER_PATTERN_SIZE,
+      0,
       FINDER_PATTERN_SIZE
     );
   }
 
   // fill alignmentPattern
-  private fillAlignmentPattern() {
+  #fillAlignmentPattern() {
     if (this.version === 1) {
       return;
     }
@@ -223,8 +230,21 @@ export class QR {
       }
       const x = positions[xIndex];
       const y = positions[yIndex];
-      this.fillBlock(x - 2, y - 2, ALIGNMENT_PATTERN_SIZE);
+      this.#fillBlock(x - 2, y - 2, ALIGNMENT_PATTERN_SIZE);
       yIndex++;
+    }
+  }
+
+  #fillVersionInfo() {
+    const bits = getVersionInfoBitString(this.version);
+    for (let i = 0; i < 18; i++) {
+      const bit = bits[i];
+      const row = Math.floor(i / 3);
+      const col = this.noOfModules - 11 + (i % 3);
+      // Encode in top-right corner
+      this.data[row * this.noOfModules + col] = +bit;
+      // Encode in bottom-left corner
+      this.data[col * this.noOfModules + row] = +bit;
     }
   }
 

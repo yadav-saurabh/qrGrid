@@ -61,6 +61,29 @@ export function getCharCountIndicator(mode: Mode, version: number) {
 }
 
 /**
+ * get the version info bit string
+ */
+export function getVersionInfoBitString(version: number) {
+  // Golay code generator polynomial 0x1F25 (0b1111100100101)
+  const GOLAY_GENERATOR = 0x1f25;
+
+  // The 6 bits representing the version number
+  let versionBits = version << 12;
+
+  // Calculate the error correction bits
+  let dividend = versionBits;
+  for (let i = 17; i >= 12; i--) {
+    if (dividend & (1 << i)) {
+      dividend ^= GOLAY_GENERATOR << (i - 12);
+    }
+  }
+
+  // Combine version and error correction bits
+  let result = versionBits | (dividend & 0xfff);
+  return result.toString(2).padStart(18, "0");
+}
+
+/**
  * get the capacity
  */
 export function getCapacity(
