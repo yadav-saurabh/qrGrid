@@ -79,8 +79,7 @@ export function getVersionInfoBitString(version: number) {
   }
 
   // Combine version and error correction bits
-  let result = versionBits | (dividend & 0xfff);
-  return result.toString(2).padStart(18, "0");
+  return versionBits | (dividend & 0xfff);
 }
 
 /**

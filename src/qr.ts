@@ -259,7 +259,7 @@ export class QR {
   #fillVersionInfo() {
     const bits = getVersionInfoBitString(this.version);
     for (let i = 0; i < 18; i++) {
-      const bit = bits[i];
+      const bit = (bits >> i) & 1;
       const row = Math.floor(i / 3);
       const col = this.noOfModules - 11 + (i % 3);
       // Encode in top-right corner
