@@ -18,3 +18,13 @@ export enum Mode {
   Byte = "Byte",
   Kanji = "Kanji",
 }
+
+/**
+ * Reserved bits types
+ */
+export enum ReservedBits {
+  FinderPattern = "FinderPattern",
+  AlignmentPattern = "AlignmentPattern",
+  TimingPattern = "TimingPattern",
+  VersionInfo = "VersionInfo",
+}

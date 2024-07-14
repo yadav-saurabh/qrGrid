@@ -11,7 +11,7 @@ import {
   MODE_INDICATOR_BITS,
   PAD_CODEWORDS,
 } from "./constants";
-import { ErrorCorrectionLevel, Mode } from "./enums";
+import { ErrorCorrectionLevel, Mode, ReservedBits } from "./enums";
 import { rsEncode } from "./reed-solomon";
 import { getSegments } from "./segment";
 import {
@@ -35,6 +35,7 @@ export class QR {
   noOfModules: number;
   version: number;
   errorCorrection: ErrorCorrectionLevel;
+  reservedBits: { [key: number]: { type: ReservedBits; dark: boolean } };
   #codewords: Uint8Array;
   #codeBitLength: number;
 
@@ -43,19 +44,18 @@ export class QR {
       throw new Error("Not a valid string input");
     }
 
-    this.#codeBitLength = 0;
     this.inputData = inputData;
     this.errorCorrection =
-      ErrorCorrectionLevel[options?.errorCorrection || "M"];
+      ErrorCorrectionLevel[options?.errorCorrection || ErrorCorrectionLevel.M];
+    this.reservedBits = {};
 
     this.segments = getSegments(inputData);
     this.version = this.#getVersion();
-    this.#codewords = new Uint8Array(CODEWORDS[this.version - 1]);
     this.noOfModules = this.version * 4 + 17;
 
     this.data = new Uint8Array(this.noOfModules * this.noOfModules);
-
-    console.log(this);
+    this.#codewords = new Uint8Array(CODEWORDS[this.version - 1]);
+    this.#codeBitLength = 0;
 
     this.#generateCodeword();
     this.#fillFinderPattern();
@@ -65,6 +65,7 @@ export class QR {
       this.#fillVersionInfo();
     }
     this.#fillCodeword();
+
     this.print();
   }
 
@@ -167,22 +168,74 @@ export class QR {
     }
   }
 
-  #fillBlock(x: number, y: number, size: PatternSize) {
+  #reserveFinderSeparationBits(
+    x: number,
+    y: number,
+    size: number,
+    height: number,
+    width: number
+  ) {
+    for (let i = 0; i < size + 1; i++) {
+      const left = this.noOfModules * (i + x - 1) + y - 1;
+      const top = this.noOfModules * (x - 1) + i + y;
+      const right = this.noOfModules * (i + x) + width + 1;
+      const down = this.noOfModules * (height + 1) + i + y - 1;
+
+      if (x > 0 && top >= 0) {
+        this.reservedBits[top] = {
+          type: ReservedBits.FinderPattern,
+          dark: false,
+        };
+      }
+      if (y > 0 && left >= 0) {
+        this.reservedBits[left] = {
+          type: ReservedBits.FinderPattern,
+          dark: false,
+        };
+      }
+      if (this.noOfModules - x > size && down >= 0) {
+        this.reservedBits[down] = {
+          type: ReservedBits.FinderPattern,
+          dark: false,
+        };
+      }
+      if (this.noOfModules - y > size && right >= 0) {
+        this.reservedBits[right] = {
+          type: ReservedBits.FinderPattern,
+          dark: false,
+        };
+      }
+    }
+  }
+
+  #fillBlock(
+    x: number,
+    y: number,
+    size: PatternSize,
+    rbType: ReservedBits.AlignmentPattern | ReservedBits.FinderPattern
+  ) {
     const height = size + x - 1;
     const width = size + y - 1;
+    if (rbType === ReservedBits.FinderPattern) {
+      this.#reserveFinderSeparationBits(x, y, size, height, width);
+    }
     for (let i = x; i <= height; i++) {
       for (let j = y; j <= width; j++) {
         const index = i * this.noOfModules + j;
+        this.reservedBits[index] = { type: rbType, dark: false };
         // outer block
         if (j === y || j === width) {
           this.data[index] = 1;
+          this.reservedBits[index] = { type: rbType, dark: true };
         }
         if (i === x || i === height) {
           this.data[index] = 1;
+          this.reservedBits[index] = { type: rbType, dark: true };
         }
         // inner block
         if (j >= y + 2 && j <= width - 2 && i >= x + 2 && i <= height - 2) {
           this.data[index] = 1;
+          this.reservedBits[index] = { type: rbType, dark: true };
         }
       }
     }
@@ -191,30 +244,43 @@ export class QR {
   // fill timingPattern with 1
   #fillTimingPattern() {
     let length = this.noOfModules - FINDER_PATTERN_SIZE * 2 - 2;
-    for (let i = 1; i <= length; i = i + 2) {
+    for (let i = 1; i <= length; i++) {
       const hIndex = FINDER_PATTERN_SIZE + i + this.noOfModules * 6;
       const vIndex = (FINDER_PATTERN_SIZE + i) * this.noOfModules + 6;
 
-      this.data[hIndex] = 1;
-      this.data[vIndex] = 1;
+      if (i % 2 === 0) {
+        this.data[hIndex] = 1;
+        this.data[vIndex] = 1;
+      }
+      this.reservedBits[hIndex] = {
+        type: ReservedBits.TimingPattern,
+        dark: true,
+      };
+
+      this.reservedBits[vIndex] = {
+        type: ReservedBits.TimingPattern,
+        dark: true,
+      };
     }
   }
 
   // fill finderPattern
   #fillFinderPattern() {
     // top-left finder pattern
-    this.#fillBlock(0, 0, FINDER_PATTERN_SIZE);
+    this.#fillBlock(0, 0, FINDER_PATTERN_SIZE, ReservedBits.FinderPattern);
     // top-right finder pattern
     this.#fillBlock(
       0,
       this.noOfModules - FINDER_PATTERN_SIZE,
-      FINDER_PATTERN_SIZE
+      FINDER_PATTERN_SIZE,
+      ReservedBits.FinderPattern
     );
     // bottom-left finder pattern
     this.#fillBlock(
       this.noOfModules - FINDER_PATTERN_SIZE,
       0,
-      FINDER_PATTERN_SIZE
+      FINDER_PATTERN_SIZE,
+      ReservedBits.FinderPattern
     );
   }
 
@@ -251,7 +317,12 @@ export class QR {
       }
       const x = positions[xIndex];
       const y = positions[yIndex];
-      this.#fillBlock(x - 2, y - 2, ALIGNMENT_PATTERN_SIZE);
+      this.#fillBlock(
+        x - 2,
+        y - 2,
+        ALIGNMENT_PATTERN_SIZE,
+        ReservedBits.AlignmentPattern
+      );
       yIndex++;
     }
   }
@@ -263,9 +334,19 @@ export class QR {
       const row = Math.floor(i / 3);
       const col = this.noOfModules - 11 + (i % 3);
       // Encode in top-right corner
-      this.data[row * this.noOfModules + col] = +bit;
+      const topRightIndex = row * this.noOfModules + col;
+      this.data[topRightIndex] = bit;
+      this.reservedBits[topRightIndex] = {
+        type: ReservedBits.VersionInfo,
+        dark: true,
+      };
       // Encode in bottom-left corner
-      this.data[col * this.noOfModules + row] = +bit;
+      const bottomLeftIndex = col * this.noOfModules + row;
+      this.data[bottomLeftIndex] = bit;
+      this.reservedBits[bottomLeftIndex] = {
+        type: ReservedBits.VersionInfo,
+        dark: true,
+      };
     }
   }
 
