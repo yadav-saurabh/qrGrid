@@ -168,7 +168,7 @@ export class QR {
     }
   }
 
-  #reserveFinderSeparationBits(
+  #reserveFinderSeparatorBits(
     x: number,
     y: number,
     size: number,
@@ -217,7 +217,7 @@ export class QR {
     const height = size + x - 1;
     const width = size + y - 1;
     if (rbType === ReservedBits.FinderPattern) {
-      this.#reserveFinderSeparationBits(x, y, size, height, width);
+      this.#reserveFinderSeparatorBits(x, y, size, height, width);
     }
     for (let i = x; i <= height; i++) {
       for (let j = y; j <= width; j++) {
@@ -248,7 +248,7 @@ export class QR {
       const hIndex = FINDER_PATTERN_SIZE + i + this.noOfModules * 6;
       const vIndex = (FINDER_PATTERN_SIZE + i) * this.noOfModules + 6;
 
-      if (i % 2 === 0) {
+      if (i % 2 !== 0) {
         this.data[hIndex] = 1;
         this.data[vIndex] = 1;
       }
@@ -350,7 +350,35 @@ export class QR {
     }
   }
 
-  #fillCodeword() {}
+  #fillCodeword() {
+    let dataIndex = 0;
+    let bitIndex = 7; // Starting with the most significant bit of the first byte
+    let reverse = true;
+
+    // Traverse the QR code in the zigzag pattern
+    for (let col = this.noOfModules - 1; col >= 1; col -= 2) {
+      if (col === 6) col = 5; // Skipping the vertical timing pattern
+      for (let i = this.noOfModules - 1; i >= 0; i--) {
+        for (let j = 0; j < 2; j++) {
+          const row = reverse ? i : this.noOfModules - i - 1;
+          const index = row * this.noOfModules + col - j;
+          if (this.reservedBits[index] === undefined) {
+            if ((this.#codewords[dataIndex] & (1 << bitIndex)) !== 0) {
+              this.data[index] = 1;
+            }
+            // Move to the next bit
+            if (--bitIndex === -1) {
+              dataIndex++;
+              bitIndex = 7;
+            }
+          }
+        }
+        if (i === 0) {
+          reverse = !reverse;
+        }
+      }
+    }
+  }
 
   print() {
     for (let i = 0; i < this.noOfModules; i++) {
