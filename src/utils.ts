@@ -29,10 +29,10 @@ export const regexString = {
 export function getBitsLength(data: Segments[0]) {
   const dataLength = data.value.length;
   if (data.mode === Mode.Numeric) {
-    const leastModeBit = MODE_BITS[Mode.Numeric][0];
+    const maxModeBit = MODE_BITS[Mode.Numeric][2];
     const modeLength = MODE_BITS[Mode.Numeric].length;
     return (
-      leastModeBit * Math.floor(dataLength / modeLength) +
+      maxModeBit * Math.floor(dataLength / modeLength) +
       (dataLength % modeLength ? (dataLength % modeLength) * modeLength + 1 : 0)
     );
   }

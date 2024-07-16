@@ -2,13 +2,13 @@ import {
   ALIGNMENT_PATTERN_DIFFS,
   ALIGNMENT_PATTERN_SIZE,
   ALIGNMENT_PATTERN_TOTALS,
+  CHARACTER_COUNT_INDICATOR,
   CHARACTER_COUNT_MAX_VERSION,
   CODEWORDS,
   ERROR_CORRECTION_BITS,
   ERROR_CORRECTION_CODEWORDS,
   FINDER_PATTERN_SIZE,
   MASK_PATTERNS,
-  MODE_BITS,
   MODE_INDICATOR,
   MODE_INDICATOR_BITS,
   PAD_CODEWORDS,
@@ -64,6 +64,7 @@ export class QR {
     this.maskPatten = 0;
 
     this.#generateQr();
+    // console.log(this);
     this.print();
   }
 
@@ -100,15 +101,17 @@ export class QR {
       if (isMixedMode) {
         this.segments.forEach((d) => {
           bitSize +=
-            MODE_INDICATOR_BITS + MODE_BITS[d.mode][ccIndex] + getBitsLength(d);
+            MODE_INDICATOR_BITS +
+            CHARACTER_COUNT_INDICATOR[d.mode][ccIndex] +
+            getBitsLength(d);
         });
       }
 
       if (bitSize <= maxDataCapacity) {
-        let startIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex - 1] - 1 || 1;
+        let startIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex - 1] || 1;
 
         // inner loop qr version
-        for (let i = startIndex; i < maxCapacityVersion; i++) {
+        for (let i = startIndex; i <= maxCapacityVersion; i++) {
           const capacity = getCapacity(i, this.errorCorrection, mode);
 
           if (bitSize <= capacity) {
