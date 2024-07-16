@@ -166,7 +166,7 @@ export class QR {
     }
 
     if (this.#codeBitLength % 8 !== 0) {
-      this.#encodeCodeword(0, this.#codeBitLength % 8);
+      this.#encodeCodeword(0, 8 - (this.#codeBitLength % 8));
     }
 
     const remainingByte = (dataTotalCodewordBits - this.#codeBitLength) / 8;

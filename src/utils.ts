@@ -180,7 +180,7 @@ export function getEncodedSegmentData(data: Segments[0]) {
     for (let i = 0; i < value.length; i = i + 2) {
       const first = ALPHANUMERIC_CHARSET.indexOf(value[i]);
       const second = value[i + 1]
-        ? ALPHANUMERIC_CHARSET.indexOf(value[i])
+        ? ALPHANUMERIC_CHARSET.indexOf(value[i + 1])
         : null;
       if (second !== null) {
         const num = first * 45 + second;
