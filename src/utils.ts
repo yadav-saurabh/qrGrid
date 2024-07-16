@@ -202,3 +202,96 @@ export function getEncodedSegmentData(data: Segments[0]) {
   }
   return bitArray;
 }
+
+/**
+ * get mask penalty
+ */
+export function getMaskPenalty(data: Uint8Array, size: number): number {
+  let penalty = 0;
+
+  // Rule 1: Five or more same-colored modules in a row
+  for (let i = 0; i < size; i++) {
+    let rowPenalty = 0;
+    let colPenalty = 0;
+    let lastRowBit = data[i * size];
+    let lastColBit = data[i];
+    let rowCount = 0;
+    let colCount = 0;
+
+    for (let j = 0; j < size; j++) {
+      const rowBit = data[i * size + j];
+      if (rowBit === lastRowBit) {
+        rowCount++;
+      } else {
+        if (rowCount >= 5) rowPenalty += 3 + (rowCount - 5);
+        rowCount = 1;
+        lastRowBit = rowBit;
+      }
+
+      const colBit = data[j * size + i];
+      if (colBit === lastColBit) {
+        colCount++;
+      } else {
+        if (colCount >= 5) colPenalty += 3 + (colCount - 5);
+        colCount = 1;
+        lastColBit = colBit;
+      }
+    }
+
+    if (rowCount >= 5) rowPenalty += 3 + (rowCount - 5);
+    if (colCount >= 5) colPenalty += 3 + (colCount - 5);
+
+    penalty += rowPenalty + colPenalty;
+  }
+
+  // Rule 2: 2x2 blocks of same-colored modules
+  for (let i = 0; i < size - 1; i++) {
+    for (let j = 0; j < size - 1; j++) {
+      const color = data[i * size + j];
+      if (
+        color === data[(i + 1) * size + j] &&
+        color === data[i * size + (j + 1)] &&
+        color === data[(i + 1) * size + (j + 1)]
+      ) {
+        penalty += 3;
+      }
+    }
+  }
+
+  // Rule 3: Specific patterns in rows or columns
+  const pattern1 = [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0];
+  const pattern2 = [0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1];
+
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j <= size - pattern1.length; j++) {
+      let matchRow1 = true;
+      let matchRow2 = true;
+      let matchCol1 = true;
+      let matchCol2 = true;
+
+      for (let k = 0; k < pattern1.length; k++) {
+        if (data[i * size + j + k] !== pattern1[k]) matchRow1 = false;
+        if (data[i * size + j + k] !== pattern2[k]) matchRow2 = false;
+        if (data[(j + k) * size + i] !== pattern1[k]) matchCol1 = false;
+        if (data[(j + k) * size + i] !== pattern2[k]) matchCol2 = false;
+      }
+
+      if (matchRow1 || matchRow2) penalty += 40;
+      if (matchCol1 || matchCol2) penalty += 40;
+    }
+  }
+
+  // Rule 4: Balance of dark and light modules
+  const darkModules = data.reduce((sum, bit) => sum + bit, 0);
+  const totalModules = data.length;
+  const darkPercentage = (darkModules * 100) / totalModules;
+  const previousMultiple = Math.floor(darkPercentage / 5) * 5;
+  const nextMultiple = Math.ceil(darkPercentage / 5) * 5;
+  penalty +=
+    Math.min(
+      Math.abs(previousMultiple - 50) / 5,
+      Math.abs(nextMultiple - 50) / 5
+    ) * 10;
+
+  return penalty;
+}
