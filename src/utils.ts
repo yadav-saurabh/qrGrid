@@ -61,9 +61,9 @@ export function getCharCountIndicator(mode: Mode, version: number) {
 }
 
 /**
- * get the version info bit string
+ * get the version info bit
  */
-export function getVersionInfoBitString(version: number) {
+export function getVersionInfoBits(version: number) {
   // Golay code generator polynomial 0x1F25 (0b1111100100101)
   const GOLAY_GENERATOR = 0x1f25;
 
@@ -80,6 +80,37 @@ export function getVersionInfoBitString(version: number) {
 
   // Combine version and error correction bits
   return versionBits | (dividend & 0xfff);
+}
+
+/**
+ * get the format info bit
+ */
+export function getFormatInfoBits(
+  errorCorrectionBit: number,
+  maskPattern: number
+) {
+  // Golay Generator polynomial for QR code format information
+  const GOLAY_GENERATOR = 0b10100110111;
+
+  // XOR mask for format information
+  const FORMAT_MASK = 0b101010000010010;
+
+  let formatInfo = (errorCorrectionBit << 3) | maskPattern;
+  let reg = formatInfo << 10;
+
+  // Calculate error correction bits
+  for (let i = 4; i >= 0; i--) {
+    if (reg & (1 << (i + 10))) {
+      reg ^= GOLAY_GENERATOR << i;
+    }
+  }
+  let errorCorrectionBits = reg & 0x3ff;
+
+  // Combine format info with error correction bits
+  let pattern = (formatInfo << 10) | errorCorrectionBits;
+
+  // XOR with the format mask
+  return (pattern ^= FORMAT_MASK);
 }
 
 /**

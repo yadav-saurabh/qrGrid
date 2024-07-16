@@ -26,5 +26,8 @@ export enum ReservedBits {
   FinderPattern = "FinderPattern",
   AlignmentPattern = "AlignmentPattern",
   TimingPattern = "TimingPattern",
+  FormatInfo = "FormatInfo",
   VersionInfo = "VersionInfo",
+  DarkModule = "DarkModule",
+  Separator = "Separator",
 }

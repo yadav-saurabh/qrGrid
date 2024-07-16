@@ -4,8 +4,10 @@ import {
   ALIGNMENT_PATTERN_TOTALS,
   CHARACTER_COUNT_MAX_VERSION,
   CODEWORDS,
+  ERROR_CORRECTION_BITS,
   ERROR_CORRECTION_CODEWORDS,
   FINDER_PATTERN_SIZE,
+  MASK_PATTERNS,
   MODE_BITS,
   MODE_INDICATOR,
   MODE_INDICATOR_BITS,
@@ -19,7 +21,9 @@ import {
   getBitsLength,
   getCapacity,
   getCharCountIndicator,
-  getVersionInfoBitString,
+  getVersionInfoBits,
+  getFormatInfoBits,
+  getMaskPenalty,
 } from "./utils";
 
 type PatternSize = typeof FINDER_PATTERN_SIZE | typeof ALIGNMENT_PATTERN_SIZE;
@@ -36,6 +40,7 @@ export class QR {
   version: number;
   errorCorrection: ErrorCorrectionLevel;
   reservedBits: { [key: number]: { type: ReservedBits; dark: boolean } };
+  maskPatten: number;
   #codewords: Uint8Array;
   #codeBitLength: number;
 
@@ -56,7 +61,13 @@ export class QR {
     this.data = new Uint8Array(this.noOfModules * this.noOfModules);
     this.#codewords = new Uint8Array(CODEWORDS[this.version - 1]);
     this.#codeBitLength = 0;
+    this.maskPatten = 0;
 
+    this.#generateQr();
+    this.print();
+  }
+
+  #generateQr() {
     this.#generateCodeword();
     this.#fillFinderPattern();
     this.#fillTimingPattern();
@@ -64,9 +75,10 @@ export class QR {
     if (this.version >= 7) {
       this.#fillVersionInfo();
     }
+    this.#reserveBits();
     this.#fillCodeword();
-
-    this.print();
+    this.#mask();
+    this.#fillFormatInfo();
   }
 
   #getVersion() {
@@ -168,20 +180,84 @@ export class QR {
     }
   }
 
-  #reserveFinderSeparatorBits(
-    x: number,
-    y: number,
-    size: number,
-    height: number,
-    width: number
-  ) {
+  #reserveBits() {
+    const size = this.noOfModules;
+
+    // top-left Finder pattern
+    this.#reserveFinderSeparatorBits(0, 0);
+    // top-right Finder pattern
+    this.#reserveFinderSeparatorBits(0, size - FINDER_PATTERN_SIZE);
+    // bottom-left Finder pattern
+    this.#reserveFinderSeparatorBits(size - FINDER_PATTERN_SIZE, 0);
+
+    // Temporary reserve Format Info to preserve index so that dataCodeword can be filled easily, and to prevent masking only encoded region is masked
+    // after data masking correct reservation will be applied
+    for (let i = 0; i < 8; i++) {
+      // top-right index of format info
+      const rightTop = size * i + FINDER_PATTERN_SIZE + 1;
+      const rightTopTimingBlock =
+        size * (FINDER_PATTERN_SIZE - 1) + FINDER_PATTERN_SIZE + 1;
+
+      // bottom-right index of format info
+      const rightBottom = size * (size - i) + FINDER_PATTERN_SIZE + 1;
+
+      // bottom-left index of format info
+      let bottomLeft = size * (FINDER_PATTERN_SIZE + 1) + i;
+      const bottomLeftTimingBlock =
+        size * (FINDER_PATTERN_SIZE + 1) + FINDER_PATTERN_SIZE - 1;
+
+      // bottom-right index of format info
+      const bottomRight = size * (FINDER_PATTERN_SIZE + 1) + size - i - 1;
+
+      if (rightTop && rightTop !== rightTopTimingBlock) {
+        this.reservedBits[rightTop] = {
+          type: ReservedBits.FinderPattern,
+          dark: false,
+        };
+      }
+      if (rightBottom && rightBottom < this.data.length) {
+        this.reservedBits[rightBottom] = {
+          type: ReservedBits.FinderPattern,
+          dark: false,
+        };
+      }
+      if (bottomLeft) {
+        bottomLeft =
+          bottomLeft >= bottomLeftTimingBlock ? bottomLeft + 1 : bottomLeft;
+        this.reservedBits[bottomLeft] = {
+          type: ReservedBits.FinderPattern,
+          dark: false,
+        };
+      }
+      if (bottomRight) {
+        this.reservedBits[bottomRight] = {
+          type: ReservedBits.FinderPattern,
+          dark: false,
+        };
+      }
+    }
+
+    // reserve Dark Module
+    const darkModule =
+      size * (size - FINDER_PATTERN_SIZE - 1) + (FINDER_PATTERN_SIZE + 1);
+    this.data[darkModule] = 1;
+    this.reservedBits[darkModule] = {
+      type: ReservedBits.DarkModule,
+      dark: true,
+    };
+  }
+
+  #reserveFinderSeparatorBits(x: number, y: number) {
+    const size = FINDER_PATTERN_SIZE;
+    const height = size + x - 1;
+    const width = size + y - 1;
     for (let i = 0; i < size + 1; i++) {
       const left = this.noOfModules * (i + x - 1) + y - 1;
       const top = this.noOfModules * (x - 1) + i + y;
       const right = this.noOfModules * (i + x) + width + 1;
       const down = this.noOfModules * (height + 1) + i + y - 1;
 
-      if (x > 0 && top >= 0) {
+      if (x > 0 && top - this.noOfModules * (x - 1) < this.noOfModules) {
         this.reservedBits[top] = {
           type: ReservedBits.FinderPattern,
           dark: false,
@@ -193,13 +269,20 @@ export class QR {
           dark: false,
         };
       }
-      if (this.noOfModules - x > size && down >= 0) {
+      if (
+        this.noOfModules - x > size &&
+        down - this.noOfModules * (height + 1) >= 0
+      ) {
         this.reservedBits[down] = {
           type: ReservedBits.FinderPattern,
           dark: false,
         };
       }
-      if (this.noOfModules - y > size && right >= 0) {
+      if (
+        this.noOfModules - y > size &&
+        right >= 0 &&
+        right <= this.data.length
+      ) {
         this.reservedBits[right] = {
           type: ReservedBits.FinderPattern,
           dark: false,
@@ -216,9 +299,6 @@ export class QR {
   ) {
     const height = size + x - 1;
     const width = size + y - 1;
-    if (rbType === ReservedBits.FinderPattern) {
-      this.#reserveFinderSeparatorBits(x, y, size, height, width);
-    }
     for (let i = x; i <= height; i++) {
       for (let j = y; j <= width; j++) {
         const index = i * this.noOfModules + j;
@@ -248,18 +328,17 @@ export class QR {
       const hIndex = FINDER_PATTERN_SIZE + i + this.noOfModules * 6;
       const vIndex = (FINDER_PATTERN_SIZE + i) * this.noOfModules + 6;
 
-      if (i % 2 !== 0) {
-        this.data[hIndex] = 1;
-        this.data[vIndex] = 1;
-      }
+      const dark = i % 2 !== 0;
+      this.data[hIndex] = dark ? 1 : 0;
       this.reservedBits[hIndex] = {
         type: ReservedBits.TimingPattern,
-        dark: true,
+        dark: dark,
       };
 
+      this.data[vIndex] = dark ? 1 : 0;
       this.reservedBits[vIndex] = {
         type: ReservedBits.TimingPattern,
-        dark: true,
+        dark: dark,
       };
     }
   }
@@ -328,7 +407,7 @@ export class QR {
   }
 
   #fillVersionInfo() {
-    const bits = getVersionInfoBitString(this.version);
+    const bits = getVersionInfoBits(this.version);
     for (let i = 0; i < 18; i++) {
       const bit = (bits >> i) & 1;
       const row = Math.floor(i / 3);
@@ -338,15 +417,78 @@ export class QR {
       this.data[topRightIndex] = bit;
       this.reservedBits[topRightIndex] = {
         type: ReservedBits.VersionInfo,
-        dark: true,
+        dark: bit === 1,
       };
       // Encode in bottom-left corner
       const bottomLeftIndex = col * this.noOfModules + row;
       this.data[bottomLeftIndex] = bit;
       this.reservedBits[bottomLeftIndex] = {
         type: ReservedBits.VersionInfo,
-        dark: true,
+        dark: bit === 1,
       };
+    }
+  }
+
+  #fillFormatInfo(maskPattern?: number, qrData?: Uint8Array) {
+    const data = qrData || this.data;
+    const mask = maskPattern || this.maskPatten;
+
+    const bits = getFormatInfoBits(
+      ERROR_CORRECTION_BITS[this.errorCorrection],
+      mask
+    );
+
+    for (let i = 0; i < 15; i++) {
+      const bit = (bits >> i) & 1;
+
+      // vertical
+      if (i < 6) {
+        const index = i * this.noOfModules + 8;
+
+        data[index] = bit;
+        this.reservedBits[index] = {
+          type: ReservedBits.FormatInfo,
+          dark: bit === 1,
+        };
+      } else if (i < 8) {
+        const index = (i + 1) * this.noOfModules + 8;
+        data[index] = bit;
+        this.reservedBits[index] = {
+          type: ReservedBits.FormatInfo,
+          dark: bit === 1,
+        };
+      } else {
+        const index = (this.noOfModules - 15 + i) * this.noOfModules + 8;
+        data[index] = bit;
+        this.reservedBits[index] = {
+          type: ReservedBits.FormatInfo,
+          dark: bit === 1,
+        };
+      }
+
+      // horizontal
+      if (i < 8) {
+        const index = 8 * this.noOfModules + this.noOfModules - i - 1;
+        data[index] = bit;
+        this.reservedBits[index] = {
+          type: ReservedBits.FormatInfo,
+          dark: bit === 1,
+        };
+      } else if (i < 9) {
+        const index = 8 * this.noOfModules + 15 - i;
+        data[index] = bit;
+        this.reservedBits[index] = {
+          type: ReservedBits.FormatInfo,
+          dark: bit === 1,
+        };
+      } else {
+        const index = 8 * this.noOfModules + 15 - i - 1;
+        data[index] = bit;
+        this.reservedBits[index] = {
+          type: ReservedBits.FormatInfo,
+          dark: bit === 1,
+        };
+      }
     }
   }
 
@@ -380,13 +522,45 @@ export class QR {
     }
   }
 
+  #mask() {
+    let bestPattern = 0;
+    let lowestPenalty = Infinity;
+
+    for (let i = 0; i < MASK_PATTERNS.length; i++) {
+      const maskedData = this.#applyMask(i, true);
+      this.#fillFormatInfo(i, maskedData);
+      const penalty = getMaskPenalty(maskedData, this.noOfModules);
+
+      if (penalty < lowestPenalty) {
+        lowestPenalty = penalty;
+        bestPattern = i;
+      }
+    }
+
+    this.maskPatten = bestPattern;
+    this.#applyMask(bestPattern);
+  }
+
+  #applyMask(maskPattern: number, newData?: boolean) {
+    const maskedData = newData ? new Uint8Array(this.data) : this.data;
+    for (let i = 0; i < this.noOfModules; i++) {
+      for (let j = 0; j < this.noOfModules; j++) {
+        const index = i * this.noOfModules + j;
+        if (this.reservedBits[index] === undefined) {
+          maskedData[index] =
+            this.data[index] ^ Number(MASK_PATTERNS[maskPattern](i, j));
+        }
+      }
+    }
+    return maskedData;
+  }
+
   print() {
     for (let i = 0; i < this.noOfModules; i++) {
       for (let j = 0; j < this.noOfModules; j++) {
         const index = i * this.noOfModules + j;
         if (this.data[index] === 1) {
           process.stdout.write("██");
-          // process.stdout.write("1 ");
           continue;
         }
         process.stdout.write("  ");

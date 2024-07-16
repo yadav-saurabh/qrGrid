@@ -105,11 +105,33 @@ export const MODE_BITS = {
 };
 
 /**
+ * Number of bits for a error correction level indicator
+ */
+export const ERROR_CORRECTION_BITS = {
+  [ErrorCorrectionLevel.L]: 0b01,
+  [ErrorCorrectionLevel.M]: 0b00,
+  [ErrorCorrectionLevel.Q]: 0b11,
+  [ErrorCorrectionLevel.H]: 0b10,
+};
+
+// QR Code mask patterns
+export const MASK_PATTERNS = [
+  (i: number, j: number) => (i + j) % 2 === 0,
+  (i: number, _: number) => i % 2 === 0,
+  (_: number, j: number) => j % 3 === 0,
+  (i: number, j: number) => (i + j) % 3 === 0,
+  (i: number, j: number) => (Math.floor(i / 2) + Math.floor(j / 3)) % 2 === 0,
+  (i: number, j: number) => ((i * j) % 2) + ((i * j) % 3) === 0,
+  (i: number, j: number) => (((i * j) % 2) + ((i * j) % 3)) % 2 === 0,
+  (i: number, j: number) => (((i + j) % 2) + ((i * j) % 3)) % 2 === 0,
+];
+
+/**
  * Pad Codewords
  * - 11101100 (0xEC) : index 0
  * - 00010001 (0x11) : index 1
  */
-export const PAD_CODEWORDS = [0xEC, 0x11];
+export const PAD_CODEWORDS = [0xec, 0x11];
 
 /**
  * Number of data Codewords for Qr version
