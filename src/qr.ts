@@ -6,6 +6,7 @@ import {
   CHARACTER_COUNT_MAX_VERSION,
   CODEWORDS,
   ERROR_CORRECTION_BITS,
+  ERROR_CORRECTION_BLOCK,
   ERROR_CORRECTION_CODEWORDS,
   FINDER_PATTERN_SIZE,
   MASK_PATTERNS,
@@ -64,8 +65,6 @@ export class QR {
     this.maskPatten = 0;
 
     this.#generateQr();
-    // console.log(this);
-    this.print();
   }
 
   #generateQr() {
@@ -85,7 +84,7 @@ export class QR {
   #getVersion() {
     let version: number = 0;
 
-    // outer loop character count (CHARACTER_COUNT_INDICATOR length max is 3)
+    // outer loop character count (CHARACTER_COUNT_INDICATOR length is 3)
     ccLoop: for (let ccIndex = 0; ccIndex < 3; ccIndex++) {
       const isMixedMode = this.segments.length > 1;
       const mode = isMixedMode ? "Mixed" : this.segments[0].mode;
@@ -125,28 +124,42 @@ export class QR {
     return version;
   }
 
-  #encodeCodeword(data: number, bitLen: number) {
+  #encodeCodeword(codewords: Uint8Array, data: number, bitLen: number) {
     for (let i = 0; i < bitLen; i++) {
       const bit = (data >>> (bitLen - i - 1)) & 1;
       const codewordIndex = Math.floor(this.#codeBitLength / 8);
-      if (this.#codewords.length <= codewordIndex) {
-        this.#codewords[codewordIndex + 1] = 0;
+      if (codewords.length <= codewordIndex) {
+        codewords[codewordIndex + 1] = 0;
       }
 
       if (bit) {
-        this.#codewords[codewordIndex] |= 0x80 >>> this.#codeBitLength % 8;
+        codewords[codewordIndex] |= 0x80 >>> this.#codeBitLength % 8;
       }
       this.#codeBitLength++;
     }
   }
 
   #generateCodeword() {
+    const totalCodeword = this.#codewords.length;
+    const ecTotalCodeword =
+      ERROR_CORRECTION_CODEWORDS[this.errorCorrection][this.version - 1];
+    const dataTotalCodeword = totalCodeword - ecTotalCodeword;
+    const dataTotalCodewordBits = dataTotalCodeword * 8;
+
+    const dcData = new Uint8Array(totalCodeword - ecTotalCodeword);
+    const ecData = new Uint8Array(ecTotalCodeword);
+
     for (let index = 0; index < this.segments.length; index++) {
       const segment = this.segments[index];
       // encode mode
-      this.#encodeCodeword(MODE_INDICATOR[segment.mode], MODE_INDICATOR_BITS);
+      this.#encodeCodeword(
+        dcData,
+        MODE_INDICATOR[segment.mode],
+        MODE_INDICATOR_BITS
+      );
       // encode character count indicator
       this.#encodeCodeword(
+        dcData,
         segment.value.length,
         getCharCountIndicator(segment.mode, this.version)
       );
@@ -154,32 +167,72 @@ export class QR {
       const segmentBitArray = getEncodedSegmentData(segment);
       for (let i = 0; i < segmentBitArray.length; i++) {
         const segmentBit = segmentBitArray[i];
-        this.#encodeCodeword(segmentBit.data, segmentBit.bitLength);
+        this.#encodeCodeword(dcData, segmentBit.data, segmentBit.bitLength);
       }
     }
-    const totalCodeword = CODEWORDS[this.version - 1];
-    const ecTotalCodeword =
-      ERROR_CORRECTION_CODEWORDS[this.errorCorrection][this.version - 1];
-
-    const dataTotalCodeword = totalCodeword - ecTotalCodeword;
-    const dataTotalCodewordBits = dataTotalCodeword * 8;
 
     if (this.#codeBitLength + 4 <= dataTotalCodewordBits) {
-      this.#encodeCodeword(0, 4);
+      this.#encodeCodeword(dcData, 0, 4);
     }
 
     if (this.#codeBitLength % 8 !== 0) {
-      this.#encodeCodeword(0, 8 - (this.#codeBitLength % 8));
+      this.#encodeCodeword(dcData, 0, 8 - (this.#codeBitLength % 8));
     }
 
     const remainingByte = (dataTotalCodewordBits - this.#codeBitLength) / 8;
     for (let i = 0; i < remainingByte; i++) {
-      this.#encodeCodeword(PAD_CODEWORDS[i % 2], 8);
+      this.#encodeCodeword(dcData, PAD_CODEWORDS[i % 2], 8);
     }
 
-    const ecCodeWord = rsEncode(this.#codewords, ecTotalCodeword);
-    for (let i = 0; i < ecTotalCodeword; i++) {
-      this.#codewords[i + dataTotalCodeword] = ecCodeWord[i];
+    const ecTotalBlock =
+      ERROR_CORRECTION_BLOCK[this.errorCorrection][this.version - 1];
+    const group2Block = totalCodeword % ecTotalBlock;
+    const group1Block = ecTotalBlock - group2Block;
+
+    const group1TotalCodeword = Math.floor(totalCodeword / ecTotalBlock);
+
+    const group1DataTotalCodeword = Math.floor(
+      dataTotalCodeword / ecTotalBlock
+    );
+    const group2DataTotalCodeword = group1DataTotalCodeword + 1;
+
+    // Number of EC codewords is the same for both groups
+    const ecCount = group1TotalCodeword - group1DataTotalCodeword;
+
+    let offset = 0;
+    let maxDataSize = 0;
+    for (let b = 0; b < ecTotalBlock; b++) {
+      const dataSize =
+        b < group1Block ? group1DataTotalCodeword : group2DataTotalCodeword;
+
+      // Calculate EC codewords for this data block
+      const errorCodeword = rsEncode(
+        dcData.slice(offset, offset + dataSize),
+        ecCount
+      );
+      ecData.set(errorCodeword, b * ecCount);
+
+      offset += dataSize;
+      maxDataSize = Math.max(maxDataSize, dataSize);
+    }
+
+    // Interleave the Data Codewords
+    let codewordIndex = 0;
+    for (let i = 0; i < maxDataSize; i++) {
+      for (let j = 0; j < ecTotalBlock; j++) {
+        const index = j * maxDataSize + i;
+        if (dcData[index] !== undefined) {
+          this.#codewords[codewordIndex++] = dcData[index];
+        }
+      }
+    }
+
+    // Interleave the Error Correction Codewords
+    for (let i = 0; i < ecCount; i++) {
+      for (let j = 0; j < ecTotalBlock; j++) {
+        const index = j * ecCount + i;
+        this.#codewords[codewordIndex++] = ecData[index];
+      }
     }
   }
 
@@ -556,19 +609,5 @@ export class QR {
       }
     }
     return maskedData;
-  }
-
-  print() {
-    for (let i = 0; i < this.noOfModules; i++) {
-      for (let j = 0; j < this.noOfModules; j++) {
-        const index = i * this.noOfModules + j;
-        if (this.data[index] === 1) {
-          process.stdout.write("██");
-          continue;
-        }
-        process.stdout.write("  ");
-      }
-      process.stdout.write("\n");
-    }
   }
 }

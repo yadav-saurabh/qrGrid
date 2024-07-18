@@ -44,10 +44,10 @@ function generateGenerator(n: number) {
 export function rsEncode(data: Uint8Array, ecBytes: number) {
   initTables();
   const generator = generateGenerator(ecBytes);
-  const encoded = new Uint8Array(data);
+  const encoded = new Uint8Array(data.length + ecBytes);
+  encoded.set(data);
 
-  const messageBytes = data.length - ecBytes;
-  for (let i = 0; i < messageBytes; i++) {
+  for (let i = 0; i < data.length; i++) {
     const coeff = encoded[i];
     if (coeff !== 0) {
       for (let j = 0; j < generator.length; j++) {
