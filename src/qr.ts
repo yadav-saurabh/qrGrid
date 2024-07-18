@@ -315,13 +315,13 @@ export class QR {
 
       if (x > 0 && top - this.noOfModules * (x - 1) < this.noOfModules) {
         this.reservedBits[top] = {
-          type: ReservedBits.FinderPattern,
+          type: ReservedBits.Separator,
           dark: false,
         };
       }
       if (y > 0 && left >= 0) {
         this.reservedBits[left] = {
-          type: ReservedBits.FinderPattern,
+          type: ReservedBits.Separator,
           dark: false,
         };
       }
@@ -330,7 +330,7 @@ export class QR {
         down - this.noOfModules * (height + 1) >= 0
       ) {
         this.reservedBits[down] = {
-          type: ReservedBits.FinderPattern,
+          type: ReservedBits.Separator,
           dark: false,
         };
       }

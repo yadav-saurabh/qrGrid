@@ -2,14 +2,6 @@
   "name": "qr",
   "module": "index.ts",
   "type": "module",
-  "scripts": {
-    "dev": "tsx index.js"
-  },
-  "devDependencies": {
-    "bun-types": "latest",
-    "typescript": "^5.0.0",
-    "tsx": "^4.9.5"
-  },
   "volta": {
     "node": "20.13.1"
   }
