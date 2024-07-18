@@ -1,6 +1,5 @@
 /**
  * Qr Code Error Correction Levels
- * https://www.qrcode.com/en/about/error_correction.html
  */
 export enum ErrorCorrectionLevel {
   L = "L",

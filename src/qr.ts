@@ -81,6 +81,9 @@ export class QR {
     this.#fillFormatInfo();
   }
 
+  /**
+   * calculate the minimum version required for the given input data and Error Correction Level
+   */
   #getVersion() {
     let version: number = 0;
 
@@ -124,6 +127,9 @@ export class QR {
     return version;
   }
 
+  /**
+   * encode the data to it's binary 8 bit format and store ot in the codeword
+   */
   #encodeCodeword(codewords: Uint8Array, data: number, bitLen: number) {
     for (let i = 0; i < bitLen; i++) {
       const bit = (data >>> (bitLen - i - 1)) & 1;
@@ -139,16 +145,20 @@ export class QR {
     }
   }
 
+  /**
+   * Generate and encode the Input data to it equivalent Modes and Error Correction Codewords
+   */
   #generateCodeword() {
     const totalCodeword = this.#codewords.length;
     const ecTotalCodeword =
       ERROR_CORRECTION_CODEWORDS[this.errorCorrection][this.version - 1];
     const dataTotalCodeword = totalCodeword - ecTotalCodeword;
-    const dataTotalCodewordBits = dataTotalCodeword * 8;
+    const dataTotalCodewordBit = dataTotalCodeword * 8;
 
     const dcData = new Uint8Array(totalCodeword - ecTotalCodeword);
     const ecData = new Uint8Array(ecTotalCodeword);
 
+    // encode segment data
     for (let index = 0; index < this.segments.length; index++) {
       const segment = this.segments[index];
       // encode mode
@@ -170,16 +180,16 @@ export class QR {
         this.#encodeCodeword(dcData, segmentBit.data, segmentBit.bitLength);
       }
     }
-
-    if (this.#codeBitLength + 4 <= dataTotalCodewordBits) {
+    // Add terminator Bits 4 0s (if bitString is more than 4 bit shorter than totalCodewordBit)
+    if (this.#codeBitLength + 4 <= dataTotalCodewordBit) {
       this.#encodeCodeword(dcData, 0, 4);
     }
-
+    // Add 0s till the bitString is a multiple of 8
     if (this.#codeBitLength % 8 !== 0) {
       this.#encodeCodeword(dcData, 0, 8 - (this.#codeBitLength % 8));
     }
-
-    const remainingByte = (dataTotalCodewordBits - this.#codeBitLength) / 8;
+    // Add pad words if bitString is still shorter than the totalCodewordBit
+    const remainingByte = (dataTotalCodewordBit - this.#codeBitLength) / 8;
     for (let i = 0; i < remainingByte; i++) {
       this.#encodeCodeword(dcData, PAD_CODEWORDS[i % 2], 8);
     }
@@ -188,23 +198,20 @@ export class QR {
       ERROR_CORRECTION_BLOCK[this.errorCorrection][this.version - 1];
     const group2Block = totalCodeword % ecTotalBlock;
     const group1Block = ecTotalBlock - group2Block;
-
     const group1TotalCodeword = Math.floor(totalCodeword / ecTotalBlock);
-
     const group1DataTotalCodeword = Math.floor(
       dataTotalCodeword / ecTotalBlock
     );
     const group2DataTotalCodeword = group1DataTotalCodeword + 1;
-
-    // Number of EC codewords is the same for both groups
+    // Number of error correction codewords is the same for both groups
     const ecCount = group1TotalCodeword - group1DataTotalCodeword;
-
     let offset = 0;
     let maxDataSize = 0;
+
+    // calculate maxdataSize and generate error correction codewords for each block
     for (let b = 0; b < ecTotalBlock; b++) {
       const dataSize =
         b < group1Block ? group1DataTotalCodeword : group2DataTotalCodeword;
-
       // Calculate EC codewords for this data block
       const errorCodeword = rsEncode(
         dcData.slice(offset, offset + dataSize),
@@ -215,7 +222,6 @@ export class QR {
       offset += dataSize;
       maxDataSize = Math.max(maxDataSize, dataSize);
     }
-
     // Interleave the Data Codewords
     let codewordIndex = 0;
     for (let i = 0; i < maxDataSize; i++) {
@@ -226,7 +232,6 @@ export class QR {
         }
       }
     }
-
     // Interleave the Error Correction Codewords
     for (let i = 0; i < ecCount; i++) {
       for (let j = 0; j < ecTotalBlock; j++) {
@@ -236,6 +241,9 @@ export class QR {
     }
   }
 
+  /**
+   * reserve Finder Pattern Separator bits, Format Information bits and Dark Module bit
+   */
   #reserveBits() {
     const size = this.noOfModules;
 
@@ -246,22 +254,19 @@ export class QR {
     // bottom-left Finder pattern
     this.#reserveFinderSeparatorBits(size - FINDER_PATTERN_SIZE, 0);
 
-    // Temporary reserve Format Info to preserve index so that dataCodeword can be filled easily, and to prevent masking only encoded region is masked
+    // Temporary reserve Format Info to preserve index so that dataCodeword can be filled easily
     // after data masking correct reservation will be applied
     for (let i = 0; i < 8; i++) {
       // top-right index of format info
       const rightTop = size * i + FINDER_PATTERN_SIZE + 1;
       const rightTopTimingBlock =
         size * (FINDER_PATTERN_SIZE - 1) + FINDER_PATTERN_SIZE + 1;
-
       // bottom-right index of format info
       const rightBottom = size * (size - i) + FINDER_PATTERN_SIZE + 1;
-
       // bottom-left index of format info
       let bottomLeft = size * (FINDER_PATTERN_SIZE + 1) + i;
       const bottomLeftTimingBlock =
         size * (FINDER_PATTERN_SIZE + 1) + FINDER_PATTERN_SIZE - 1;
-
       // bottom-right index of format info
       const bottomRight = size * (FINDER_PATTERN_SIZE + 1) + size - i - 1;
 
@@ -303,6 +308,9 @@ export class QR {
     };
   }
 
+  /**
+   * helper function to reserver Finder Pattern Separator bits for the given co ordinates
+   */
   #reserveFinderSeparatorBits(x: number, y: number) {
     const size = FINDER_PATTERN_SIZE;
     const height = size + x - 1;
@@ -347,6 +355,9 @@ export class QR {
     }
   }
 
+  /**
+   * helper function set data for AlignmentPattern and FinderPattern
+   */
   #fillBlock(
     x: number,
     y: number,
@@ -377,7 +388,9 @@ export class QR {
     }
   }
 
-  // fill timingPattern with 1
+  /**
+   * set data for TimingPattern
+   */
   #fillTimingPattern() {
     let length = this.noOfModules - FINDER_PATTERN_SIZE * 2 - 2;
     for (let i = 1; i <= length; i++) {
@@ -399,7 +412,9 @@ export class QR {
     }
   }
 
-  // fill finderPattern
+  /**
+   * set data for FinderPattern
+   */
   #fillFinderPattern() {
     // top-left finder pattern
     this.#fillBlock(0, 0, FINDER_PATTERN_SIZE, ReservedBits.FinderPattern);
@@ -419,16 +434,20 @@ export class QR {
     );
   }
 
-  // fill alignmentPattern
+  /**
+   * set data for AlignmentPattern
+   */
   #fillAlignmentPattern() {
+    // no AlignmentPattern for version 1
     if (this.version === 1) {
       return;
     }
 
+    // calculate the co-ordinates of the alignment patterns
     const subdivisionCount = Math.floor(this.version / 7);
     const total = ALIGNMENT_PATTERN_TOTALS[subdivisionCount];
-    const first = 6;
-    const last = this.noOfModules - 7;
+    const first = 6; // first co-ordinates is always 6
+    const last = this.noOfModules - 7; // last co-ordinates is always Modules-7
     const diff = ALIGNMENT_PATTERN_DIFFS[this.version - 1];
     const positions = [first];
     for (let i = subdivisionCount; i >= 1; i--) {
@@ -462,6 +481,9 @@ export class QR {
     }
   }
 
+  /**
+   * set data for Version Information
+   */
   #fillVersionInfo() {
     const bits = getVersionInfoBits(this.version);
     for (let i = 0; i < 18; i++) {
@@ -485,6 +507,9 @@ export class QR {
     }
   }
 
+  /**
+   * set data for Format Information
+   */
   #fillFormatInfo(maskPattern?: number, qrData?: Uint8Array) {
     const data = qrData || this.data;
     const mask = maskPattern || this.maskPatten;
@@ -548,6 +573,9 @@ export class QR {
     }
   }
 
+  /**
+   * set data for codewords
+   */
   #fillCodeword() {
     let dataIndex = 0;
     let bitIndex = 7; // Starting with the most significant bit of the first byte
@@ -578,6 +606,9 @@ export class QR {
     }
   }
 
+  /**
+   * calculate mask and apply mask with lowest penalty
+   */
   #mask() {
     let bestPattern = 0;
     let lowestPenalty = Infinity;
@@ -597,6 +628,9 @@ export class QR {
     this.#applyMask(bestPattern);
   }
 
+  /**
+   * apply mask
+   */
   #applyMask(maskPattern: number, newData?: boolean) {
     const maskedData = newData ? new Uint8Array(this.data) : this.data;
     for (let i = 0; i < this.noOfModules; i++) {
