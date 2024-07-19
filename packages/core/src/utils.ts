@@ -90,10 +90,10 @@ export function getFormatInfoBits(
   maskPattern: number
 ) {
   // Golay Generator polynomial for QR code format information
-  const GOLAY_GENERATOR = 0b10100110111;
+  const GOLAY_GENERATOR = 0x537;
 
   // XOR mask for format information
-  const FORMAT_MASK = 0b101010000010010;
+  const FORMAT_MASK = 0x5412;
 
   let formatInfo = (errorCorrectionBit << 3) | maskPattern;
   let reg = formatInfo << 10;
@@ -259,8 +259,8 @@ export function getMaskPenalty(data: Uint8Array, size: number): number {
   }
 
   // Rule 3: Specific patterns in rows or columns
-  const pattern1 = [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0];
-  const pattern2 = [0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1];
+  const pattern1 = new Uint8Array([1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0]);
+  const pattern2 = new Uint8Array([0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1]);
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j <= size - pattern1.length; j++) {

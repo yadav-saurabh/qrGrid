@@ -65,6 +65,7 @@ export class QR {
     this.maskPatten = 0;
 
     this.#generateQr();
+    console.log(this);
   }
 
   #generateQr() {
