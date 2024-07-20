@@ -1,15 +1,9 @@
 {
   "name": "@zqr/core",
-  "module": "index.ts",
-  "main": "dist/index.js",
+  "version": "0.1.0",
+  "module": "src/index.ts",
+  "main": "src/index.ts",
   "type": "module",
-  "files": [
-    "dist/**"
-  ],
-  "exports": {
-    ".": "./dist/index.js",
-    "./enums": "./dist/enums.js"
-  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w"

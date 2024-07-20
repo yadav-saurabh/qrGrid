@@ -33,6 +33,9 @@ export type QrOptions = {
   errorCorrection?: keyof typeof ErrorCorrectionLevel;
 };
 
+/**
+ * Generates a Qr code
+ */
 export class QR {
   readonly inputData: string;
   segments: Segments;
