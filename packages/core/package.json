@@ -1,6 +1,5 @@
 {
   "name": "@zqr/core",
-  "version": "0.1.0",
   "module": "src/index.ts",
   "main": "src/index.ts",
   "type": "module",

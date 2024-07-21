@@ -2,7 +2,7 @@ import { getBitsLength } from "./utils";
 import { CHARACTER_COUNT_INDICATOR, MODE_INDICATOR_BITS } from "./constants";
 import { dijkstra, getPath } from "./dijkstra";
 import { Mode } from "./enums";
-import { Segments } from "./qr";
+import { Segments } from "./types";
 import { regexString } from "./utils";
 
 const GRAPH_START_NODE = "start";

@@ -1,4 +1,4 @@
-import { Segments } from "./qr";
+import { Segments } from "./types";
 import {
   ALPHANUMERIC_CHARSET,
   CHARACTER_COUNT_INDICATOR,

@@ -14,9 +14,10 @@ import {
   MODE_INDICATOR_BITS,
   PAD_CODEWORDS,
 } from "./constants";
-import { ErrorCorrectionLevel, Mode, ReservedBits } from "./enums";
+import { ErrorCorrectionLevel, ReservedBits } from "./enums";
 import { rsEncode } from "./reed-solomon";
 import { getSegments } from "./segment";
+import { QrOptions, Segments } from "./types";
 import {
   getEncodedSegmentData,
   getBitsLength,
@@ -28,10 +29,6 @@ import {
 } from "./utils";
 
 type PatternSize = typeof FINDER_PATTERN_SIZE | typeof ALIGNMENT_PATTERN_SIZE;
-export type Segments = Array<{ value: string; mode: Mode }>;
-export type QrOptions = {
-  errorCorrection?: keyof typeof ErrorCorrectionLevel;
-};
 
 /**
  * Generates a Qr code
@@ -68,7 +65,6 @@ export class QR {
     this.maskPatten = 0;
 
     this.#generateQr();
-    console.log(this);
   }
 
   #generateQr() {
@@ -188,7 +184,7 @@ export class QR {
     if (this.#codeBitLength + 4 <= dataTotalCodewordBit) {
       this.#encodeCodeword(dcData, 0, 4);
     }
-    // Add 0s till the bitString is a multiple of 8
+    // Add 0's till the bitString is a multiple of 8
     if (this.#codeBitLength % 8 !== 0) {
       this.#encodeCodeword(dcData, 0, 8 - (this.#codeBitLength % 8));
     }
@@ -211,16 +207,16 @@ export class QR {
     const ecCount = group1TotalCodeword - group1DataTotalCodeword;
     let offset = 0;
     let maxDataSize = 0;
+    let blockIndexes = [offset];
 
     // calculate maxdataSize and generate error correction codewords for each block
     for (let b = 0; b < ecTotalBlock; b++) {
       const dataSize =
         b < group1Block ? group1DataTotalCodeword : group2DataTotalCodeword;
+      blockIndexes.push(offset + dataSize);
       // Calculate EC codewords for this data block
-      const errorCodeword = rsEncode(
-        dcData.slice(offset, offset + dataSize),
-        ecCount
-      );
+      const blockData = dcData.slice(offset, offset + dataSize);
+      const errorCodeword = rsEncode(blockData, ecCount);
       ecData.set(errorCodeword, b * ecCount);
 
       offset += dataSize;
@@ -230,8 +226,8 @@ export class QR {
     let codewordIndex = 0;
     for (let i = 0; i < maxDataSize; i++) {
       for (let j = 0; j < ecTotalBlock; j++) {
-        const index = j * maxDataSize + i;
-        if (dcData[index] !== undefined) {
+        const index = blockIndexes[j] + i;
+        if (index < blockIndexes[j + 1]) {
           this.#codewords[codewordIndex++] = dcData[index];
         }
       }
