@@ -2,11 +2,15 @@ import { getBitsLength } from "./utils";
 import { CHARACTER_COUNT_INDICATOR, MODE_INDICATOR_BITS } from "./constants";
 import { dijkstra, getPath } from "./dijkstra";
 import { Mode } from "./enums";
-import { Segments } from "./types";
 import { regexString } from "./utils";
 
 const GRAPH_START_NODE = "start";
 const GRAPH_END_NODE = "end";
+
+/**
+ * Qr Code Segment Type
+ */
+export type Segments = Array<{ value: string; mode: Mode }>;
 
 /**
  * split the string into basic Mode
@@ -15,7 +19,7 @@ const GRAPH_END_NODE = "end";
  * // output
  * [{value: 'H', mode: 'AlphaNumeric' }, {value: 'ello', mode: 'Byte' }]
  */
-function getBasicInputSegments(data: string): Segments {
+export function getBasicInputSegments(data: string): Segments {
   const regStr = [
     `(${regexString[Mode.AlphaNumeric]})`,
     `(${regexString[Mode.Numeric]})`,
@@ -46,7 +50,10 @@ function getBasicInputSegments(data: string): Segments {
  * // output
  * [{value: 'Hello', mode: 'Byte' }]
  */
-function getOptimizedSegments(segments: Segments): Segments {
+export function getOptimizedSegments(
+  segments: Segments,
+  ccIndex: number
+): Segments {
   let graph: Record<string, Record<string, number>> = {
     [GRAPH_START_NODE]: {},
   };
@@ -70,26 +77,30 @@ function getOptimizedSegments(segments: Segments): Segments {
       connects.push({ value: element.value, mode: Mode.Byte });
     }
 
-    // loop through connect(possible mode) and add them in graph with weight as the bits
+    // loop through connect(possible mode) and add them in graph with weight as the byte
     for (let connectIndex = 0; connectIndex < connects.length; connectIndex++) {
       const connectElement = connects[connectIndex];
       const key = `${segmentIndex}${connectIndex}`;
       nodes[key] = connectElement;
       currentKeys.push(key);
 
-      // calculate bite and add to the previous nodes
+      // calculate byte and add to the previous nodes
       for (let i = 0; i < keys.length; i++) {
         const graphKey = keys[i];
-        const bitLength = getBitsLength(connectElement);
 
         // if previous node is same as current then no mode indicator and character count indicator bits
         if (nodes[graphKey] && nodes[graphKey].mode === connectElement.mode) {
-          graph[graphKey][key] = bitLength;
+          const segmentSum = {
+            value: nodes[graphKey].value + connectElement.value,
+            mode: connectElement.mode,
+          };
+          graph[graphKey][key] =
+            getBitsLength(segmentSum) - getBitsLength(nodes[graphKey]);
         } else {
           graph[graphKey][key] =
-            bitLength +
+            getBitsLength(connectElement) +
             MODE_INDICATOR_BITS +
-            CHARACTER_COUNT_INDICATOR[connectElement.mode][2]; // assuming the highest cc bit
+            CHARACTER_COUNT_INDICATOR[connectElement.mode][ccIndex];
         }
       }
       // if graph ends add end node
@@ -118,9 +129,4 @@ function getOptimizedSegments(segments: Segments): Segments {
   }
 
   return data;
-}
-
-export function getSegments(data: string): Segments {
-  const basicSplit = getBasicInputSegments(data);
-  return getOptimizedSegments(basicSplit);
 }

@@ -1,5 +1,8 @@
 {
   "name": "@zqr/core",
-  "version": "0.1.1",
-  "exports": "./src/index.ts"
+  "version": "0.1.2",
+  "exports": {
+    ".": "./src/index.ts",
+    "./enums": "./src/enums.ts"
+  }
 }

@@ -1,4 +1,3 @@
-import { Segments } from "./types";
 import {
   ALPHANUMERIC_CHARSET,
   CHARACTER_COUNT_INDICATOR,
@@ -8,6 +7,7 @@ import {
   MODE_INDICATOR_BITS,
 } from "./constants";
 import { ErrorCorrectionLevel, Mode } from "./enums";
+import { Segments } from "./segment";
 
 /**
  * special characters used in Alpha Numeric character in QR
@@ -52,10 +52,10 @@ export function getBitsLength(data: Segments[0]) {
  */
 export function getCharCountIndicator(mode: Mode, version: number) {
   let index = 0;
-  if (version > 9) {
-    index = 1;
-  } else if (version > 26) {
+  if (version > 26) {
     index = 2;
+  } else if (version > 9) {
+    index = 1;
   }
   return CHARACTER_COUNT_INDICATOR[mode][index];
 }

@@ -16,8 +16,7 @@ import {
 } from "./constants";
 import { ErrorCorrectionLevel, ReservedBits } from "./enums";
 import { rsEncode } from "./reed-solomon";
-import { getSegments } from "./segment";
-import { QrOptions, Segments } from "./types";
+import { getBasicInputSegments, getOptimizedSegments, Segments } from "./segment";
 import {
   getEncodedSegmentData,
   getBitsLength,
@@ -28,6 +27,12 @@ import {
   getMaskPenalty,
 } from "./utils";
 
+/**
+ * Options to generate a new Qr
+ */
+export type QrOptions = {
+  errorCorrection?: keyof typeof ErrorCorrectionLevel;
+};
 type PatternSize = typeof FINDER_PATTERN_SIZE | typeof ALIGNMENT_PATTERN_SIZE;
 
 /**
@@ -55,7 +60,7 @@ export class QR {
       ErrorCorrectionLevel[options?.errorCorrection || ErrorCorrectionLevel.M];
     this.reservedBits = {};
 
-    this.segments = getSegments(inputData);
+    this.segments = getBasicInputSegments(inputData);
     this.version = this.#getVersion();
     this.noOfModules = this.version * 4 + 17;
 
@@ -86,13 +91,15 @@ export class QR {
    */
   #getVersion() {
     let version: number = 0;
+    let segments: Segments = [];
 
     // outer loop character count (CHARACTER_COUNT_INDICATOR length is 3)
     ccLoop: for (let ccIndex = 0; ccIndex < 3; ccIndex++) {
-      const isMixedMode = this.segments.length > 1;
-      const mode = isMixedMode ? "Mixed" : this.segments[0].mode;
+      segments = getOptimizedSegments(this.segments, ccIndex);
+      const isMixedMode = segments.length > 1;
+      const mode = isMixedMode ? "Mixed" : segments[0].mode;
       const maxCapacityVersion = CHARACTER_COUNT_MAX_VERSION[ccIndex];
-      let bitSize: number = isMixedMode ? 0 : this.segments[0].value.length;
+      let bitSize: number = isMixedMode ? 0 : segments[0].value.length;
 
       const maxDataCapacity = getCapacity(
         maxCapacityVersion,
@@ -101,7 +108,7 @@ export class QR {
       );
 
       if (isMixedMode) {
-        this.segments.forEach((d) => {
+        segments.forEach((d) => {
           bitSize +=
             MODE_INDICATOR_BITS +
             CHARACTER_COUNT_INDICATOR[d.mode][ccIndex] +
@@ -123,7 +130,7 @@ export class QR {
         }
       }
     }
-
+    this.segments = segments;
     return version;
   }
 

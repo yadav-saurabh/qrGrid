@@ -79,7 +79,7 @@ export const CHARACTER_COUNT_MAX_VERSION = [9, 26, 40];
  * index = 0
  * if version > 9
  *   index = 1
- * else if version > 26
+ * if version > 26
  *   index = 2
  * CHARACTER_COUNT_INDICATOR[Mode][index]
  */

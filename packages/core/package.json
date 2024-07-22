@@ -3,6 +3,16 @@
   "module": "src/index.ts",
   "main": "src/index.ts",
   "type": "module",
+  "description": "qr code generator",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yadav-saurabh/zqr"
+  },
+  "keywords": [
+    "qr",
+    "typescript"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w"
