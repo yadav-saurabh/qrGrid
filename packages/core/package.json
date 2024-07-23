@@ -3,16 +3,23 @@
   "module": "src/index.ts",
   "main": "src/index.ts",
   "type": "module",
-  "description": "qr code generator",
+  "description": "zqr qr code generation library",
   "license": "MIT",
+  "bugs": "https://github.com/yadav-saurabh/zqr/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yadav-saurabh/zqr"
+    "url": "https://github.com/yadav-saurabh/zqr",
+    "directory": "packages/core"
   },
   "keywords": [
     "qr",
+    "zqr",
     "typescript"
   ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./enums": "./src/enums.ts"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w"

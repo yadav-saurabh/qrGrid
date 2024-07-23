@@ -1,8 +1,28 @@
 {
   "name": "@zqr/react",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "module": "src/qr.tsx",
+  "main": "src/qr.tsx",
+  "description": "zqr qr code generation library for react",
+  "license": "MIT",
+  "bugs": "https://github.com/yadav-saurabh/zqr/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yadav-saurabh/zqr",
+    "directory": "packages/zqr-react"
+  },
+  "keywords": [
+    "qr",
+    "styling",
+    "zqr",
+    "typescript",
+    "react"
+  ],
+  "exports": {
+    ".": "./src/qr.tsx",
+    "./style": "./src/style.tsx"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -10,8 +30,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "@zqr/core": "*"
   },
   "devDependencies": {
@@ -25,5 +43,8 @@
     "eslint-plugin-react-refresh": "^0.4.7",
     "typescript": "^5.2.2",
     "vite": "^5.3.4"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1"
   }
 }
