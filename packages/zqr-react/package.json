@@ -21,7 +21,9 @@
   ],
   "exports": {
     ".": "./src/qr.tsx",
-    "./style": "./src/style.tsx"
+    "./types": "./src/types.tsx",
+    "./styles": "./src/styles.tsx",
+    "./utils": "./src/utils.tsx"
   },
   "scripts": {
     "dev": "vite",

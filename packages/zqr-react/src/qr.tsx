@@ -1,36 +1,18 @@
 import { useEffect, useRef } from "react";
-import { QR, QrOptions } from "@zqr/core";
+import { QR } from "@zqr/core";
+import { ModuleStyleFunctionParams, QrProps } from "./types";
 
 const DEFAULT_CANVAS_SIZE = 400;
 const DEFAULT_BG_COLOR = "black";
 const DEFAULT_COLOR = "white";
 
 function applyModuleStyle(
-  ctx: CanvasRenderingContext2D,
-  coord: { index: number; x: number; y: number },
-  size: number,
-  _qr: QR
+  ctx: ModuleStyleFunctionParams[0],
+  module: ModuleStyleFunctionParams[1],
+  _qr: ModuleStyleFunctionParams[2]
 ) {
-  ctx.fillRect(coord.x, coord.y, size, size);
+  ctx.fillRect(module.x, module.y, module.size, module.size);
 }
-
-export type ModuleStyleFunctionType = (
-  ctx: CanvasRenderingContext2D,
-  coord: { index: number; x: number; y: number },
-  size: number,
-  qr: QR
-) => void;
-
-export type QrProps = {
-  input: string;
-  qrOptions?: QrOptions;
-  size?: number;
-  bgColor?: string;
-  color?: string;
-  theme?: (ctx: CanvasRenderingContext2D, size: number, qr: QR) => void;
-  moduleStyle?: ModuleStyleFunctionType;
-  getQrData?: (qr: QR) => void;
-};
 
 export function Qr(props: QrProps) {
   const { input, qrOptions, bgColor, color, moduleStyle } = props;
@@ -44,9 +26,11 @@ export function Qr(props: QrProps) {
     const canvasSize = props.size || DEFAULT_CANVAS_SIZE;
 
     const ctx = canvasRef.current.getContext("2d")!;
+    if (props.getCanvasCtx) {
+      props.getCanvasCtx(ctx);
+    }
 
     if (!input) {
-      ctx.fillStyle = bgColor || DEFAULT_BG_COLOR;
       ctx.fillRect(0, 0, canvasSize, canvasSize);
       return;
     }
@@ -61,12 +45,9 @@ export function Qr(props: QrProps) {
     canvasRef.current.height = canvasSize + border;
     canvasRef.current.width = canvasSize + border;
 
-    ctx.fillStyle = bgColor || DEFAULT_BG_COLOR;
-    ctx.fillRect(0, 0, canvasSize + border, canvasSize + border);
-    ctx.fillStyle = color || DEFAULT_COLOR;
-
-    if (props.theme) {
-      props.theme(ctx, size, qr);
+    ctx.fillStyle = color && typeof color === "string" ? color : DEFAULT_COLOR;
+    if (color && typeof color === "function") {
+      ctx.fillStyle = color(ctx);
     }
 
     let moduleStyleFunction = applyModuleStyle;
@@ -81,7 +62,7 @@ export function Qr(props: QrProps) {
         const index = i * qr.noOfModules + j;
         const bit = qr.data[index];
         if (bit) {
-          moduleStyleFunction(ctx, { index, x, y }, size, qr);
+          moduleStyleFunction(ctx, { index, x, y, size }, qr);
         }
         x += size;
         if (j === qr.noOfModules - 1) {
@@ -90,7 +71,26 @@ export function Qr(props: QrProps) {
         }
       }
     }
-  }, [input, qrOptions, props.size, bgColor, color, moduleStyle, props.theme]);
+
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle =
+      bgColor && typeof bgColor === "string" ? bgColor : DEFAULT_BG_COLOR;
+    if (bgColor && typeof bgColor === "function") {
+      ctx.fillStyle = bgColor(ctx);
+    }
+    ctx.fillRect(0, 0, canvasSize + border, canvasSize + border);
+
+    if (props.onFinish) {
+      props.onFinish(ctx, size, qr);
+    }
+  }, [
+    input,
+    qrOptions?.errorCorrection,
+    props.size,
+    bgColor,
+    color,
+    moduleStyle,
+  ]);
 
   return (
     <canvas

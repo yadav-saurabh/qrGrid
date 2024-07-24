@@ -22,7 +22,8 @@ body {
   padding: 2rem;
 }
 
-textarea {
+textarea,
+select {
   width: 100%;
   padding: 12px 20px;
   font-size: 16px;
@@ -30,6 +31,10 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+select {
+  margin-top: 1rem;
 }
 
 .defaultQrContainer {
