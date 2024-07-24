@@ -104,7 +104,7 @@ function App() {
           <span className="segments">
             {(qrData?.segments || []).map((d, i) => (
               <Fragment key={i}>
-                <b>{d.mode}</b> -<span>{d.value}</span>
+                <b>{d.mode}</b> - <span>{d.value}</span>
                 <br />
               </Fragment>
             ))}

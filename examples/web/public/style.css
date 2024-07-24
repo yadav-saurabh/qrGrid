@@ -1,0 +1,79 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 2rem;
+}
+
+.inputContainer {
+  padding: 2rem;
+}
+
+textarea,
+select {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 16px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+select {
+  margin-top: 1rem;
+}
+
+button {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 16px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.defaultQrContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.segments {
+  margin-left: 1rem;
+  display: inline-block;
+  font-size: 0.8rem;
+  max-height: 8rem;
+  overflow: scroll;
+}
+
+.qrContainer {
+  margin: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.qr {
+  padding: 1rem;
+  border: 1px solid white;
+}
+
+.qr p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+}

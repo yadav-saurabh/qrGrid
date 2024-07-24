@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite + TS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="inputContainer">
+    <textarea id="inputText" placeholder="Text To Encode" rows=4 cols=50> </textarea>
+    <select name="errorCorrection" id="errorCorrectionSelect">
+      <option disabled>Choose a ErrorCorrectionLevel</option>
+      <option value="L">L</option>
+      <option value="M" selected>M</option>
+      <option value="Q">Q</option>
+      <option value="H">H</option>
+    </select>
+  </div>
+  <!-- default qr -->
+  <div class="defaultQrContainer">
+    <div style="position:relative; left:-4rem">
+      <h2>Default Qr</h2>
+      Version: <span id="version"></span>
+      <br />
+      Size: <span id="noOfModules"></span>
+      <br />
+      Error Correction: <span id="errorCorrection"></span>
+      <br />
+      Total bits size: <span id="dataSize"></span>
+      <br />
+      Reserved bits length: <span id="reservedBitSize"></span>
+      <br />
+      Segments:
+      <br />
+      <span class="segments" id="segments"></span>
+      <div>
+        <button type="button" id="downloadBtn">
+          Download
+        </button>
+      </div>
+    </div>
+    <canvas height="400" width="400" id="defaultQr" />
+  </div>
+  <!-- other qr will be appended here -->
+  <div class="qrContainer" id="qrContainer">
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

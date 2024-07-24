@@ -1,5 +1,5 @@
 {
-  "name": "@zqr/example-vanilla",
+  "name": "@zqr/example-web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,6 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
+  },
+  "dependencies": {
+    "@zqr/core": "*"
   },
   "devDependencies": {
     "typescript": "^5.2.2",
