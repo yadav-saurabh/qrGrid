@@ -187,11 +187,12 @@ export function downloadQr(
   type?: "png" | "jpeg" | "webp",
   name?: string
 ) {
-  if (canvas) {
-    const url = canvas.toDataURL(`image/${type || "png"}`);
+  const imageType = `image/${type || "png"}`;
+  canvas.toBlob((blob) => {
+    const url = URL.createObjectURL(blob!);
     const link = document.createElement("a");
     link.download = name || "zqr";
     link.href = url;
     link.click();
-  }
+  }, imageType);
 }
