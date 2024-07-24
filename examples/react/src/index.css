@@ -37,6 +37,16 @@ select {
   margin-top: 1rem;
 }
 
+button {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 16px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
 .defaultQrContainer {
   display: flex;
   justify-content: center;

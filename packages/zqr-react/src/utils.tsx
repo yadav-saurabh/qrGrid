@@ -181,3 +181,17 @@ export function roundCornerFinderPattern(
     ctx.fillRect(module.x, module.y, module.size, module.size);
   }
 }
+
+export function downloadQr(
+  canvas: HTMLCanvasElement,
+  type?: "png" | "jpeg" | "webp",
+  name?: string
+) {
+  if (canvas) {
+    const url = canvas.toDataURL(`image/${type || "png"}`);
+    const link = document.createElement("a");
+    link.download = name || "zqr";
+    link.href = url;
+    link.click();
+  }
+}

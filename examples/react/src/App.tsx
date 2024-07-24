@@ -1,16 +1,27 @@
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { QR } from "@zqr/core";
 import { ErrorCorrectionLevel, ReservedBits } from "@zqr/core/enums";
 import { Qr } from "@zqr/react";
 import { dotModuleStyle, smoothModuleStyle } from "@zqr/react/styles";
-import { getNeighbor, roundCorner } from "@zqr/react/utils";
+import {
+  downloadQr as downloadUtil,
+  getNeighbor,
+  roundCorner,
+} from "@zqr/react/utils";
 
 function App() {
   const [input, setInput] = useState("");
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [errorCorrection, setErrorCorrection] = useState<ErrorCorrectionLevel>(
     ErrorCorrectionLevel.M
   );
   const [qrData, setQrData] = useState<QR | null>(null);
+
+  const download = () => {
+    if (canvasRef.current) {
+      downloadUtil(canvasRef.current);
+    }
+  };
 
   const qrModuleStyleA = (
     ctx: CanvasRenderingContext2D,
@@ -98,10 +109,16 @@ function App() {
               </Fragment>
             ))}
           </span>
+          <div>
+            <button type="button" onClick={download}>
+              Download
+            </button>
+          </div>
         </div>
         <Qr
           input={input}
           qrOptions={{ errorCorrection }}
+          ref={canvasRef}
           getQrData={(qr) => {
             setQrData(qr);
           }}

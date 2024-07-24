@@ -1,10 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, forwardRef, useImperativeHandle, Ref } from "react";
 import { QR } from "@zqr/core";
 import { ModuleStyleFunctionParams, QrProps } from "./types";
 
 const DEFAULT_CANVAS_SIZE = 400;
 const DEFAULT_BG_COLOR = "black";
 const DEFAULT_COLOR = "white";
+const DEFAULT_IMG_SIZE = 0.2;
+const DEFAULT_IMG_OPACITY = 1;
 
 function applyModuleStyle(
   ctx: ModuleStyleFunctionParams[0],
@@ -14,10 +16,12 @@ function applyModuleStyle(
   ctx.fillRect(module.x, module.y, module.size, module.size);
 }
 
-export function Qr(props: QrProps) {
-  const { input, qrOptions, bgColor, color, moduleStyle } = props;
+function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
+  const { input, qrOptions, bgColor, image, color, moduleStyle } = props;
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useImperativeHandle(ref, () => canvasRef.current!, []);
 
   useEffect(() => {
     if (!canvasRef?.current) {
@@ -31,7 +35,7 @@ export function Qr(props: QrProps) {
     }
 
     if (!input) {
-      ctx.fillRect(0, 0, canvasSize, canvasSize);
+      ctx.clearRect(0, 0, canvasSize, canvasSize);
       return;
     }
 
@@ -72,6 +76,23 @@ export function Qr(props: QrProps) {
       }
     }
 
+    if (image) {
+      const img = new Image();
+      img.src = image.src;
+      img.onload = () => {
+        ctx.save();
+        const dHeight = canvasSize * (image.sizePercent || DEFAULT_IMG_SIZE);
+        const dWidth = canvasSize * (image.sizePercent || DEFAULT_IMG_SIZE);
+        const dxLogo = (canvasSize - dWidth) / 2;
+        const dyLogo = (canvasSize - dHeight) / 2;
+
+        ctx.globalAlpha = image.opacity || DEFAULT_IMG_OPACITY;
+        ctx.drawImage(img, dxLogo, dyLogo, dWidth, dHeight);
+        ctx.restore();
+      };
+    }
+
+    ctx.save();
     ctx.globalCompositeOperation = "destination-over";
     ctx.fillStyle =
       bgColor && typeof bgColor === "string" ? bgColor : DEFAULT_BG_COLOR;
@@ -79,16 +100,16 @@ export function Qr(props: QrProps) {
       ctx.fillStyle = bgColor(ctx);
     }
     ctx.fillRect(0, 0, canvasSize + border, canvasSize + border);
-
-    if (props.onFinish) {
-      props.onFinish(ctx, size, qr);
-    }
+    ctx.restore();
   }, [
     input,
     qrOptions?.errorCorrection,
-    props.size,
     bgColor,
     color,
+    image?.src,
+    image?.opacity,
+    image?.sizePercent,
+    props.size,
     moduleStyle,
   ]);
 
@@ -100,3 +121,5 @@ export function Qr(props: QrProps) {
     />
   );
 }
+
+export const Qr = forwardRef<HTMLCanvasElement, QrProps>(QrComponent);
