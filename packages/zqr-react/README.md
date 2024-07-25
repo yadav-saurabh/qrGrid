@@ -7,3 +7,20 @@ import { Qr } from "@zqr/react";
 
 <Qr input="Hello World!"/>
 ```
+
+## Installation
+
+All the Zqr packages are available through [jsr](https://jsr.io/@zqr)
+
+```bash
+# deno
+deno add @zqr/react
+# npm
+npx jsr add @zqr/react
+# yarn
+yarn dlx jsr add @zqr/react
+# pnpm
+pnpm dlx jsr add @zqr/react
+# bun
+bunx jsr add @zqr/react
+```

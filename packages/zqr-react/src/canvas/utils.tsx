@@ -1,3 +1,7 @@
+/**
+ * Utils functions that can be used in styling the module or downloading the image from canvas
+ * @module
+ */
 import { QR, ReservedBits } from "@zqr/core";
 
 import { ModuleStyleFunctionParams } from "./types";
@@ -8,6 +12,9 @@ export type CornerType =
   | "bottom-left"
   | "bottom-right";
 
+/**
+ * get Neighbor status of the given index
+ */
 export function getNeighbor(index: number, qr: QR) {
   const { noOfModules, data } = qr;
 
@@ -36,6 +43,9 @@ export function getNeighbor(index: number, qr: QR) {
   };
 }
 
+/**
+ * make a module corner (square) round
+ */
 export function roundCorner(
   ctx: CanvasRenderingContext2D,
   module: ModuleStyleFunctionParams[1],
@@ -53,6 +63,9 @@ export function roundCorner(
   ctx.restore();
 }
 
+/**
+ * draws a arc at the corner of the module
+ */
 export function cornerArc(
   ctx: CanvasRenderingContext2D,
   module: ModuleStyleFunctionParams[1],
@@ -90,6 +103,9 @@ export function cornerArc(
   ctx.restore();
 }
 
+/**
+ * make module smooth
+ */
 export function smoothEdges(
   ctx: CanvasRenderingContext2D,
   module: ModuleStyleFunctionParams[1],
@@ -143,6 +159,9 @@ export function smoothEdges(
   ctx.fillRect(x, y, size, size);
 }
 
+/**
+ * changes the module styles of finderPatterns to make it round
+ */
 export function roundCornerFinderPattern(
   ctx: CanvasRenderingContext2D,
   module: ModuleStyleFunctionParams[1],
@@ -181,6 +200,9 @@ export function roundCornerFinderPattern(
   }
 }
 
+/**
+ * download the qr in the provided format
+ */
 export function downloadQr(
   canvas: HTMLCanvasElement,
   type?: "png" | "jpeg" | "webp",

@@ -1,8 +1,15 @@
+/**
+ * Styling function that can be used to pass in Qr component
+ * @module
+ */
 import { QR, ReservedBits } from "@zqr/core";
 
 import { ModuleStyleFunctionParams } from "./types";
 import { roundCornerFinderPattern, smoothEdges } from "./utils";
 
+/**
+ * Qr Module styles as dots(circles)
+ */
 export function dotModuleStyle(
   ctx: CanvasRenderingContext2D,
   module: ModuleStyleFunctionParams[1]
@@ -13,6 +20,9 @@ export function dotModuleStyle(
   ctx.fill();
 }
 
+/**
+ * Qr Module styles with with smooth edges
+ */
 export function smoothModuleStyle(
   ctx: CanvasRenderingContext2D,
   module: ModuleStyleFunctionParams[1],

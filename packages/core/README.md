@@ -14,7 +14,7 @@ npx jsr add @zqr/core
 # yarn
 yarn dlx jsr add @zqr/core
 # pnpm
-yarn dlx jsr add @zqr/core
+pnpm dlx jsr add @zqr/core
 # bun
 bunx jsr add @zqr/core
 ```

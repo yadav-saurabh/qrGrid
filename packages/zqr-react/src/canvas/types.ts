@@ -1,3 +1,7 @@
+/**
+ * Qr component types
+ * @module
+ */
 import { QR, QrOptions } from "@zqr/core";
 
 export type ModuleStyleFunction = (
