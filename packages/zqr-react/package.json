@@ -20,10 +20,10 @@
     "react"
   ],
   "exports": {
-    ".": "./src/qr.tsx",
-    "./types": "./src/types.tsx",
-    "./styles": "./src/styles.tsx",
-    "./utils": "./src/utils.tsx"
+    ".": "./src/index.ts",
+    "./canvas": "./src/canvas/index.ts",
+    "./canvas/styles": "./src/canvas/styles.tsx",
+    "./canvas/utils": "./src/canvas/utils.tsx"
   },
   "scripts": {
     "dev": "vite",

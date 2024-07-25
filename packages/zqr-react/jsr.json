@@ -1,0 +1,10 @@
+{
+  "name": "@zqr/react",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./canvas": "./src/canvas/index.ts",
+    "./canvas/styles": "./src/canvas/styles.tsx",
+    "./canvas/utils": "./src/canvas/utils.tsx"
+  }
+}

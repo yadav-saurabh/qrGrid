@@ -1,5 +1,11 @@
+/**
+ * This module contains function to find shortest distant in graph(segments) using dijkstra algorithm
+ * @module
+ */
+
 import { useEffect, useRef, forwardRef, useImperativeHandle, Ref } from "react";
 import { QR } from "@zqr/core";
+
 import { ModuleStyleFunctionParams, QrProps } from "./types";
 
 const DEFAULT_CANVAS_SIZE = 400;

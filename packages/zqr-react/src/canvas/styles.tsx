@@ -1,5 +1,4 @@
-import { QR } from "@zqr/core";
-import { ReservedBits } from "@zqr/core/enums";
+import { QR, ReservedBits } from "@zqr/core";
 
 import { ModuleStyleFunctionParams } from "./types";
 import { roundCornerFinderPattern, smoothEdges } from "./utils";
