@@ -1,3 +1,7 @@
+/**
+ * This module contains function to divide input sting to suitable segments for qr.
+ * @module
+ */
 import { getBitsLength } from "./utils";
 import { CHARACTER_COUNT_INDICATOR, MODE_INDICATOR_BITS } from "./constants";
 import { dijkstra, getPath } from "./dijkstra";

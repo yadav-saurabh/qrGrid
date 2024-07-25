@@ -1,4 +1,9 @@
 /**
+ * This module contains function to find shortest distant in graph(segments) using dijkstra algorithm 
+ * @module
+ */
+
+/**
  * a simple priority queue implementation
  */
 class PriorityQueue<T> {

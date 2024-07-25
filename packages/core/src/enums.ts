@@ -1,4 +1,9 @@
 /**
+ * This module contains enums used in qr 
+ * @module
+ */
+
+/**
  * Qr Code Error Correction Levels
  */
 export enum ErrorCorrectionLevel {

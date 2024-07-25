@@ -191,7 +191,7 @@ export function downloadQr(
   canvas.toBlob((blob) => {
     const url = URL.createObjectURL(blob!);
     const link = document.createElement("a");
-    link.download = name || "zqr";
+    link.download = name || "zqr-react";
     link.href = url;
     link.click();
   }, imageType);

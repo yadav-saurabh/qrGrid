@@ -1,3 +1,7 @@
+/**
+ * This module contains utility function used to generate a qr.
+ * @module
+ */
 import {
   ALPHANUMERIC_CHARSET,
   CHARACTER_COUNT_INDICATOR,

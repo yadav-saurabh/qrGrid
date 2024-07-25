@@ -1,3 +1,8 @@
+/**
+ * This module contains constants used to generate a qr
+ * @module
+ */
+
 import { ErrorCorrectionLevel, Mode } from "./enums";
 
 /**

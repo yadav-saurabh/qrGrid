@@ -1,3 +1,7 @@
+/**
+ * This module contains qr class to generate the qr.
+ * @module
+ */
 import {
   ALIGNMENT_PATTERN_DIFFS,
   ALIGNMENT_PATTERN_SIZE,
@@ -16,7 +20,11 @@ import {
 } from "./constants";
 import { ErrorCorrectionLevel, ReservedBits } from "./enums";
 import { rsEncode } from "./reed-solomon";
-import { getBasicInputSegments, getOptimizedSegments, Segments } from "./segment";
+import {
+  getBasicInputSegments,
+  getOptimizedSegments,
+  Segments,
+} from "./segment";
 import {
   getEncodedSegmentData,
   getBitsLength,

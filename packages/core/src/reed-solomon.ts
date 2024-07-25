@@ -1,3 +1,8 @@
+/**
+ * This module contains function to generate reed solomon error correction code.
+ * @module
+ */
+
 // Galois Field arithmetic
 const GF_EXP = new Uint8Array(256);
 const GF_LOG = new Uint8Array(256);
