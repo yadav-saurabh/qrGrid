@@ -26,9 +26,11 @@ The QR constructor expects two parameters:
 - options (QrOptions): Optional settings for QR code generation.
 
 ```typescript
-new QR(inputData, QrOptions?);
-// where inputData and QrOptions is:
-type inputData = string; 
+QR(
+inputData: string,
+options?: QrOptions,
+)
+// where QrOptions is:
 type QrOptions = {errorCorrection?: keyof typeof ErrorCorrectionLevel};
 // where ErrorCorrectionLevel is:
 enum ErrorCorrectionLevel {
@@ -42,7 +44,8 @@ enum ErrorCorrectionLevel {
 The QR class has the following public properties
 
 ``` typescript
-QR {
+// QR Properties
+{
   inputData: string; // input data passed in the constructor
   segments: Segments; // segments of the input data to make the qr
   data: Uint8Array; // qr data in 1's and 0's representing the dark and light module of qr
