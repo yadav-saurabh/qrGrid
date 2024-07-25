@@ -1,21 +1,12 @@
-import { QR } from "@zqr/core";
+import { QR, ReservedBits } from "@zqr/core";
+import { generateCanvas } from "./utils";
 
 const DEFAULT_CANVAS_SIZE = 400;
 const DEFAULT_BG_COLOR = "black";
 const DEFAULT_COLOR = "white";
 
-const description = document.createElement("p");
-description.innerText = "dotQr";
-
-const div = document.createElement("div");
-div.className = "qr";
-document.getElementById("qrContainer")?.appendChild(div);
-
-const canvas = document.createElement("canvas");
-div.appendChild(canvas);
-div.appendChild(description);
-
-export function generateDotQr(qr: QR) {
+const canvas = generateCanvas("coloredFinderPatternQr");
+export function generateColoredFinderPatternQr(qr: QR) {
   const ctx = canvas.getContext("2d")!;
   const canvasSize = DEFAULT_CANVAS_SIZE;
 
@@ -27,14 +18,14 @@ export function generateDotQr(qr: QR) {
 
   let x = size;
   let y = size;
-  const radius = Math.floor(size / 2);
-  const radian = 2 * Math.PI;
   for (let i = 0; i < qr.data.length; i++) {
     const bit = qr.data[i];
     if (bit) {
-      ctx.beginPath();
-      ctx.arc(x + radius, y + radius, radius, 0, radian);
-      ctx.fill();
+      if (qr.reservedBits[i]?.type === ReservedBits.FinderPattern) {
+        ctx.fillStyle = "#36BA98";
+      }
+      ctx.fillRect(x, y, size, size);
+      ctx.fillStyle = "white";
     }
     x += size;
     if (i % qr.noOfModules === qr.noOfModules - 1) {

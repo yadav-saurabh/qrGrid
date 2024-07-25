@@ -16,10 +16,6 @@
     "zqr",
     "typescript"
   ],
-  "exports": {
-    ".": "./src/index.ts",
-    "./enums": "./src/enums.ts"
-  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w"

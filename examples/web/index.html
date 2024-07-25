@@ -20,7 +20,6 @@
       <option value="H">H</option>
     </select>
   </div>
-  <!-- default qr -->
   <div class="defaultQrContainer">
     <div style="position:relative; left:-4rem">
       <h2>Default Qr</h2>
@@ -43,10 +42,14 @@
         </button>
       </div>
     </div>
-    <canvas height="400" width="400" id="defaultQr" />
+    <!-- default qr canvas -->
+    <canvas height="400" width="400" id="defaultQrCanvas" />
   </div>
-  <!-- other qr will be appended here -->
-  <div class="qrContainer" id="qrContainer">
+  <!-- canvas qr will be appended here -->
+  <div class="qrContainer" id="qrContainerCanvas">
+  </div>
+  <!-- svg qr will be appended here -->
+  <div class="qrContainer" id="qrContainerSvg">
   </div>
 
   <script type="module" src="/src/main.ts"></script>

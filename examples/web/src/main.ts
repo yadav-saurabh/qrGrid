@@ -1,8 +1,20 @@
-import { QR } from "@zqr/core";
-import { generateDefaultQr } from "./defaultQr";
-import { ErrorCorrectionLevel } from "@zqr/core/enums";
-import { generateDotQr } from "./dotQr";
-import { generateColoredFinderPatternQr } from "./coloredFinderPatternQr";
+import { QR, ErrorCorrectionLevel } from "@zqr/core";
+
+// canvas qr imports
+import { generateDefaultQr } from "./canvas/defaultQr";
+import { generateDotQr } from "./canvas/dotQr";
+import { generateColoredFinderPatternQr } from "./canvas/coloredFinderPatternQr";
+import { generateSmoothEdges } from "./canvas/smoothEdgesQr";
+import { downloadQr } from "./canvas/utils";
+import { generateGradientQr } from "./canvas/gradientQr";
+
+function generateQrOnCanvas(qr: QR) {
+  generateDefaultQr(qr);
+  generateDotQr(qr);
+  generateColoredFinderPatternQr(qr);
+  generateSmoothEdges(qr);
+  generateGradientQr(qr);
+}
 
 // input
 let input = "";
@@ -12,18 +24,18 @@ inputElement?.addEventListener("input", (event) => {
 
   if (input) {
     const qr = getQrData();
-    generateAllQr(qr);
+    generateQrOnCanvas(qr);
   }
 });
 
-// input
+// select
 let select: ErrorCorrectionLevel = ErrorCorrectionLevel.M;
 const selectElement = document.getElementById("errorCorrectionSelect");
 selectElement?.addEventListener("change", (event) => {
   select = (event.target as HTMLSelectElement).value as ErrorCorrectionLevel;
   if (select) {
     const qr = getQrData();
-    generateAllQr(qr);
+    generateQrOnCanvas(qr);
   }
 });
 
@@ -31,22 +43,11 @@ selectElement?.addEventListener("change", (event) => {
 const downloadBtn = document.getElementById("downloadBtn");
 downloadBtn?.addEventListener("click", onDownloadClick);
 
-function generateAllQr(qr: QR) {
-  generateDefaultQr(qr);
-  generateDotQr(qr);
-  generateColoredFinderPatternQr(qr);
-}
-
 function onDownloadClick() {
-  const canvas = document.getElementById("defaultQr") as HTMLCanvasElement;
-  const imageType = "image/png";
-  canvas.toBlob((blob) => {
-    const url = URL.createObjectURL(blob!);
-    const link = document.createElement("a");
-    link.download = "zqr-example-web";
-    link.href = url;
-    link.click();
-  }, imageType);
+  const canvas = document.getElementById(
+    "defaultQrCanvas"
+  ) as HTMLCanvasElement;
+  downloadQr(canvas);
 }
 
 // generate qr data
