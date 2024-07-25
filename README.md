@@ -22,22 +22,15 @@ import { QR } from "@zqr/core";
 new QR("Hello World!")
 ```
 
-```javascript
-console.log(qr);
-// outputs:
-{
-  data: [1,0,1,0,...] // Qr data representation, Unit8Array bits array contains 0's and 1's
-  segments: [{mode: 'Binary', value: "Hello World!"}...] // Qr segments data representation
-  version: 1, // version used to generate the qr code
-  noOfModules: 21 // no of module in the qr, 21 x 21 for version 1
-  errorCorrection: "M" // error correction level used to generate the qr code, default M
-  reservedBits: {'0': { type: "FinderPattern", dark: true },...} // reserved bits in the generated qr
-  maskPatten: 2 // mask pattern used
-}
-
-```
-
 ### React
+
+## TODO
+
+- [ ] (core) Support for Kanji Mode
+- [ ] (react) Support for using SVG
+- [ ] (web) examples using svg
+- [ ] package and examples for angular
+- [ ] package and examples for vue
 
 ## Credits
 

@@ -12,10 +12,19 @@ This package serves as the foundational component for encoding QR codes, utilize
 
 ## Installation
 
-All the Zqr packages are available in [jsr](https://jsr.io/)
+All the Zqr packages are available through [jsr](https://jsr.io/)
 
 ```bash
+# deno
+deno add @zqr/core
+# npm
 npx jsr add @zqr/core
+# yarn
+yarn dlx jsr add @zqr/core
+# pnpm
+yarn dlx jsr add @zqr/core
+# bun
+bunx jsr add @zqr/core
 ```
 
 ## Usage
@@ -104,3 +113,7 @@ ctx.globalCompositeOperation = "destination-over";
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, canvasSize + border, canvasSize + border);
 ```
+
+## TODO
+
+- [ ] Support for Kanji Mode
