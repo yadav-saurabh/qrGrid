@@ -1,18 +1,10 @@
 # Zqr Core
 
-This package serves as the foundational component for encoding QR codes, utilized by all other zqr packages. For maximum customization and full control over QR code generation, it is recommended to use this core package directly. For  detailed examples, see the [web examples](https://github.com/yadav-saurabh/zqr/tree/main/examples/web)
-
-## Features
-
-- Fast
-- Typescript
-- No Framework
-- Zero Dependency
-- Customizable
+This package serves as the foundational component for encoding QR codes, utilized by all other zqr packages. For maximum customization and full control over QR code generation, it is recommended to use this core package directly. For detailed examples, see the [web examples](https://github.com/yadav-saurabh/zqr/tree/main/examples/web)
 
 ## Installation
 
-All the Zqr packages are available through [jsr](https://jsr.io/)
+All the Zqr packages are available through [jsr](https://jsr.io/@zqr)
 
 ```bash
 # deno
@@ -113,7 +105,3 @@ ctx.globalCompositeOperation = "destination-over";
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, canvasSize + border, canvasSize + border);
 ```
-
-## TODO
-
-- [ ] Support for Kanji Mode
