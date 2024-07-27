@@ -2,8 +2,8 @@
   "name": "@zqr/react",
   "private": true,
   "type": "module",
-  "module": "src/qr.tsx",
-  "main": "src/qr.tsx",
+  "module": "src/qr.js",
+  "main": "src/qr.js",
   "description": "zqr qr code generation library for react",
   "license": "MIT",
   "bugs": "https://github.com/yadav-saurabh/zqr/issues",
@@ -22,12 +22,11 @@
   "exports": {
     ".": "./src/index.ts",
     "./canvas": "./src/canvas/index.ts",
-    "./canvas/styles": "./src/canvas/styles.tsx",
-    "./canvas/utils": "./src/canvas/utils.tsx"
+    "./canvas/styles": "./src/canvas/styles.js",
+    "./canvas/utils": "./src/canvas/utils.js"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -43,8 +42,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
-    "typescript": "^5.2.2",
-    "vite": "^5.3.4"
+    "typescript": "^5.2.2"
   },
   "peerDependencies": {
     "react": "^18.3.1"

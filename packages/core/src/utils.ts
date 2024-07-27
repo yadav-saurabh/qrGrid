@@ -9,9 +9,9 @@ import {
   ERROR_CORRECTION_CODEWORDS,
   MODE_BITS,
   MODE_INDICATOR_BITS,
-} from "./constants";
-import { ErrorCorrectionLevel, Mode } from "./enums";
-import { Segments } from "./segment";
+} from "./constants.js";
+import { ErrorCorrectionLevel, Mode } from "./enums.js";
+import { Segments } from "./segment.js";
 
 /**
  * special characters used in Alpha Numeric character in QR

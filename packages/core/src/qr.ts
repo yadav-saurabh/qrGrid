@@ -17,14 +17,14 @@ import {
   MODE_INDICATOR,
   MODE_INDICATOR_BITS,
   PAD_CODEWORDS,
-} from "./constants";
-import { ErrorCorrectionLevel, ReservedBits } from "./enums";
-import { rsEncode } from "./reed-solomon";
+} from "./constants.js";
+import { ErrorCorrectionLevel, ReservedBits } from "./enums.js";
+import { rsEncode } from "./reed-solomon.js";
 import {
   getBasicInputSegments,
   getOptimizedSegments,
   Segments,
-} from "./segment";
+} from "./segment.js";
 import {
   getEncodedSegmentData,
   getBitsLength,
@@ -33,7 +33,7 @@ import {
   getVersionInfoBits,
   getFormatInfoBits,
   getMaskPenalty,
-} from "./utils";
+} from "./utils.js";
 
 /**
  * Options to generate a new Qr

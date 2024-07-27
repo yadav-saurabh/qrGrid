@@ -2,11 +2,11 @@
  * This module contains function to divide input sting to suitable segments for qr.
  * @module
  */
-import { getBitsLength } from "./utils";
-import { CHARACTER_COUNT_INDICATOR, MODE_INDICATOR_BITS } from "./constants";
-import { dijkstra, getPath } from "./dijkstra";
-import { Mode } from "./enums";
-import { regexString } from "./utils";
+import { getBitsLength } from "./utils.js";
+import { CHARACTER_COUNT_INDICATOR, MODE_INDICATOR_BITS } from "./constants.js";
+import { dijkstra, getPath } from "./dijkstra.js";
+import { Mode } from "./enums.js";
+import { regexString } from "./utils.js";
 
 const GRAPH_START_NODE = "start";
 const GRAPH_END_NODE = "end";

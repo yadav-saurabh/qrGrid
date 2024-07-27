@@ -3,7 +3,7 @@
  * @module
  */
 
-import { ErrorCorrectionLevel, Mode } from "./enums";
+import { ErrorCorrectionLevel, Mode } from "./enums.js";
 
 /**
  * Alphanumeric mode character set

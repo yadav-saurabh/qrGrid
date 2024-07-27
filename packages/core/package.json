@@ -17,7 +17,10 @@
     "typescript"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b && npm run cp:license && npm run cp:jsr && npm run cp:readme",
+    "cp:license": "cp ../../LICENSE ./dist/LICENSE",
+    "cp:jsr": "cp ./jsr.json ./dist/jsr.json",
+    "cp:readme": "cp ./README.md ./dist/README.md",
     "dev": "tsc -w"
   }
 }

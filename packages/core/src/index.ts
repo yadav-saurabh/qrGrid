@@ -1,2 +1,2 @@
-export * from "./qr";
-export * from "./enums";
+export * from "./qr.js";
+export * from "./enums.js";
