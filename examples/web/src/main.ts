@@ -1,4 +1,4 @@
-import { QR, ErrorCorrectionLevel } from "@zqr/core";
+import { QR, ErrorCorrectionLevel } from "@qrgrid/core";
 
 // canvas qr imports
 import { generateDefaultQr } from "./canvas/defaultQr";

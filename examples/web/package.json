@@ -1,5 +1,5 @@
 {
-  "name": "@zqr/example-web",
+  "name": "@qrgrid/example-web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@zqr/core": "*"
+    "@qrgrid/core": "*"
   },
   "devDependencies": {
     "typescript": "^5.2.2",

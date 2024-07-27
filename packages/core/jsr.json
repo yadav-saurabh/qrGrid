@@ -1,5 +1,0 @@
-{
-  "name": "@zqr/core",
-  "version": "0.1.4",
-  "exports": "./src/index.ts"
-}

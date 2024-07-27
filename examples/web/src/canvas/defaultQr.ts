@@ -1,4 +1,4 @@
-import { QR } from "@zqr/core";
+import { QR } from "@qrgrid/core";
 
 const DEFAULT_CANVAS_SIZE = 400;
 const DEFAULT_BG_COLOR = "black";

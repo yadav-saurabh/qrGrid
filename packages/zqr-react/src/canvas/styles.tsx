@@ -2,7 +2,7 @@
  * Styling function that can be used to pass in Qr component
  * @module
  */
-import { QR, ReservedBits } from "@zqr/core";
+import { QR, ReservedBits } from "@qrgrid/core";
 
 import { ModuleStyleFunctionParams } from "./types";
 import { roundCornerFinderPattern, smoothEdges } from "./utils";

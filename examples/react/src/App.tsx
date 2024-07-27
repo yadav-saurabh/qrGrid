@@ -1,12 +1,12 @@
 import { Fragment, useRef, useState } from "react";
-import { QR, ErrorCorrectionLevel, ReservedBits } from "@zqr/core";
-import { Qr } from "@zqr/react/canvas";
-import { dotModuleStyle, smoothModuleStyle } from "@zqr/react/canvas/styles";
+import { QR, ErrorCorrectionLevel, ReservedBits } from "@qrgrid/core";
+import { Qr } from "@qrgrid/react/canvas";
+import { dotModuleStyle, smoothModuleStyle } from "@qrgrid/react/canvas/styles";
 import {
   downloadQr as downloadUtil,
   getNeighbor,
   roundCorner,
-} from "@zqr/react/canvas/utils";
+} from "@qrgrid/react/canvas/utils";
 
 function App() {
   const [input, setInput] = useState("");

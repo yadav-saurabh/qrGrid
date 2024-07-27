@@ -2,7 +2,7 @@
  * Utils functions that can be used in styling the module or downloading the image from canvas
  * @module
  */
-import { QR, ReservedBits } from "@zqr/core";
+import { QR, ReservedBits } from "@qrgrid/core";
 
 import { ModuleStyleFunctionParams } from "./types";
 
@@ -212,7 +212,7 @@ export function downloadQr(
   canvas.toBlob((blob) => {
     const url = URL.createObjectURL(blob!);
     const link = document.createElement("a");
-    link.download = name || "zqr-react";
+    link.download = name || "qrgrid-react";
     link.href = url;
     link.click();
   }, imageType);

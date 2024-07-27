@@ -2,7 +2,7 @@
  * Qr component types
  * @module
  */
-import { QR, QrOptions } from "@zqr/core";
+import { QR, QrOptions } from "@qrgrid/core";
 
 export type ModuleStyleFunction = (
   ctx: CanvasRenderingContext2D,

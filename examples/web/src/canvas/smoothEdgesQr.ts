@@ -1,4 +1,4 @@
-import { QR, ReservedBits } from "@zqr/core";
+import { QR, ReservedBits } from "@qrgrid/core";
 import {
   cornerArc,
   CornerType,

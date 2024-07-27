@@ -1,4 +1,4 @@
-import { QR } from "@zqr/core";
+import { QR } from "@qrgrid/core";
 import { generateCanvas } from "./utils";
 
 const DEFAULT_CANVAS_SIZE = 400;

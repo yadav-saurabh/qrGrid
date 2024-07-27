@@ -1,4 +1,4 @@
-import { QR, ReservedBits } from "@zqr/core";
+import { QR, ReservedBits } from "@qrgrid/core";
 
 export type CornerType =
   | "top-left"
@@ -188,7 +188,7 @@ export function downloadQr(
   canvas.toBlob((blob) => {
     const url = URL.createObjectURL(blob!);
     const link = document.createElement("a");
-    link.download = name || "zqr-web";
+    link.download = name || "qrgrid-web";
     link.href = url;
     link.click();
   }, imageType);

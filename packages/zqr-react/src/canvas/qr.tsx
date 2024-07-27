@@ -3,7 +3,7 @@
  * @module
  */
 import { useEffect, useRef, forwardRef, useImperativeHandle, Ref } from "react";
-import { QR } from "@zqr/core";
+import { QR } from "@qrgrid/core";
 
 import { ModuleStyleFunctionParams, QrProps } from "./types";
 

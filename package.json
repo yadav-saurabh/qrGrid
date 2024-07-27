@@ -1,11 +1,11 @@
 {
-  "name": "zqr",
+  "name": "qrgrid",
   "description": "javascript qr generator",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yadav-saurabh/zqr"
+    "url": "https://github.com/yadav-saurabh/qrgrid"
   },
   "keywords": [
     "qr",

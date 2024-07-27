@@ -1,22 +1,22 @@
-# Zqr Core
+# qrgrid Core
 
-This package serves as the foundational component for encoding QR codes, utilized by all other zqr packages. For maximum customization and full control over QR code generation, it is recommended to use this core package directly. For detailed examples, see the [web examples](https://github.com/yadav-saurabh/zqr/tree/main/examples/web)
+This package serves as the foundational component for encoding QR codes, utilized by all other qrgrid packages. For maximum customization and full control over QR code generation, it is recommended to use this core package directly. For detailed examples, see the [web examples](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/web)
 
 ## Installation
 
-All the Zqr packages are available through [jsr](https://jsr.io/@zqr)
+All the qrgrid packages are available through [jsr](https://jsr.io/@qrgrid)
 
 ```bash
 # deno
-deno add @zqr/core
+deno add @qrgrid/core
 # npm
-npx jsr add @zqr/core
+npx jsr add @qrgrid/core
 # yarn
-yarn dlx jsr add @zqr/core
+yarn dlx jsr add @qrgrid/core
 # pnpm
-pnpm dlx jsr add @zqr/core
+pnpm dlx jsr add @qrgrid/core
 # bun
-bunx jsr add @zqr/core
+bunx jsr add @qrgrid/core
 ```
 
 ## Usage
@@ -71,7 +71,7 @@ enum Mode {
 Implementing in a web project using canvas
 
 ```typescript
-import { QR } from "@zqr/core";
+import { QR } from "@qrgrid/core";
 
 const qr = new QR("Hello World!")
 
