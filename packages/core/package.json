@@ -1,5 +1,6 @@
 {
   "name": "@qrgrid/core",
+  "version": "0.1.0",
   "module": "src/index.ts",
   "main": "src/index.ts",
   "type": "module",
@@ -16,11 +17,24 @@
     "qrgrid",
     "typescript"
   ],
+  "files": [
+    "/dist"
+  ],
   "scripts": {
-    "build": "tsc -b && npm run cp:license && npm run cp:jsr && npm run cp:readme",
-    "cp:license": "cp ../../LICENSE ./dist/LICENSE",
-    "cp:jsr": "cp ./jsr.json ./dist/jsr.json",
-    "cp:readme": "cp ./README.md ./dist/README.md",
-    "dev": "tsc -w"
+    "prepublish": "npm run build",
+    "build": "npm run clean && rollup -c && npm run cp:license && npm run mod:pkg",
+    "clean": "rimraf ./dist",
+    "cp:license": "cp ../../LICENSE ./LICENSE",
+    "mod:pkg": "node ./scripts/modify-package.mjs",
+    "type-check": "tsc --noEmit",
+    "tsc:build": "tsc -b"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.19.0",
+    "tslib": "^2.6.3"
   }
 }

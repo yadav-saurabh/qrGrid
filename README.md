@@ -22,7 +22,7 @@ JavaScript Library for QR Code Encoding and Generation
 
 ## Installation
 
-All the qrGrid packages are available through [npm](https://www.npmjs.com)
+All the qrGrid packages are available through [npm](https://www.npmjs.com/search?q=qrgrid)
 
 ```bash
 # npm

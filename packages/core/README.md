@@ -4,19 +4,11 @@ This package serves as the foundational component for encoding QR codes, utilize
 
 ## Installation
 
-All the qrgrid packages are available through [jsr](https://jsr.io/@qrgrid)
+All the qrgrid packages are available through [npm](https://www.npmjs.com/search?q=qrgrid)
 
 ```bash
-# deno
-deno add @qrgrid/core
 # npm
-npx jsr add @qrgrid/core
-# yarn
-yarn dlx jsr add @qrgrid/core
-# pnpm
-pnpm dlx jsr add @qrgrid/core
-# bun
-bunx jsr add @qrgrid/core
+npm i add @qrgrid/core
 ```
 
 ## Usage
