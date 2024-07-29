@@ -1,5 +1,5 @@
 /**
- * This module contains qr class to generate the qr.
+ * QR class, generates the qr code in Uint8Array of 1's and 0's from the given input.
  * @module
  */
 import {
@@ -18,7 +18,12 @@ import {
   MODE_INDICATOR_BITS,
   PAD_CODEWORDS,
 } from "./constants.js";
-import { ErrorCorrectionLevel, ReservedBits } from "./enums.js";
+import {
+  ErrorCorrectionLevel,
+  ErrorCorrectionLevelType,
+  ReservedBits,
+  ReservedBitsType,
+} from "./enums.js";
 import { rsEncode } from "./reed-solomon.js";
 import {
   getBasicInputSegments,
@@ -39,7 +44,7 @@ import {
  * Options to generate a new Qr
  */
 export type QrOptions = {
-  errorCorrection?: keyof typeof ErrorCorrectionLevel;
+  errorCorrection?: ErrorCorrectionLevelType;
 };
 type PatternSize = typeof FINDER_PATTERN_SIZE | typeof ALIGNMENT_PATTERN_SIZE;
 
@@ -52,8 +57,8 @@ export class QR {
   data: Uint8Array;
   noOfModules: number;
   version: number;
-  errorCorrection: ErrorCorrectionLevel;
-  reservedBits: { [key: number]: { type: ReservedBits; dark: boolean } };
+  errorCorrection: ErrorCorrectionLevelType;
+  reservedBits: Record<number, { type: ReservedBitsType; dark: boolean }>;
   maskPatten: number;
   #codewords: Uint8Array;
   #codeBitLength: number;
@@ -143,7 +148,7 @@ export class QR {
   }
 
   /**
-   * encode the data to it's binary 8 bit format and store ot in the codeword
+   * encode the data to it's binary 8 bit format
    */
   #encodeCodeword(codewords: Uint8Array, data: number, bitLen: number) {
     for (let i = 0; i < bitLen; i++) {
@@ -377,7 +382,7 @@ export class QR {
     x: number,
     y: number,
     size: PatternSize,
-    rbType: ReservedBits.AlignmentPattern | ReservedBits.FinderPattern
+    rbType: ReservedBitsType
   ) {
     const height = size + x - 1;
     const width = size + y - 1;

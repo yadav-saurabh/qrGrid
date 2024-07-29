@@ -1,10 +1,10 @@
 {
   "name": "@qrgrid/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "module": "src/index.ts",
   "main": "src/index.ts",
   "type": "module",
-  "description": "qrgrid qr code generation library",
+  "description": "qrGrid qr code generation library",
   "license": "MIT",
   "bugs": "https://github.com/yadav-saurabh/qrgrid/issues",
   "repository": {
@@ -14,7 +14,7 @@
   },
   "keywords": [
     "qr",
-    "qrgrid",
+    "qrGrid",
     "typescript"
   ],
   "files": [

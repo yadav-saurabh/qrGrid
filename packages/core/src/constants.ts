@@ -1,5 +1,5 @@
 /**
- * This module contains constants used to generate a qr
+ * constants used in generating the qr
  * @module
  */
 

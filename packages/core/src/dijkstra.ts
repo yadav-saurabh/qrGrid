@@ -1,5 +1,5 @@
 /**
- * This module contains function to find shortest distant in graph(segments) using dijkstra algorithm 
+ * function to find shortest distant in graph(segments) using dijkstra algorithm 
  * @module
  */
 

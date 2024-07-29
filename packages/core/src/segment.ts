@@ -5,7 +5,7 @@
 import { getBitsLength } from "./utils.js";
 import { CHARACTER_COUNT_INDICATOR, MODE_INDICATOR_BITS } from "./constants.js";
 import { dijkstra, getPath } from "./dijkstra.js";
-import { Mode } from "./enums.js";
+import { Mode, ModeType } from "./enums.js";
 import { regexString } from "./utils.js";
 
 const GRAPH_START_NODE = "start";
@@ -14,7 +14,7 @@ const GRAPH_END_NODE = "end";
 /**
  * Qr Code Segment Type
  */
-export type Segments = Array<{ value: string; mode: Mode }>;
+export type Segments = Array<{ value: string; mode: ModeType }>;
 
 /**
  * split the string into basic Mode

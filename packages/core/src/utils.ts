@@ -10,7 +10,7 @@ import {
   MODE_BITS,
   MODE_INDICATOR_BITS,
 } from "./constants.js";
-import { ErrorCorrectionLevel, Mode } from "./enums.js";
+import { ErrorCorrectionLevelType, Mode, ModeType } from "./enums.js";
 import { Segments } from "./segment.js";
 
 /**
@@ -54,7 +54,7 @@ export function getBitsLength(data: Segments[0]) {
 /**
  * get the bit of character count indicator
  */
-export function getCharCountIndicator(mode: Mode, version: number) {
+export function getCharCountIndicator(mode: ModeType, version: number) {
   let index = 0;
   if (version > 26) {
     index = 2;
@@ -122,8 +122,8 @@ export function getFormatInfoBits(
  */
 export function getCapacity(
   version: number,
-  errorCorrectionLevel: ErrorCorrectionLevel,
-  mode: Mode | "Mixed"
+  errorCorrectionLevel: ErrorCorrectionLevelType,
+  mode: ModeType | "Mixed"
 ) {
   const totalCodeWord = CODEWORDS[version - 1];
   const ecTotalCodeWord =
@@ -153,6 +153,7 @@ export function getCapacity(
       return Math.floor(usableBits / 8);
     }
   }
+  return 0;
 }
 
 /**
