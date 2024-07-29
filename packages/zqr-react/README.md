@@ -10,17 +10,7 @@ import { Qr } from "@qrgrid/react";
 
 ## Installation
 
-All the qrgrid packages are available through [jsr](https://jsr.io/@qrgrid)
-
 ```bash
-# deno
-deno add @qrgrid/react
 # npm
-npx jsr add @qrgrid/react
-# yarn
-yarn dlx jsr add @qrgrid/react
-# pnpm
-pnpm dlx jsr add @qrgrid/react
-# bun
-bunx jsr add @qrgrid/react
+npx i add @qrgrid/react
 ```

@@ -1,6 +1,6 @@
 {
   "name": "@qrgrid/react",
-  "private": true,
+  "version": "0.1.0-beta.1",
   "type": "module",
   "module": "src/qr.js",
   "main": "src/qr.js",
@@ -19,6 +19,9 @@
     "typescript",
     "react"
   ],
+  "files": [
+    "/dist"
+  ],
   "exports": {
     ".": "./src/index.ts",
     "./canvas": "./src/canvas/index.ts",
@@ -26,7 +29,13 @@
     "./canvas/utils": "./src/canvas/utils.js"
   },
   "scripts": {
-    "build": "tsc -b",
+    "prepublish": "npm run build",
+    "build": "npm run clean && rollup -c && npm run cp:license && npm run mod:pkg",
+    "clean": "rimraf ./dist",
+    "cp:license": "cp ../../LICENSE ./LICENSE",
+    "mod:pkg": "node ./scripts/modify-package.mjs",
+    "type-check": "tsc --noEmit",
+    "tsc:build": "tsc -b",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -34,6 +43,8 @@
     "@qrgrid/core": "*"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
@@ -42,6 +53,8 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.19.1",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
