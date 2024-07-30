@@ -1,24 +1,20 @@
+<p align="center">
+  <a href="https://github.com/yadav-saurabh/qrGrid#gh-light-mode-only">
+    <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/assets/qr-grid-light-bg.svg#gh-light-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="350">
+  </a>
+  <a href="https://github.com/yadav-saurabh/qrGrid#gh-dark-mode-only">
+    <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/assets/qr-grid-dark-bg.svg#gh-dark-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="350">
+  </a>
+</p>
+
 # qrGrid
 
-<table border="0">
- <tr>
-  JavaScript Library for QR Code Encoding and Generation
-  <p align="center">
-    <a href="https://github.com/yadav-saurabh/qrGrid/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@qrgrid/core" alt="license"></a>
-    <a href="https://www.npmjs.com/package/qrGrid"><img src="https://img.shields.io/npm/v/@qrgrid/core" alt="npm package"></a>
-  </p>
- </tr>
- <tr>
-   <p align="center">
-    <a href="https://github.com/yadav-saurabh/qrGrid#gh-light-mode-only">
-      <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/assets/qr-grid-light-bg.svg#gh-light-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="350">
-    </a>
-    <a href="https://github.com/yadav-saurabh/qrGrid#gh-dark-mode-only">
-      <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/assets/qr-grid-dark-bg.svg#gh-dark-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="350">
-    </a>
-  </p>
- </tr>
-</table>
+JavaScript Library for QR Code Encoding and Generation
+
+<p>
+  <a href="https://github.com/yadav-saurabh/qrGrid/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@qrgrid/core" alt="license"></a>
+  <a href="https://www.npmjs.com/package/@qrgrid/core"><img src="https://img.shields.io/npm/v/@qrgrid/core" alt="npm package"></a>
+</p>
 
 ## Table of Contents
 
