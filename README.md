@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://github.com/yadav-saurabh/qrGrid#gh-light-mode-only">
-    <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/assets/qr-grid-light-bg.svg#gh-light-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="480">
+    <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/assets/qr-grid-light-bg.svg#gh-light-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="200">
   </a>
   <a href="https://github.com/yadav-saurabh/qrGrid#gh-dark-mode-only">
-    <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/assets/qr-grid-dark-bg.svg#gh-dark-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="480">
+    <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/assets/qr-grid-light-bg.svg#gh-dark-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="200">
   </a>
 </p>
 <p align="center">
