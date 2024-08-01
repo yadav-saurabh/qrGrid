@@ -215,5 +215,6 @@ export function downloadQr(
     link.download = name || "qrgrid-react";
     link.href = url;
     link.click();
+    URL.revokeObjectURL(url);
   }, imageType);
 }

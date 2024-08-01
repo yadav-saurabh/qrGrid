@@ -26,7 +26,10 @@
     ".": "./src/index.ts",
     "./canvas": "./src/canvas/index.ts",
     "./canvas/styles": "./src/canvas/styles.js",
-    "./canvas/utils": "./src/canvas/utils.js"
+    "./canvas/utils": "./src/canvas/utils.js",
+    "./svg": "./src/svg/index.ts",
+    "./svg/styles": "./src/svg/styles.js",
+    "./svg/utils": "./src/svg/utils.js"
   },
   "scripts": {
     "prepublish": "npm run build",

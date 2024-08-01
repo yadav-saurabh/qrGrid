@@ -10,7 +10,7 @@ import { ModuleStyleFunctionParams, QrProps } from "./types";
 const DEFAULT_CANVAS_SIZE = 400;
 const DEFAULT_BG_COLOR = "black";
 const DEFAULT_COLOR = "white";
-const DEFAULT_IMG_SIZE = 0.2;
+const DEFAULT_IMG_SIZE = 20;
 const DEFAULT_IMG_OPACITY = 1;
 
 /**
@@ -100,8 +100,10 @@ function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
       img.src = image.src;
       img.onload = () => {
         ctx.save();
-        const dHeight = canvasSize * (image.sizePercent || DEFAULT_IMG_SIZE);
-        const dWidth = canvasSize * (image.sizePercent || DEFAULT_IMG_SIZE);
+        const dHeight =
+          canvasSize * (image.sizePercent || DEFAULT_IMG_SIZE) * 0.01;
+        const dWidth =
+          canvasSize * (image.sizePercent || DEFAULT_IMG_SIZE) * 0.01;
         const dxLogo = (canvasSize - dWidth) / 2;
         const dyLogo = (canvasSize - dHeight) / 2;
 

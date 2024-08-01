@@ -58,6 +58,7 @@ button:hover {
   display: inline-block;
   font-size: 0.8rem;
   max-height: 8rem;
+  max-width: 15rem;
   overflow: scroll;
 }
 
