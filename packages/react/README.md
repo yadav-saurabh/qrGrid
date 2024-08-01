@@ -5,8 +5,7 @@ This package serves as a wrapper for `@qrgrid/core`. For detailed examples, see 
 ## Installation
 
 ```bash
-# npm
-npx i add @qrgrid/react
+npm i @qrgrid/react
 ```
 
 ## using canvas

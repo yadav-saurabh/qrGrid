@@ -8,7 +8,7 @@ All the qrgrid packages are available through [npm](https://www.npmjs.com/search
 
 ```bash
 # npm
-npm i add @qrgrid/core
+npm i @qrgrid/core
 ```
 
 ## Usage
