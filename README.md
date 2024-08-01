@@ -60,15 +60,16 @@ new QR("Hello World!")
 This package serves as a wrapper for `@qrgrid/core`. For detailed examples, see the [react examples](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/react)
 
 ```javascript
-import { Qr } from "@qrgrid/react";
+import { Canvas, Svg } from "@qrgrid/react";
 
-<Qr input="Hello World!"/>
+<Canvas.Qr input="Hello World!"/>
+<Svg.Qr input="Hello World!"/>
 ```
 
 ## TODO
 
 - [ ] (core) Support for Kanji Mode
-- [ ] (react) Support for using SVG
+- [x] (react) Support for using SVG
 - [ ] (web) examples using svg
 - [ ] package and examples for angular
 - [ ] package and examples for vue

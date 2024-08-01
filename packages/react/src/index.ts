@@ -1,2 +1,2 @@
-export * as QrCanvas from "./canvas";
-export * as SvgCanvas from "./svg";
+export * as Canvas from "./canvas";
+export * as Svg from "./svg";
