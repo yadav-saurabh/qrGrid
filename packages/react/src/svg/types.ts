@@ -32,7 +32,7 @@ export type QrProps = {
   size?: number;
   qrOptions?: QrOptions;
   bgColor?: string;
-  color?: string;
+  color?: string | { codeword?: string; finder?: string };
   image?: QrImageOption;
   moduleStyle?: ModuleStyleFunction;
   getQrData?: (qr: QR) => void;

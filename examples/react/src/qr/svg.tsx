@@ -1,8 +1,14 @@
 import { Fragment, useRef, useState } from "react";
-import { QR, ErrorCorrectionLevelType } from "@qrgrid/core";
-import { Qr } from "@qrgrid/react/svg";
-import { downloadQr as downloadUtil } from "@qrgrid/react/svg/utils";
-import { dotModuleStyle } from "@qrgrid/react/svg/styles";
+import { QR, ErrorCorrectionLevelType, ReservedBits } from "@qrgrid/core";
+import { ModuleStyleFunctionParams, Qr } from "@qrgrid/react/svg";
+import {
+  downloadQr as downloadUtil,
+  getCirclePath,
+  getNeighbor,
+  getRoundCornerPath,
+  getSquarePath,
+} from "@qrgrid/react/svg/utils";
+import { dotModuleStyle, smoothModuleStyle } from "@qrgrid/react/svg/styles";
 
 type PropTypes = {
   input: string;
@@ -17,6 +23,30 @@ function SvgQr({ input, errorCorrection }: PropTypes) {
     if (svgRef.current) {
       downloadUtil(svgRef.current);
     }
+  };
+
+  const qrModuleStyle = (
+    path: ModuleStyleFunctionParams[0],
+    module: ModuleStyleFunctionParams[1],
+    qr: QR
+  ) => {
+    const { reservedBits } = qr;
+    const { x, y, size } = module;
+    const neighbor = getNeighbor(module.index, qr);
+
+    if (reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
+      if (!neighbor.top && !neighbor.right) {
+        path.finder += getRoundCornerPath(module, ["top-right"], size);
+        return;
+      }
+      if (!neighbor.bottom && !neighbor.left) {
+        path.finder += getRoundCornerPath(module, ["bottom-left"], size);
+        return;
+      }
+      path.finder += getSquarePath(x, y, size);
+      return;
+    }
+    path.codeword += getCirclePath(x, y, size);
   };
 
   return (
@@ -59,17 +89,54 @@ function SvgQr({ input, errorCorrection }: PropTypes) {
         />
       </div>
       <div className="qrContainer">
+        {/* module style */}
         <div className="qr">
           <Qr
             input={input}
             qrOptions={{ errorCorrection }}
             moduleStyle={dotModuleStyle}
-            getQrData={(qr) => {
-              setQrData(qr);
-            }}
           />
           <p>ModuleStyle:- styles/dotModuleStyle</p>
         </div>
+        <div className="qr">
+          <Qr
+            input={input}
+            qrOptions={{ errorCorrection }}
+            moduleStyle={smoothModuleStyle}
+          />
+          <p>ModuleStyle:- styles/smoothModuleStyle</p>
+        </div>
+        <div className="qr">
+          <Qr
+            input={input}
+            qrOptions={{ errorCorrection }}
+            moduleStyle={qrModuleStyle}
+            color={{ finder: "#C73659", codeword: "#7E8EF1" }}
+          />
+          <p>ModuleStyle:- custom qrModuleStyle</p>
+        </div>
+        {/* color */}
+        <div className="qr">
+          <Qr
+            input={input}
+            qrOptions={{ errorCorrection }}
+            bgColor="#F8EDED"
+            color="#173B45"
+          />
+          <p>BgColor:- #F8EDED Color:- #173B45</p>
+        </div>
+        <div className="qr">
+          <Qr
+            input={input}
+            qrOptions={{ errorCorrection }}
+            bgColor="white"
+            color={{ finder: "#36BA98", codeword: "#173B45" }}
+          />
+          <p>
+            BgColor:- white <br /> Color:- finder: "#36BA98" codeword: "#173B45"
+          </p>
+        </div>
+        {/* image */}
         <div className="qr">
           <Qr
             input={input}

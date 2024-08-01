@@ -96,9 +96,7 @@ function CanvasQr({ input, errorCorrection }: PropTypes) {
           input={input}
           qrOptions={{ errorCorrection }}
           ref={canvasRef}
-          getQrData={(qr) => {
-            setQrData(qr);
-          }}
+          getQrData={setQrData}
         />
       </div>
       {/* ========== module style ========== */}
@@ -152,7 +150,7 @@ function CanvasQr({ input, errorCorrection }: PropTypes) {
             bgColor="#F8EDED"
             color="#173B45"
           />
-          <p>BgColor:- #FF7D29 Color:- #173B45</p>
+          <p>BgColor:- #F8EDED Color:- #173B45</p>
         </div>
         <div className="qr">
           <Qr

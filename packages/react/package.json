@@ -1,6 +1,6 @@
 {
   "name": "@qrgrid/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "module": "src/qr.js",
   "main": "src/qr.js",

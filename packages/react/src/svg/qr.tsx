@@ -28,6 +28,22 @@ function applyModuleStyle(
   }
 }
 
+function getColor(colorProp: QrProps["color"], type: "finder" | "codeword") {
+  let color = DEFAULT_COLOR;
+  if (colorProp && typeof colorProp === "string") {
+    color = colorProp;
+  }
+  if (colorProp && typeof colorProp === "object") {
+    if (type === "codeword" && colorProp.codeword) {
+      color = colorProp.codeword;
+    }
+    if (type === "finder" && colorProp.finder) {
+      color = colorProp.finder;
+    }
+  }
+  return color;
+}
+
 /**
  * Qr component generate QR code as a svg
  */
@@ -125,10 +141,19 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
       style={{ background: props.bgColor || DEFAULT_BG_COLOR }}
       ref={ref}
     >
-      <path d={finderPatternPath} fill={props.color || DEFAULT_COLOR} />
-      <path d={codewordPath} fill={props.color || DEFAULT_COLOR} />
+      <path
+        id="finder"
+        d={finderPatternPath}
+        fill={getColor(props.color, "finder")}
+      />
+      <path
+        id="codeword"
+        d={codewordPath}
+        fill={getColor(props.color, "codeword")}
+      />
       {image ? (
         <image
+          id="image"
           x={imgData.x}
           y={imgData.y}
           height={imgData.height}
