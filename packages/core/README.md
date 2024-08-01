@@ -1,6 +1,15 @@
 # qrgrid Core
 
-This package serves as the foundational component for encoding QR codes, utilized by all other qrgrid packages. For maximum customization and full control over QR code generation, it is recommended to use this core package directly. For detailed examples, see the [web examples](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/web)
+This package serves as the foundational component for encoding QR codes, utilized by all other qrgrid packages. For maximum customization and full control over QR code generation, it is recommended to use this core package directly. For detailed examples, see the [web examples folder](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/web)
+
+## Features
+
+- Fast
+- Typescript
+- No Framework
+- Zero Dependency
+- Customizable
+- Well Documented
 
 ## Installation
 

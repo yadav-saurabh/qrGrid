@@ -8,6 +8,8 @@ const INPUTS = [
   "src/index.ts",
   "src/canvas/styles.tsx",
   "src/canvas/utils.tsx",
+  "src/svg/styles.tsx",
+  "src/svg/utils.tsx",
 ];
 const EXTERNALS = [
   ...Object.keys(pkg.dependencies || {}),

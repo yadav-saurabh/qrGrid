@@ -4,22 +4,37 @@
  */
 import { QR, QrOptions } from "@qrgrid/core";
 
+/**
+ * Function type (ModuleStyleFunction is to style the module)
+ */
 export type ModuleStyleFunction = (
   ctx: CanvasRenderingContext2D,
   module: { index: number; x: number; y: number; size: number },
   qr: QR
 ) => void;
 
+/**
+ * Param Types of function ModuleStyleFunction
+ */
 export type ModuleStyleFunctionParams = Parameters<ModuleStyleFunction>;
 
+/**
+ * Qr component bgColor and color Prop Type
+ */
 export type QrColor = string | CanvasGradient | CanvasPattern;
 
+/**
+ * Qr component Image Prop Type
+ */
 export type QrImageOption = {
   src: string;
   sizePercent?: number;
   opacity?: number;
 };
 
+/**
+ * Qr component Props Type
+ */
 export type QrProps = {
   input: string;
   qrOptions?: QrOptions;

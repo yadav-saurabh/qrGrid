@@ -4,12 +4,9 @@
  */
 import { QR, QrOptions } from "@qrgrid/core";
 
-export type QrImageOption = {
-  src: string;
-  sizePercent?: number;
-  opacity?: number;
-};
-
+/**
+ * Function type (ModuleStyleFunction is to style the module)
+ */
 export type ModuleStyleFunction = (
   path: { codeword: string; finder: string },
   module: { index: number; x: number; y: number; size: number },
@@ -18,6 +15,18 @@ export type ModuleStyleFunction = (
 
 export type ModuleStyleFunctionParams = Parameters<ModuleStyleFunction>;
 
+/**
+ * Qr component Image Prop Type
+ */
+export type QrImageOption = {
+  src: string;
+  sizePercent?: number;
+  opacity?: number;
+};
+
+/**
+ * Qr component Props Type
+ */
 export type QrProps = {
   input: string;
   size?: number;

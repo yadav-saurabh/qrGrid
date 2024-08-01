@@ -18,7 +18,6 @@ The Ultimate Customizable QR Code JavaScript Library
 
 ## Table of Contents
 
-- [Features](#features)
 - [Usage](#usage)
   - [Core](#core)
   - [React](#react)
@@ -26,22 +25,13 @@ The Ultimate Customizable QR Code JavaScript Library
 - [Credits](#credits)
 - [License](#license)
 
-## Features
-
-- Fast
-- Typescript
-- No Framework
-- Zero Dependency
-- Customizable
-- Well Documented
-
 ## Usage
 
 ### Core
 
 This package serves as the foundational component for encoding QR codes, utilized by all other qrGrid packages. For maximum customization and full control over QR code generation, it is recommended to use this core package directly.
 
-Install the package:
+Installation:
 
 ```bash
 npm i @qrgrid/core
@@ -59,12 +49,12 @@ For more details, see the [documentation](https://github.com/yadav-saurabh/qrgri
 
 ### React
 
-This package serves as a wrapper for `@qrgrid/core`.Provides two ways to generate the Qr *Canvas* and *Svg*. It also comes with utility function to download images and style the Qr code.
+This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**. It also includes utility functions to download images and styling Qr codes.
 
-Install the package:
+Installation:
 
 ```bash
-npm i @qrgrid/core
+npm i @qrgrid/react
 ```
 
 Example usage:
