@@ -32,7 +32,6 @@
     "./svg/utils": "./src/svg/utils.js"
   },
   "scripts": {
-    "prepublish": "npm run build",
     "build": "npm run clean && rollup -c && npm run cp:license && npm run mod:pkg",
     "clean": "rimraf ./dist",
     "cp:license": "cp ../../LICENSE ./LICENSE",
@@ -61,6 +60,6 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "react": "^18.3.1"
+    "react": "*"
   }
 }

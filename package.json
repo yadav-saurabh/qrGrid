@@ -17,15 +17,18 @@
   ],
   "author": "yadav-saurabh",
   "scripts": {
+    "changeset": "changeset",
     "prune": "turbo prune",
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.7",
     "prettier": "^3.3.3",
-    "turbo": "^2.0.7",
+    "turbo": "^2.0.11",
     "typescript": "^5.5.3"
   },
   "engines": {

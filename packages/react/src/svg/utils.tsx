@@ -203,7 +203,6 @@ export function roundCornerFinderPatternPath(
     if (!neighbor.top && !neighbor.left) {
       path += getRoundCornerPath(module, ["top-left"]);
       if (!neighbor.bottomRight) {
-        console.log("!neighbor.bottomRight");
         const arcCoords = { ...module, y: y + size, x: x + size };
         path += getCornerArcPath(arcCoords, "top-left");
       }

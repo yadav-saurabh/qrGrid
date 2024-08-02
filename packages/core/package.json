@@ -21,7 +21,6 @@
     "/dist"
   ],
   "scripts": {
-    "prepublish": "npm run build",
     "build": "npm run clean && rollup -c && npm run cp:license && npm run mod:pkg",
     "clean": "rimraf ./dist",
     "cp:license": "cp ../../LICENSE ./LICENSE",

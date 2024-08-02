@@ -1,4 +1,4 @@
-import { QR, ErrorCorrectionLevel } from "@qrgrid/core";
+import { QR, ErrorCorrectionLevel, ErrorCorrectionLevelType } from "@qrgrid/core";
 
 // canvas qr imports
 import { generateDefaultQr } from "./canvas/defaultQr";
@@ -29,10 +29,10 @@ inputElement?.addEventListener("input", (event) => {
 });
 
 // select
-let select: ErrorCorrectionLevel = ErrorCorrectionLevel.M;
+let select: ErrorCorrectionLevelType = ErrorCorrectionLevel.M;
 const selectElement = document.getElementById("errorCorrectionSelect");
 selectElement?.addEventListener("change", (event) => {
-  select = (event.target as HTMLSelectElement).value as ErrorCorrectionLevel;
+  select = (event.target as HTMLSelectElement).value as ErrorCorrectionLevelType;
   if (select) {
     const qr = getQrData();
     generateQrOnCanvas(qr);
