@@ -4,6 +4,7 @@
   "module": "src/index.ts",
   "main": "src/index.ts",
   "type": "module",
+  "private": false,
   "description": "qrGrid qr code generation library",
   "license": "MIT",
   "bugs": "https://github.com/yadav-saurabh/qrgrid/issues",
