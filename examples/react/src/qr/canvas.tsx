@@ -1,12 +1,12 @@
 import { Fragment, useRef, useState } from "react";
 import { QR, ReservedBits, ErrorCorrectionLevelType } from "@qrgrid/core";
 import { Qr } from "@qrgrid/react/canvas";
-import { dotModuleStyle, smoothModuleStyle } from "@qrgrid/react/canvas/styles";
+import { dotModuleStyle, smoothModuleStyle } from "@qrgrid/styles/canvas/styles";
 import {
   downloadQr as downloadUtil,
   getNeighbor,
   roundCorner,
-} from "@qrgrid/react/canvas/utils";
+} from "@qrgrid/styles/canvas/utils";
 
 type PropTypes = {
   input: string;

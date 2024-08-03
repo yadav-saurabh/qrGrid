@@ -7,8 +7,8 @@ import {
   getNeighbor,
   getRoundCornerPath,
   getSquarePath,
-} from "@qrgrid/react/svg/utils";
-import { dotModuleStyle, smoothModuleStyle } from "@qrgrid/react/svg/styles";
+} from "@qrgrid/styles/svg/utils";
+import { dotModuleStyle, smoothModuleStyle } from "@qrgrid/styles/svg/styles";
 
 type PropTypes = {
   input: string;

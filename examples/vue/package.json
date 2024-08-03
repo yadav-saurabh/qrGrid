@@ -8,7 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.4.31"
+    "vue": "^3.4.31",
+    "@qrgrid/styles": "*"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
