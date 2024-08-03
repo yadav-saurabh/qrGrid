@@ -1,6 +1,6 @@
 {
   "name": "@qrgrid/react",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "type": "module",
   "module": "src/index.ts",
   "main": "src/index.ts",

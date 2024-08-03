@@ -1,5 +1,11 @@
 # @qrgrid/react
 
+## 1.0.0
+
+### Changes
+
+- Version bump
+
 ## 0.2.1
 
 ### Patch Changes

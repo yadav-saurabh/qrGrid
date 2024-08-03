@@ -1,20 +1,61 @@
 {
   "name": "@qrgrid/styles",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
-  "private": true,
   "module": "src/index.ts",
   "main": "src/index.ts",
-  "exports": {
-    ".": "./src/index.js",
-    "./canvas": "./src/canvas/index.js",
-    "./canvas/styles": "./src/canvas/styles.js",
-    "./canvas/utils": "./src/canvas/utils.js",
-    "./svg": "./src/svg/index.ts",
-    "./svg/styles": "./src/svg/styles.js",
-    "./svg/utils": "./src/svg/utils.js"
+  "private": false,
+  "description": "The Ultimate Customizable QR Code JavaScript Library QR Grid Common Web Styling library",
+  "license": "MIT",
+  "bugs": "https://github.com/yadav-saurabh/qrgrid/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yadav-saurabh/qrgrid",
+    "directory": "packages/styles"
   },
-  "peerDependencies": {
+  "keywords": [
+    "qr",
+    "styling",
+    "qrgrid",
+    "typescript",
+    "react",
+    "vue",
+    "angular"
+  ],
+  "files": [
+    "/dist"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./canvas": "./src/canvas/index.ts",
+    "./canvas/styles": "./src/canvas/styles.ts",
+    "./canvas/utils": "./src/canvas/utils.ts",
+    "./svg": "./src/svg/index.ts",
+    "./svg/styles": "./src/svg/styles.ts",
+    "./svg/utils": "./src/svg/utils.ts"
+  },
+  "scripts": {
+    "build": "npm run clean && rollup -c && npm run cp:license && npm run mod:pkg",
+    "clean": "rimraf ./dist",
+    "cp:license": "cp ../../LICENSE ./LICENSE",
+    "mod:pkg": "node ./scripts/modify-package.mjs",
+    "type-check": "tsc --noEmit",
+    "tsc:build": "tsc -b",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
     "@qrgrid/core": "*"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "eslint": "^8.57.0",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.19.1",
+    "typescript": "^5.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
