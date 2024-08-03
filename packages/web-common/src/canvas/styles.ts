@@ -4,15 +4,14 @@
  */
 import { QR, ReservedBits } from "@qrgrid/core";
 
-import { ModuleStyleFunctionParams } from "./types";
-import { roundCornerFinderPattern, smoothEdges } from "./utils";
+import { ModuleType, roundCornerFinderPattern, smoothEdges } from "./utils";
 
 /**
  * Qr Module styles as dots(circles)
  */
 export function dotModuleStyle(
   ctx: CanvasRenderingContext2D,
-  module: ModuleStyleFunctionParams[1]
+  module: ModuleType
 ) {
   const radius = Math.floor(module.size / 2);
   ctx.beginPath();
@@ -25,7 +24,7 @@ export function dotModuleStyle(
  */
 export function smoothModuleStyle(
   ctx: CanvasRenderingContext2D,
-  module: ModuleStyleFunctionParams[1],
+  module: ModuleType,
   qr: QR
 ) {
   ctx.fillStyle = "white";
