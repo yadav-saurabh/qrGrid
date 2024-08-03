@@ -1,20 +1,44 @@
 import { defineConfig } from "rollup";
-import commonjs from "@rollup/plugin-commonjs";
+import fs from "node:fs/promises";
+import path from "node:path";
 import ts from "@rollup/plugin-typescript";
 
-import pkg from "./package.json" assert { type: "json" };
+import { modifyExports } from "./scripts/modify-package.mjs";
 
-const INPUTS = [
-  "src/index.ts",
-  "src/canvas/styles.tsx",
-  "src/canvas/utils.tsx",
-  "src/svg/styles.tsx",
-  "src/svg/utils.tsx",
-];
+const PACKAGE_PATH = "./package.json";
+const INPUTS = ["src/index.ts"];
+const pkg = JSON.parse(await fs.readFile(PACKAGE_PATH));
 const EXTERNALS = [
   ...Object.keys(pkg.dependencies || {}),
   ...Object.keys(pkg.peerDependencies || {}),
+  "react/jsx-runtime",
 ];
+
+await modifyExports(
+  [".", "./canvas", "./svg"],
+  {
+    dist: "./dist/",
+    main: { dist: "/cjs/", file: "index", ext: ".cjs" },
+    module: { dist: "/mjs/", file: "index", ext: ".mjs" },
+    topTypes: { dist: "/types/", file: "index", ext: ".d.ts" },
+    import: { dist: "./mjs", ext: ".mjs" },
+    require: { dist: "./mjs", ext: ".cjs" },
+    types: { dist: "./types", ext: ".d.ts" },
+  },
+  PACKAGE_PATH
+);
+
+function cleanJSFiles() {
+  return {
+    name: "clean-js-files",
+    writeBundle: async (options, bundle) => {
+      const files = Object.keys(bundle).filter((file) => file.endsWith(".js"));
+      await Promise.all(
+        files.map((file) => fs.unlink(path.join(options.dir, file)))
+      );
+    },
+  };
+}
 
 export default defineConfig([
   {
@@ -27,12 +51,11 @@ export default defineConfig([
       entryFileNames: "[name].cjs",
     },
     plugins: [
-      commonjs(),
       ts({
+        outputToFilesystem: true,
         tsconfig: "./tsconfig.json",
-        declaration: false,
-        outDir: "./dist/cjs",
         rootDir: "src",
+        outDir: "./dist/cjs",
       }),
     ],
     external: EXTERNALS,
@@ -47,10 +70,9 @@ export default defineConfig([
       entryFileNames: "[name].mjs",
     },
     plugins: [
-      commonjs(),
       ts({
+        outputToFilesystem: true,
         tsconfig: "./tsconfig.json",
-        declaration: false,
         outDir: "./dist/mjs",
         rootDir: "src",
       }),
@@ -61,17 +83,17 @@ export default defineConfig([
     input: INPUTS,
     output: {
       dir: "./dist/types",
-      preserveModules: true,
-      entryFileNames: "[name].d.ts",
     },
     plugins: [
-      commonjs(),
       ts({
+        outputToFilesystem: false,
         tsconfig: "./tsconfig.json",
-        declaration: true,
         declarationDir: "./dist/types",
         rootDir: "src",
+        declaration: true,
+        emitDeclarationOnly: true,
       }),
+      cleanJSFiles(),
     ],
     external: EXTERNALS,
   },

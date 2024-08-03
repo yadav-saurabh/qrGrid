@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Qr, QrProps } from "@qrgrid/vue/canvas";
+import { Qr, QrProps } from "@qrgrid/vue/svg";
 
 const props = defineProps<{
   input: string;

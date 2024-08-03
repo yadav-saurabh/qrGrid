@@ -31,7 +31,6 @@
     "tsc:build": "tsc -b"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
     "rimraf": "^6.0.1",

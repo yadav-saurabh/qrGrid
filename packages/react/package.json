@@ -29,10 +29,9 @@
     "./svg": "./src/svg/index.ts"
   },
   "scripts": {
-    "build": "npm run clean && rollup -c && npm run cp:license && npm run mod:pkg",
+    "build": "npm run clean && rollup -c && npm run cp:license",
     "clean": "rimraf ./dist",
     "cp:license": "cp ../../LICENSE ./LICENSE",
-    "mod:pkg": "node ./scripts/modify-package.mjs",
     "type-check": "tsc --noEmit",
     "tsc:build": "tsc -b",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
@@ -41,7 +40,6 @@
     "@qrgrid/core": "*"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

@@ -84,11 +84,11 @@ Example usage:
 ```javascript
 import { Canvas, Svg } from "@qrgrid/vue";
 
-<Canvas.Qr input="Hello World!"/>
-<Svg.Qr input="Hello World!"/>
+<Canvas input="Hello World!"/>
+<Svg input="Hello World!"/>
 ```
 
-For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/react) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/react)
+For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/vue) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/vue)
 
 ## TODO
 
