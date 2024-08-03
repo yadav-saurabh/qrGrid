@@ -2,23 +2,20 @@
  * Styling function that can be used to pass in Qr component
  * @module
  */
-import { ReservedBits } from "@qrgrid/core";
+import { QR, ReservedBits } from "@qrgrid/core";
 
-import { ModuleStyleFunctionParams } from "./types";
 import {
-  getCirclePath,
   getSmoothDataBitPath,
   roundCornerFinderPatternPath,
-} from "./utils";
+  getCirclePath,
+  ModuleType,
+  PathType,
+} from "./utils.js";
 
 /**
  * Qr Module styles as dots(circles)
  */
-export function dotModuleStyle(
-  path: ModuleStyleFunctionParams[0],
-  module: ModuleStyleFunctionParams[1],
-  qr: ModuleStyleFunctionParams[2]
-) {
+export function dotModuleStyle(path: PathType, module: ModuleType, qr: QR) {
   const { x, y, size, index } = module;
   const circlePath = getCirclePath(x, y, size);
 
@@ -32,11 +29,7 @@ export function dotModuleStyle(
 /**
  * Qr Module styles with with smooth edges
  */
-export function smoothModuleStyle(
-  path: ModuleStyleFunctionParams[0],
-  module: ModuleStyleFunctionParams[1],
-  qr: ModuleStyleFunctionParams[2]
-) {
+export function smoothModuleStyle(path: PathType, module: ModuleType, qr: QR) {
   if (qr.reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
     path.finder += roundCornerFinderPatternPath(module, qr);
     return;

@@ -1,0 +1,20 @@
+{
+  "name": "@qrgrid/styles",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "module": "src/index.ts",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.js",
+    "./canvas": "./src/canvas/index.js",
+    "./canvas/styles": "./src/canvas/styles.js",
+    "./canvas/utils": "./src/canvas/utils.js",
+    "./svg": "./src/svg/index.ts",
+    "./svg/styles": "./src/svg/styles.js",
+    "./svg/utils": "./src/svg/utils.js"
+  },
+  "peerDependencies": {
+    "@qrgrid/core": "*"
+  }
+}

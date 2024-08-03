@@ -21,6 +21,7 @@ The Ultimate Customizable QR Code JavaScript Library
 - [Usage](#usage)
   - [Core](#core)
   - [React](#react)
+  - [Vue](#vue)
 - [TODO](#todo)
 - [Credits](#credits)
 - [License](#license)
@@ -68,13 +69,34 @@ import { Canvas, Svg } from "@qrgrid/react";
 
 For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/react) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/react)
 
+### Vue
+
+This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**. It also includes utility functions to download images and styling Qr codes.
+
+Installation:
+
+```bash
+npm i @qrgrid/vue
+```
+
+Example usage:
+
+```javascript
+import { Canvas, Svg } from "@qrgrid/vue";
+
+<Canvas input="Hello World!"/>
+<Svg input="Hello World!"/>
+```
+
+For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/vue) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/vue)
+
 ## TODO
 
 - [ ] (core) Support for Kanji Mode
 - [x] (react) Support for using SVG
 - [ ] (web) examples using svg
 - [ ] package and examples for angular
-- [ ] package and examples for vue
+- [x] package and examples for vue
 - [ ] package and examples more frameworks
 
 ## Credits
@@ -83,6 +105,6 @@ Inspired from [soldair/node-qrcode](https://github.com/soldair/node-qrcode) by R
 
 ## License
 
-qrgrid is totally free for commercial use and personally use, this software is licensed under the [MIT](https://github.com/yadav-saurabh/qrgrid/blob/main/LICENSE)
+Qr Grid is totally free for commercial use and personally use, this software is licensed under the [MIT](https://github.com/yadav-saurabh/qrgrid/blob/main/LICENSE)
 
 The word "QR Code" is registered trademark of: DENSO WAVE INCORPORATED

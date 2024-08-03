@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "private": false,
-  "description": "qrGrid qr code generation library",
+  "description": "The Ultimate Customizable QR Code JavaScript Library",
   "license": "MIT",
   "bugs": "https://github.com/yadav-saurabh/qrgrid/issues",
   "repository": {
@@ -16,6 +16,7 @@
   "keywords": [
     "qr",
     "qrGrid",
+    "styling",
     "typescript"
   ],
   "files": [
@@ -30,7 +31,6 @@
     "tsc:build": "tsc -b"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
     "rimraf": "^6.0.1",

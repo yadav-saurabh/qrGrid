@@ -4,7 +4,8 @@
  */
 import { QR, ReservedBits } from "@qrgrid/core";
 
-import { ModuleStyleFunctionParams } from "./types";
+export type ModuleType = { index: number; x: number; y: number; size: number };
+export type PathType = { codeword: string; finder: string };
 
 export type CornerType =
   | "top-left"
@@ -47,7 +48,7 @@ export function getNeighbor(index: number, qr: QR) {
  * make a module corner (square) round
  */
 export function getRoundCornerPath(
-  module: ModuleStyleFunctionParams[1],
+  module: ModuleType,
   type: CornerType[],
   cornerSize = 0
 ) {
@@ -93,7 +94,7 @@ export function getRoundCornerPath(
  * get the path string to draw a circle
  */
 export function getCornerArcPath(
-  module: ModuleStyleFunctionParams[1],
+  module: ModuleType,
   type: CornerType,
   cornerSize = 0
 ) {
@@ -134,10 +135,7 @@ export function getSquarePath(x: number, y: number, size: number) {
 /**
  * get smooth edge path
  */
-export function getSmoothDataBitPath(
-  module: ModuleStyleFunctionParams[1],
-  qr: QR
-) {
+export function getSmoothDataBitPath(module: ModuleType, qr: QR) {
   const { reservedBits } = qr;
   const { index, x, y, size } = module;
   if (reservedBits[index]?.type === ReservedBits.FinderPattern) {
@@ -190,10 +188,7 @@ export function getSmoothDataBitPath(
 /**
  * get finderPatterns path to make it round
  */
-export function roundCornerFinderPatternPath(
-  module: ModuleStyleFunctionParams[1],
-  qr: QR
-) {
+export function roundCornerFinderPatternPath(module: ModuleType, qr: QR) {
   const { reservedBits } = qr;
   const { index, x, y, size } = module;
   const neighbor = getNeighbor(index, qr);

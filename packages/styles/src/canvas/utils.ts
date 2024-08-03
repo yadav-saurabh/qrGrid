@@ -4,7 +4,7 @@
  */
 import { QR, ReservedBits } from "@qrgrid/core";
 
-import { ModuleStyleFunctionParams } from "./types";
+export type ModuleType = { index: number; x: number; y: number; size: number };
 
 export type CornerType =
   | "top-left"
@@ -48,7 +48,7 @@ export function getNeighbor(index: number, qr: QR) {
  */
 export function roundCorner(
   ctx: CanvasRenderingContext2D,
-  module: ModuleStyleFunctionParams[1],
+  module: ModuleType,
   type: CornerType[],
   cornerSize = 0
 ) {
@@ -68,7 +68,7 @@ export function roundCorner(
  */
 export function cornerArc(
   ctx: CanvasRenderingContext2D,
-  module: ModuleStyleFunctionParams[1],
+  module: ModuleType,
   type: CornerType,
   cornerSize = 0
 ) {
@@ -108,7 +108,7 @@ export function cornerArc(
  */
 export function smoothEdges(
   ctx: CanvasRenderingContext2D,
-  module: ModuleStyleFunctionParams[1],
+  module: ModuleType,
   qr: QR
 ) {
   const { reservedBits } = qr;
@@ -164,7 +164,7 @@ export function smoothEdges(
  */
 export function roundCornerFinderPattern(
   ctx: CanvasRenderingContext2D,
-  module: ModuleStyleFunctionParams[1],
+  module: ModuleType,
   qr: QR
 ) {
   const { reservedBits } = qr;
