@@ -3,30 +3,15 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import ts from "@rollup/plugin-typescript";
 
-import { modifyExports } from "./scripts/modify-package.mjs";
-
-const PACKAGE_PATH = "./package.json";
 const INPUTS = ["src/index.ts"];
-const pkg = JSON.parse(await fs.readFile(PACKAGE_PATH));
+
+const pkg = JSON.parse(await fs.readFile("./package.json"));
+
 const EXTERNALS = [
   ...Object.keys(pkg.dependencies || {}),
   ...Object.keys(pkg.peerDependencies || {}),
   "react/jsx-runtime",
 ];
-
-await modifyExports(
-  [".", "./canvas", "./svg"],
-  {
-    dist: "./dist/",
-    main: { dist: "/cjs/", file: "index", ext: ".cjs" },
-    module: { dist: "/mjs/", file: "index", ext: ".mjs" },
-    topTypes: { dist: "/types/", file: "index", ext: ".d.ts" },
-    import: { dist: "./mjs", ext: ".mjs" },
-    require: { dist: "./mjs", ext: ".cjs" },
-    types: { dist: "./types", ext: ".d.ts" },
-  },
-  PACKAGE_PATH
-);
 
 function cleanJSFiles() {
   return {

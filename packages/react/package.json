@@ -29,9 +29,10 @@
     "./svg": "./src/svg/index.ts"
   },
   "scripts": {
-    "build": "npm run clean && rollup -c && npm run cp:license",
+    "build": "npm run clean && rollup -c && npm run cp:license && npm run mod:pkg",
     "clean": "rimraf ./dist",
     "cp:license": "cp ../../LICENSE ./LICENSE",
+    "mod:pkg": "node ./scripts/modify-package.mjs",
     "type-check": "tsc --noEmit",
     "tsc:build": "tsc -b",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"

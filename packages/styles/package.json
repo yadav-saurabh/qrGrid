@@ -1,7 +1,8 @@
 {
-  "name": "@qrgrid/web-common",
+  "name": "@qrgrid/styles",
   "version": "0.1.0",
   "type": "module",
+  "private": true,
   "module": "src/index.ts",
   "main": "src/index.ts",
   "exports": {
