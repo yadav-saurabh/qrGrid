@@ -1,5 +1,32 @@
 {
   "name": "@qrgrid/docs",
-  "version": "0.1.0",
-  "private": true
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yadav-saurabh/qrgrid",
+    "directory": "docs"
+  },
+  "keywords": [
+    "qr",
+    "styling",
+    "qrgrid",
+    "typescript",
+    "docs"
+  ],
+  "dependencies": {
+    "@qrgrid/styles": "*",
+    "@qrgrid/vue": "*"
+  },
+  "devDependencies": {
+    "vitepress": "^1.3.1",
+    "vue": "^3.4.35"
+  },
+  "scripts": {
+    "dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  }
 }

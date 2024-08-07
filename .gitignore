@@ -179,3 +179,7 @@ dist
 
 # rollup 
 .rollup*
+
+#vitepress
+**/.vitepress/cache
+**/.vitepress/dist
