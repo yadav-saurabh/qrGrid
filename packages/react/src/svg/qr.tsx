@@ -122,6 +122,10 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
         setImgData({ img: canvas.toDataURL(), height, width, x, y });
       };
     }
+    // event once everything is generated but not updated the path value to render
+    if (props.onGenerated) {
+      props.onGenerated(path, size, qr);
+    }
   }, [
     input,
     qrOptions?.errorCorrection,

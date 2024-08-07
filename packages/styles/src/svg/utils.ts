@@ -45,6 +45,29 @@ export function getNeighbor(index: number, qr: QR) {
 }
 
 /**
+ * get the positions ans sizes of the finder patterns
+ */
+export function getFinderPatternDetails(size: number, qr: QR) {
+  const { noOfModules } = qr;
+
+  let positions = {
+    inner: [
+      { x: size * 3, y: size * 3 },
+      { x: size * (noOfModules - 4), y: size * 3 },
+      { x: size * 3, y: size * (noOfModules - 4) },
+    ],
+    outer: [
+      { x: size * 1, y: size * 1 },
+      { x: size * (noOfModules - 6), y: size * 1 },
+      { x: size * 1, y: size * (noOfModules - 6) },
+    ],
+  };
+  const sizes = { outer: size * 7, inner: size * 3 };
+
+  return { positions, sizes };
+}
+
+/**
  * make a module corner (square) round
  */
 export function getRoundCornerPath(
@@ -123,6 +146,22 @@ export function getCirclePath(x: number, y: number, size: number) {
   let cx = x + r;
   let cy = y + r;
   return `M${cx - r} ${cy}a ${r} ${r} 0 1 0 ${r * 2} 0a ${r} ${r} 0 1 0 -${r * 2} 0`;
+}
+
+/**
+ * get the path string to draw a circle outline (same as circle stroke)
+ */
+export function getCircleOutlinePath(
+  x: number,
+  y: number,
+  size: number,
+  strength?: number
+) {
+  const r = Math.floor(size / 2);
+  let d = strength || r * 0.25;
+  let cx = x;
+  let cy = y + r;
+  return `M${cx} ${cy}a ${r} ${r} 0 1 0 ${r * 2} 0 m-${d} 0a ${r - d} ${r - d} 0 0 1 -${(r - d) * 2} 0 h-${d} a ${r} ${r} 0 0 1 ${r * 2} 0 m-${d} 0a ${r - d} ${r - d} 0 0 0 -${(r - d) * 2} 0 h-${d}z`;
 }
 
 /**
