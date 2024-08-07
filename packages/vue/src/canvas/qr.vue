@@ -120,6 +120,10 @@ function generateQr() {
   }
   ctx.fillRect(0, 0, canvasSize + border, canvasSize + border);
   ctx.restore();
+  // event once everything is drawn
+  if (props.onGenerated) {
+    props.onGenerated(ctx, size, qr);
+  }
 }
 
 onMounted(() => generateQr());

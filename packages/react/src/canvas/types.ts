@@ -45,4 +45,5 @@ export type QrProps = {
   moduleStyle?: ModuleStyleFunction;
   getQrData?: (qr: QR) => void;
   getCanvasCtx?: (ctx: CanvasRenderingContext2D) => void;
+  onGenerated?: (ctx: CanvasRenderingContext2D, size: number, qr: QR) => void;
 };

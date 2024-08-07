@@ -122,6 +122,10 @@ function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
     }
     ctx.fillRect(0, 0, canvasSize + border, canvasSize + border);
     ctx.restore();
+    // event once everything is drawn
+    if (props.onGenerated) {
+      props.onGenerated(ctx, size, qr);
+    }
   }, [
     input,
     qrOptions?.errorCorrection,

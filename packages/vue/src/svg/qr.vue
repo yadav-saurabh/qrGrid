@@ -93,8 +93,6 @@ function generateQr() {
       y += size;
     }
   }
-  finderPatternPath.value = path.finder;
-  codewordPath.value = path.codeword;
   // if image place the image in center, QR ErrorCorrectionLevel Should be high and Image should not be more that 25-30% of the svg size to scan the QR code properly
   if (props.image) {
     const img = new Image();
@@ -118,6 +116,12 @@ function generateQr() {
       imgData.value = { img: canvas.toDataURL(), height, width, x, y };
     };
   }
+  // event once everything is generated but not updated the path value to render
+  if (props.onGenerated) {
+    props.onGenerated(path, size, qr);
+  }
+  finderPatternPath.value = path.finder;
+  codewordPath.value = path.codeword;
 }
 
 onMounted(() => generateQr());

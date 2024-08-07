@@ -1,5 +1,11 @@
 # @qrgrid/react
 
+## 1.1.0
+
+### Minor Changes
+
+- onGenerated event
+
 ## 1.0.0
 
 ### Changes

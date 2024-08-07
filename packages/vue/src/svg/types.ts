@@ -36,4 +36,9 @@ export type QrProps = {
   image?: QrImageOption;
   moduleStyle?: ModuleStyleFunction;
   getQrData?: (qr: QR) => void;
+  onGenerated?: (
+    path: ModuleStyleFunctionParams[0],
+    size: number,
+    qr: QR
+  ) => void;
 };
