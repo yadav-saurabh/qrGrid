@@ -5,7 +5,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { getOnGeneratedQrPaths, getQrPaths } from "./qr-styles";
 
 const style = ref(0);
-const svgSize = ref(getCanvasSize());
+const svgSize = ref(400);
 const input = ref("https://qrgrid.dev");
 
 function onGenerated(path: ModuleStyleFunctionParams[0], size: number, qr: QR) {
@@ -52,6 +52,7 @@ const onWindowResize = () => {
 };
 
 onMounted(() => {
+  svgSize.value = getCanvasSize();
   animationFrame = requestAnimationFrame(animate);
   window.addEventListener("resize", onWindowResize);
 });
