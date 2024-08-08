@@ -4,6 +4,7 @@ import { ModuleStyleFunctionParams, Qr } from "@qrgrid/react/svg";
 import {
   downloadQr as downloadUtil,
   getCirclePath,
+  getCornerArcPath,
   getNeighbor,
   getRoundCornerPath,
   getSquarePath,
@@ -33,14 +34,22 @@ function SvgQr({ input, errorCorrection }: PropTypes) {
     const { reservedBits } = qr;
     const { x, y, size } = module;
     const neighbor = getNeighbor(module.index, qr);
+    const cornerDist = size * 0.9;
 
     if (reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
-      if (!neighbor.top && !neighbor.right) {
-        path.finder += getRoundCornerPath(module, ["top-right"], size);
+      if (!neighbor.top && !neighbor.left) {
+        path.finder += getRoundCornerPath(module, ["top-left"], cornerDist);
+        if (!neighbor.bottomRight) {
+          const arcCoords = { ...module, y: y + size, x: x + size };
+          path.finder += getCornerArcPath(arcCoords, "top-left", cornerDist);
+        }
         return;
       }
-      if (!neighbor.bottom && !neighbor.left) {
-        path.finder += getRoundCornerPath(module, ["bottom-left"], size);
+      if (!neighbor.bottom && !neighbor.right) {
+        path.finder += getRoundCornerPath(module, ["bottom-right"]);
+        if (!neighbor.topLeft) {
+          path.finder += getCornerArcPath(module, "bottom-right", cornerDist);
+        }
         return;
       }
       path.finder += getSquarePath(x, y, size);
