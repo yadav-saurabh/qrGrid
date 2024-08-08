@@ -77,6 +77,10 @@ export function getRoundCornerPath(
 ) {
   const { x, y, size } = module;
   let d = cornerSize || 0.5 * size;
+  if (d > size) {
+    throw new Error("cornerSize cannot be greater than size");
+  }
+
   let topLeft = false;
   let topRight = false;
   let bottomLeft = false;
@@ -123,17 +127,20 @@ export function getCornerArcPath(
 ) {
   const { x, y, size } = module;
   const d = cornerSize || 0.5 * size;
+  if (d > size) {
+    throw new Error("cornerSize cannot be greater than size");
+  }
   if (type === "top-left") {
-    return `M${x - d} ${y} h${d}v${d}Q${x} ${y} ${x + d} ${y}z`;
+    return `M${x} ${y} v${d}q0 -${d} ${d} -${d}z`;
   }
   if (type === "top-right") {
-    return `M${x + size} ${y} v${d}Q${x + size} ${y} ${x + d} ${y}z`;
+    return `M${x} ${y} v${d}q0 -${d} -${d} -${d}z`;
   }
   if (type === "bottom-left") {
-    return `M${x} ${y + size} h${d}Q${x} ${y + size} ${x} ${y + d}z`;
+    return `M${x} ${y} h${d}q-${d} 0 -${d} -${d}z`;
   }
   if (type === "bottom-right") {
-    return `M${x + d} ${y + size} h${d}v${-d}Q${x + size} ${y + size} ${x + d} ${y + size}z`;
+    return `M${x} ${y} v${-d}q0 ${d} -${d} ${d}z`;
   }
   return "";
 }
@@ -185,11 +192,11 @@ export function getSmoothDataBitPath(module: ModuleType, qr: QR) {
   const cornerDist = size * 0.5;
 
   if (!neighbor.left && neighbor.topLeft) {
-    const arcCoords = { ...module, x: x - size };
+    const arcCoords = { ...module };
     path += getCornerArcPath(arcCoords, "top-right", cornerDist);
   }
   if (!neighbor.left && neighbor.bottomLeft) {
-    const arcCoords = { ...module, x: x - size };
+    const arcCoords = { ...module, y: y + size };
     path += getCornerArcPath(arcCoords, "bottom-right", cornerDist);
   }
   if (!neighbor.right && neighbor.topRight) {
@@ -197,7 +204,7 @@ export function getSmoothDataBitPath(module: ModuleType, qr: QR) {
     path += getCornerArcPath(arcCoords, "top-left", cornerDist);
   }
   if (!neighbor.right && neighbor.bottomRight) {
-    const arcCoords = { ...module, x: x + size };
+    const arcCoords = { ...module, x: x + size, y: y + size };
     path += getCornerArcPath(arcCoords, "bottom-left", cornerDist);
   }
 
@@ -244,21 +251,20 @@ export function roundCornerFinderPatternPath(module: ModuleType, qr: QR) {
     if (!neighbor.top && !neighbor.right) {
       path += getRoundCornerPath(module, ["top-right"]);
       if (!neighbor.bottomLeft) {
-        const arcCoords = { ...module, y: y + size, x: x - size };
+        const arcCoords = { ...module, y: y + size };
         path += getCornerArcPath(arcCoords, "top-right");
       }
     }
     if (!neighbor.bottom && !neighbor.right) {
       path += getRoundCornerPath(module, ["bottom-right"]);
       if (!neighbor.topLeft) {
-        const arcCoords = { ...module, y: y - size, x: x - size };
-        path += getCornerArcPath(arcCoords, "bottom-right");
+        path += getCornerArcPath(module, "bottom-right");
       }
     }
     if (!neighbor.bottom && !neighbor.left) {
       path += getRoundCornerPath(module, ["bottom-left"]);
       if (!neighbor.topRight) {
-        const arcCoords = { ...module, y: y - size, x: x + size };
+        const arcCoords = { ...module, x: x + size };
         path += getCornerArcPath(arcCoords, "bottom-left");
       }
     }
