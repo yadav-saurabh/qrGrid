@@ -8,29 +8,21 @@ const style = ref(0);
 const svgSize = ref(getCanvasSize());
 const input = ref("https://qrgrid.dev");
 
-const onGenerated = (
-  path: ModuleStyleFunctionParams[0],
-  size: number,
-  qr: QR
-) => {
+function onGenerated(path: ModuleStyleFunctionParams[0], size: number, qr: QR) {
   const { codeword, finder } = getOnGeneratedQrPaths(style.value, size, qr);
   path.finder += finder;
   path.codeword += codeword;
-};
+}
 
-const qrModuleStyle = (
+function qrModuleStyle(
   path: ModuleStyleFunctionParams[0],
   module: ModuleStyleFunctionParams[1],
   qr: QR
-) => {
+) {
   const { codeword, finder } = getQrPaths(style.value, module, qr);
   path.finder += finder;
   path.codeword += codeword;
-};
-
-const onWindowResize = () => {
-  svgSize.value = getCanvasSize();
-};
+}
 
 function getCanvasSize() {
   const width = window.innerWidth;
@@ -46,6 +38,7 @@ function getCanvasSize() {
 let animationFrame: number;
 let previousTimeStamp = 0;
 const TIME_IN_SEC = 3 * 1000;
+
 const animate = (timeStamp: number) => {
   if (!previousTimeStamp || timeStamp - previousTimeStamp >= TIME_IN_SEC) {
     previousTimeStamp = timeStamp;
@@ -53,6 +46,11 @@ const animate = (timeStamp: number) => {
   }
   animationFrame = requestAnimationFrame(animate);
 };
+
+const onWindowResize = () => {
+  svgSize.value = getCanvasSize();
+};
+
 onMounted(() => {
   animationFrame = requestAnimationFrame(animate);
   window.addEventListener("resize", onWindowResize);
