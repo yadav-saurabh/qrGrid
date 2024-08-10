@@ -3,7 +3,7 @@ import { h } from "vue";
 import type { Theme } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import "./style.css";
-import HomeHeroQr from "./components/home/home-hero-qr.vue";
+import HomeHeroQr from "./components/home/HomeHeroQr.vue";
 
 export default {
   extends: DefaultTheme,

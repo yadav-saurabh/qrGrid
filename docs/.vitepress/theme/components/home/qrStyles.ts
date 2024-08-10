@@ -12,9 +12,9 @@ import {
 } from "@qrgrid/styles/svg";
 import { ModuleStyleFunctionParams } from "@qrgrid/vue/svg";
 
-const ON_GENERATED_STYLE = 6;
+const ON_GENERATED_STYLE = 4;
 
-function roundCornerFinderPatternPath(
+export function roundCornerFinderPatternPath(
   module: ModuleType,
   qr: QR,
   corner: Set<CornerType>
@@ -58,7 +58,11 @@ function roundCornerFinderPatternPath(
   return "";
 }
 
-function smoothDataBitPath(module: ModuleType, qr: QR, corner: Set<CornerType>) {
+export function smoothDataBitPath(
+  module: ModuleType,
+  qr: QR,
+  corner: Set<CornerType>
+) {
   const { reservedBits } = qr;
   const { index, x, y, size } = module;
   if (reservedBits[index]?.type === ReservedBits.FinderPattern) {
@@ -87,16 +91,36 @@ function smoothDataBitPath(module: ModuleType, qr: QR, corner: Set<CornerType>) 
 
   const smoothCorners: CornerType[] = [];
 
-  if (!neighbor.topLeft && !neighbor.top && !neighbor.left && corner.has("top-left")) {
+  if (
+    !neighbor.topLeft &&
+    !neighbor.top &&
+    !neighbor.left &&
+    corner.has("top-left")
+  ) {
     smoothCorners.push("top-left");
   }
-  if (!neighbor.topRight && !neighbor.top && !neighbor.right && corner.has("top-right")) {
+  if (
+    !neighbor.topRight &&
+    !neighbor.top &&
+    !neighbor.right &&
+    corner.has("top-right")
+  ) {
     smoothCorners.push("top-right");
   }
-  if (!neighbor.bottomLeft && !neighbor.bottom && !neighbor.left && corner.has("bottom-left")) {
+  if (
+    !neighbor.bottomLeft &&
+    !neighbor.bottom &&
+    !neighbor.left &&
+    corner.has("bottom-left")
+  ) {
     smoothCorners.push("bottom-left");
   }
-  if (!neighbor.bottomRight && !neighbor.bottom && !neighbor.right && corner.has("bottom-right")) {
+  if (
+    !neighbor.bottomRight &&
+    !neighbor.bottom &&
+    !neighbor.right &&
+    corner.has("bottom-right")
+  ) {
     smoothCorners.push("bottom-right");
   }
 
@@ -108,7 +132,12 @@ function smoothDataBitPath(module: ModuleType, qr: QR, corner: Set<CornerType>) 
   return path + getSquarePath(x, y, size);
 }
 
-let corners = new Set<CornerType>();
+const corners = new Set<CornerType>([
+  "top-left",
+  "top-right",
+  "bottom-right",
+  "bottom-left",
+]);
 export function getQrPaths(
   style: number,
   module: ModuleStyleFunctionParams[1],
@@ -123,32 +152,19 @@ export function getQrPaths(
   if (reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
     // finder style for #1
     if (style === 1) {
-      corners.add("top-left");
-      finder += roundCornerFinderPatternPath(module, qr, corners);
+      finder += getSquarePath(x, y, size);
     }
     // finder style for #2
     if (style === 2) {
-      corners.add("top-right");
       finder += roundCornerFinderPatternPath(module, qr, corners);
     }
     // finder style for #3
     if (style === 3) {
-      corners.add("bottom-right");
-      finder += roundCornerFinderPatternPath(module, qr, corners);
-    }
-    // finder style for #4
-    if (style === 4) {
-      corners.add("bottom-left");
-      finder += roundCornerFinderPatternPath(module, qr, corners);
-    }
-    // finder style for #5
-    if (style === 5) {
-      corners.clear();
       finder += getCirclePath(x, y, size);
     }
-    // finder style for #6
+    // finder style for #4
     if (style === ON_GENERATED_STYLE) {
-      // skipping for style 6
+      // skipping for style 4
       finder = "";
     }
     return { codeword, finder };
@@ -156,7 +172,7 @@ export function getQrPaths(
 
   // codeword style for #1
   if (style === 1) {
-    codeword += smoothDataBitPath(module, qr, corners);
+    codeword += getSquarePath(x, y, size);
   }
   // codeword style for #2
   if (style === 2) {
@@ -164,17 +180,9 @@ export function getQrPaths(
   }
   // codeword style for #3
   if (style === 3) {
-    codeword += smoothDataBitPath(module, qr, corners);
-  }
-  // codeword style for #4
-  if (style === 4) {
-    codeword += smoothDataBitPath(module, qr, corners);
-  }
-  // codeword style for #5
-  if (style === 5) {
     codeword += getCirclePath(x, y, size);
   }
-  // codeword style for #6
+  // codeword style for #4
   if (style === ON_GENERATED_STYLE) {
     codeword += getCirclePath(x, y, size);
   }
@@ -185,7 +193,7 @@ export function getOnGeneratedQrPaths(value: number, size: number, qr: QR) {
   let finder = "";
   let codeword = "";
 
-  // only for style #5
+  // only for style #4
   if (value !== ON_GENERATED_STYLE) {
     return { codeword, finder };
   }

@@ -2,7 +2,7 @@
 import { QR } from "@qrgrid/core";
 import { ModuleStyleFunctionParams, Qr } from "@qrgrid/vue/svg";
 import { onMounted, onUnmounted, ref } from "vue";
-import { getOnGeneratedQrPaths, getQrPaths } from "./qr-styles";
+import { getOnGeneratedQrPaths, getQrPaths } from "./qrStyles";
 
 const style = ref(0);
 const svgSize = ref(400);
@@ -42,7 +42,7 @@ const TIME_IN_SEC = 3 * 1000;
 const animate = (timeStamp: number) => {
   if (!previousTimeStamp || timeStamp - previousTimeStamp >= TIME_IN_SEC) {
     previousTimeStamp = timeStamp;
-    style.value = style.value === 6 ? 1 : style.value + 1;
+    style.value = style.value === 4 ? 1 : style.value + 1;
   }
   animationFrame = requestAnimationFrame(animate);
 };
