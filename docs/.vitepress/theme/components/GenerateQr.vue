@@ -4,16 +4,16 @@ import { ModuleStyleFunctionParams, Qr } from "@qrgrid/vue/svg";
 import { CornerType, getCirclePath, getSquarePath } from "@qrgrid/styles/svg";
 import { onMounted, onUnmounted, ref } from "vue";
 
-import ColorPicker from "../ColorPicker.vue";
-import Switch from "../Switch.vue";
+import ColorPicker from "./ColorPicker.vue";
+import Switch from "./Switch.vue";
 import {
   SquareTopLeftCircleBorderIcon,
   SquareTopRightCircleBorderIcon,
   SquareBottomLeftCircleBorderIcon,
   SquareBottomRightCircleBorderIcon,
   Circle,
-} from "../../icons";
-import { roundCornerFinderPatternPath, smoothDataBitPath } from "../qrStyles";
+} from "../icons";
+import { roundCornerFinderPatternPath, smoothDataBitPath } from "./qrStyles";
 
 const STYLE_CORNER_MAPPING: Record<number, CornerType> = {
   1: "top-left",
@@ -160,168 +160,167 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="card">
-    <div>
-      <p class="title">Customize as you want</p>
-      <p class="title-desc">
-        For more customization option:
-        <a href="./generate/">Generate a custom qr</a>
-      </p>
-      <!-- FInder  -->
-      <p class="sub-title">Finder</p>
-      <div :style="{ marginLeft: '1rem' }">
-        <div class="input-container">
-          <label class="label" for="finder-color">Color</label>
-          <ColorPicker v-model="finderColor" id="finder-color" />
-        </div>
-        <div class="input-container style-grid">
-          <label class="label" for="finder-style">Style</label>
-          <div>
-            <button
-              type="button"
-              class="icon-btn"
-              :class="{ active: finderStyle.has(1) }"
-              @click="() => setStyle(1, 'finder')"
-            >
-              <SquareTopLeftCircleBorderIcon />
-            </button>
-            <button
-              type="button"
-              class="icon-btn"
-              :class="{ active: finderStyle.has(2) }"
-              @click="() => setStyle(2, 'finder')"
-            >
-              <SquareTopRightCircleBorderIcon />
-            </button>
-            <button
-              type="button"
-              class="icon-btn"
-              :class="{ active: finderStyle.has(3) }"
-              @click="() => setStyle(3, 'finder')"
-            >
-              <SquareBottomLeftCircleBorderIcon />
-            </button>
-            <button
-              type="button"
-              class="icon-btn"
-              :class="{ active: finderStyle.has(4) }"
-              @click="() => setStyle(4, 'finder')"
-            >
-              <SquareBottomRightCircleBorderIcon />
-            </button>
-            <button
-              type="button"
-              class="icon-btn"
-              :disabled="combinedStyle"
-              :class="{ active: finderStyle.has(5) }"
-              @click="() => setStyle(5, 'finder')"
-            >
-              <Circle />
-            </button>
-          </div>
-        </div>
-      </div>
-      <!-- Codewords  -->
-      <p class="sub-title">Codeword</p>
-      <div :style="{ marginLeft: '1rem' }">
-        <div class="input-container">
-          <label class="label" for="codeword-color">Color</label>
-          <ColorPicker v-model="codewordColor" id="codeword-color" />
-        </div>
-        <div class="input-container">
-          <label class="label" for="codeword-style">Style</label>
-          <div>
-            <button
-              type="button"
-              class="icon-btn"
-              :class="{ active: codewordStyle.has(1) }"
-              @click="() => setStyle(1, 'codeword')"
-            >
-              <SquareTopLeftCircleBorderIcon />
-            </button>
-            <button
-              type="button"
-              class="icon-btn"
-              :class="{ active: codewordStyle.has(2) }"
-              @click="() => setStyle(2, 'codeword')"
-            >
-              <SquareTopRightCircleBorderIcon />
-            </button>
-            <button
-              type="button"
-              class="icon-btn"
-              :class="{ active: codewordStyle.has(3) }"
-              @click="() => setStyle(3, 'codeword')"
-            >
-              <SquareBottomLeftCircleBorderIcon />
-            </button>
-            <button
-              type="button"
-              class="icon-btn"
-              :class="{ active: codewordStyle.has(4) }"
-              @click="() => setStyle(4, 'codeword')"
-            >
-              <SquareBottomRightCircleBorderIcon />
-            </button>
-            <button
-              type="button"
-              class="icon-btn"
-              :disabled="combinedStyle"
-              :class="{ active: codewordStyle.has(5) }"
-              @click="() => setStyle(5, 'codeword')"
-            >
-              <Circle />
-            </button>
-          </div>
-        </div>
-      </div>
-      <!-- Background Color  -->
-      <div class="input-container" :style="{ marginTop: '16px' }">
-        <p class="sub-title" :style="{ margin: 0 }">Background Color</p>
-        <div>
-          <label
-            class="label"
-            for="background-color"
-            :style="{ display: 'none' }"
-            >Color</label
-          >
-          <ColorPicker v-model="backgroundColor" id="background-color" />
-        </div>
-      </div>
-      <!-- Combine Styles  -->
-      <div class="input-container" :style="{ marginTop: '16px' }">
-        <p class="sub-title" :style="{ margin: 0 }">Combine Styles</p>
-        <label
-          class="label"
-          for="background-color"
-          :style="{ display: 'none' }"
-        ></label>
-        <Switch
-          label="Combine Styles"
-          @change="onCombinedStyleChanged"
-          v-model:checked="combinedStyle"
+  <div class="container">
+    <div class="card">
+      <div>
+        <p class="title">Generate a QR</p>
+        <!-- Input  -->
+        <textarea
+          placeholder="Text To Encode"
+          v-model="input"
+          rows="{4}"
+          cols="{50}"
+          class="input"
         />
+        <!-- Finder  -->
+        <p class="sub-title">Finder</p>
+        <div :style="{ marginLeft: '1rem' }">
+          <div class="input-container">
+            <label class="label" for="finder-color">Color</label>
+            <ColorPicker v-model="finderColor" id="finder-color" />
+          </div>
+          <div class="input-container style-grid">
+            <label class="label" for="finder-style">Style</label>
+            <div>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(1) }"
+                @click="() => setStyle(1, 'finder')"
+              >
+                <SquareTopLeftCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(2) }"
+                @click="() => setStyle(2, 'finder')"
+              >
+                <SquareTopRightCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(3) }"
+                @click="() => setStyle(3, 'finder')"
+              >
+                <SquareBottomLeftCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(4) }"
+                @click="() => setStyle(4, 'finder')"
+              >
+                <SquareBottomRightCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :disabled="combinedStyle"
+                :class="{ active: finderStyle.has(5) }"
+                @click="() => setStyle(5, 'finder')"
+              >
+                <Circle />
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Codewords  -->
+        <p class="sub-title">Codeword</p>
+        <div :style="{ marginLeft: '1rem' }">
+          <div class="input-container">
+            <label class="label" for="codeword-color">Color</label>
+            <ColorPicker v-model="codewordColor" id="codeword-color" />
+          </div>
+          <div class="input-container">
+            <label class="label" for="codeword-style">Style</label>
+            <div>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(1) }"
+                @click="() => setStyle(1, 'codeword')"
+              >
+                <SquareTopLeftCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(2) }"
+                @click="() => setStyle(2, 'codeword')"
+              >
+                <SquareTopRightCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(3) }"
+                @click="() => setStyle(3, 'codeword')"
+              >
+                <SquareBottomLeftCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(4) }"
+                @click="() => setStyle(4, 'codeword')"
+              >
+                <SquareBottomRightCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :disabled="combinedStyle"
+                :class="{ active: codewordStyle.has(5) }"
+                @click="() => setStyle(5, 'codeword')"
+              >
+                <Circle />
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Background Color  -->
+        <div class="input-container" :style="{ marginTop: '16px' }">
+          <p class="sub-title" :style="{ margin: 0 }">Background Color</p>
+          <div>
+            <label
+              class="label"
+              for="background-color"
+              :style="{ display: 'none' }"
+              >Color</label
+            >
+            <ColorPicker v-model="backgroundColor" id="background-color" />
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="qr-container">
-      <Qr
-        :bgColor="backgroundColor"
-        :input="input"
-        :color="{ finder: finderColor, codeword: codewordColor }"
-        :moduleStyle="qrModuleStyle"
-        :size="svgSize"
-        :data-codeword-style="[...codewordStyle].join()"
-        :data-finder-style="[...finderStyle].join()"
-      />
+      <div class="qr-container">
+        <div>
+          <Qr
+            :bgColor="backgroundColor"
+            :input="input"
+            :color="{ finder: finderColor, codeword: codewordColor }"
+            :moduleStyle="qrModuleStyle"
+            :size="svgSize"
+            :data-codeword-style="[...codewordStyle].join()"
+            :data-finder-style="[...finderStyle].join()"
+          />
+          <button>Download</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.container {
+  padding: 32px;
+  margin: 0 auto;
+  max-width: 1280px;
+}
 .card {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  margin-top: 60px;
   border: 1px solid var(--vp-c-bg-soft);
   border-radius: 12px;
   background-color: var(--vp-c-bg-soft);
@@ -331,13 +330,16 @@ onUnmounted(() => {
 .title {
   font-size: 24px;
   font-weight: 500;
-  margin-bottom: 0;
+  color: var(--vp-c-brand);
+  margin-bottom: 10px;
 }
-.title-desc {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--vp-c-text-2);
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--vp-c-default-soft);
+  border-radius: 8px;
+  background-color: var(--vp-c-default-soft);
+  margin-bottom: 14px;
 }
 .input-container {
   margin: 4px;

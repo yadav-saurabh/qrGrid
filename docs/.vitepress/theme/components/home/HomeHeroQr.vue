@@ -2,7 +2,7 @@
 import { QR } from "@qrgrid/core";
 import { ModuleStyleFunctionParams, Qr } from "@qrgrid/vue/svg";
 import { onMounted, onUnmounted, ref } from "vue";
-import { getOnGeneratedQrPaths, getQrPaths } from "./qrStyles";
+import { getOnGeneratedQrPaths, getQrPaths } from "../qrStyles";
 
 const style = ref(0);
 const svgSize = ref(400);

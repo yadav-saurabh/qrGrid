@@ -16,14 +16,15 @@ export default defineConfig({
     },
     nav: [
       { text: "Home", link: "/" },
-      { text: "Guide", link: "/guide/" },
+      { text: "Guide", link: "/guide/", activeMatch: '/guide/' },
+      { text: "Generate", link: "/generate/" },
     ],
 
     sidebar: [
       {
         text: "Introduction",
         items: [
-          { text: "Installation", link: "/guide/installation" },
+          { text: "Get Started", link: "/guide/" },
           { text: "Customization", link: "/guide/customization" },
         ],
       },
