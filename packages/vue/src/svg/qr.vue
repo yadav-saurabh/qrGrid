@@ -3,7 +3,7 @@
  * Qr component to generate QR Code on a canvas
  * @module
  */
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, defineExpose, watch } from "vue";
 import { QR, ReservedBits } from "@qrgrid/core";
 
 import { ModuleStyleFunctionParams, QrProps } from "./types";
@@ -48,6 +48,7 @@ function getColor(colorProp: QrProps["color"], type: "finder" | "codeword") {
 
 const props = defineProps<QrProps>();
 const finderPatternPath = ref<string>("");
+const svgRef = ref(null);
 const codewordPath = ref("");
 const svgSize = ref(props.size || DEFAULT_SVG_SIZE);
 const imgData = ref({ img: "", x: 0, y: 0, height: 0, width: 0 });
@@ -128,11 +129,13 @@ onMounted(() => generateQr());
 watch(props, () => {
   generateQr();
 });
+defineExpose({ svgRef });
 </script>
 
 <!-- Qr component create the QR code in a svg format / -->
 <template>
   <svg
+    ref="svgRef"
     :height="svgSize"
     :width="svgSize"
     :viewBox="`0 0 ${svgSize} ${svgSize}`"

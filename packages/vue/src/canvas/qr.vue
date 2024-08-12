@@ -3,7 +3,7 @@
  * Qr component to generate QR Code on a canvas
  * @module
  */
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, defineExpose } from "vue";
 import { QR } from "@qrgrid/core";
 
 import { ModuleStyleFunctionParams, QrProps } from "./types";
@@ -130,6 +130,7 @@ onMounted(() => generateQr());
 watch(props, () => {
   generateQr();
 });
+defineExpose({ canvasRef });
 </script>
 
 <!-- Qr component forwardRef  Qr component draws the QR code on a canvas / -->

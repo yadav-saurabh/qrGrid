@@ -1,5 +1,11 @@
 # @qrgrid/vue
 
+## 1.2.0
+
+### Minor Changes
+
+- Exposed ref canvas and svg
+
 ## 1.1.0
 
 ### Minor Changes
