@@ -15,17 +15,33 @@ import {
   SquareTopRightCircleBorderIcon,
   SquareBottomLeftCircleBorderIcon,
   SquareBottomRightCircleBorderIcon,
+  SquareTopCircleBorderIcon,
+  SquareBottomCircleBorderIcon,
+  SquareRightCircleBorderIcon,
+  SquareLeftCircleBorderIcon,
+  SquareCircleBorderIcon,
+  SquareTopLeftBottomRightCircleBorderIcon,
+  SquareBottomLeftTopRightCircleBorderIcon,
   Circle,
   ChevronDown,
 } from "../icons";
 import { roundCornerFinderPatternPath, smoothDataBitPath } from "./qrStyles";
 
-const STYLE_CORNER_MAPPING: Record<number, CornerType> = {
-  1: "top-left",
-  2: "top-right",
-  3: "bottom-right",
-  4: "bottom-left",
+const STYLE_CORNER_MAPPING: Record<number, CornerType[]> = {
+  1: ["top-left"],
+  2: ["top-right"],
+  3: ["bottom-right"],
+  4: ["bottom-left"],
+  6: ["top-left", "top-right"],
+  7: ["bottom-left", "bottom-right"],
+  8: ["top-right", "bottom-right"],
+  9: ["top-left", "bottom-left"],
+  10: ["top-right", "bottom-right", "top-left", "bottom-left"],
+  11: ["bottom-right", "top-left"],
+  12: ["top-right", "bottom-left"],
 };
+
+const STYLE_CORNER_KEYS = Object.keys(STYLE_CORNER_MAPPING).map((d) => +d);
 
 const finderStyle = ref<Set<number>>(new Set());
 const codewordStyle = ref<Set<number>>(new Set());
@@ -33,10 +49,9 @@ const svgSize = ref(400);
 const qrRef = ref<InstanceType<typeof Qr> | null>(null);
 const downloadType = ref<"svg" | "png" | "jpeg" | "webp">("svg");
 const downloadDropdown = ref(false);
-const combinedStyle = ref(false);
 const input = ref("https://qrgrid.dev");
 const finderColor = ref("#ff3131");
-const codewordColor = ref("#deddda");
+const codewordColor = ref("currentColor");
 const backgroundColor = ref("transparent");
 
 const finderCorner = new Set<CornerType>();
@@ -53,20 +68,8 @@ function qrModuleStyle(
   let codeword = "";
 
   if (reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
-    // finder style for #1
-    if (finderStyle.value.has(1)) {
-      finder += roundCornerFinderPatternPath(module, qr, finderCorner);
-    }
-    // finder style for #2
-    if (finderStyle.value.has(2)) {
-      finder += roundCornerFinderPatternPath(module, qr, finderCorner);
-    }
-    // finder style for #3
-    if (finderStyle.value.has(3)) {
-      finder += roundCornerFinderPatternPath(module, qr, finderCorner);
-    }
-    // finder style for #4
-    if (finderStyle.value.has(4)) {
+    // finder style for #1-#4 & #6-#9
+    if (STYLE_CORNER_KEYS.some((d) => finderStyle.value.has(d))) {
       finder += roundCornerFinderPatternPath(module, qr, finderCorner);
     }
     // finder style for #5
@@ -76,20 +79,8 @@ function qrModuleStyle(
     path.finder += finder || getSquarePath(x, y, size);
     return;
   }
-  // codeword style for #1
-  if (codewordStyle.value.has(1)) {
-    codeword += smoothDataBitPath(module, qr, codewordCorner);
-  }
-  // codeword style for #2
-  if (codewordStyle.value.has(2)) {
-    codeword += smoothDataBitPath(module, qr, codewordCorner);
-  }
-  // codeword style for #3
-  if (codewordStyle.value.has(3)) {
-    codeword += smoothDataBitPath(module, qr, codewordCorner);
-  }
-  // codeword style for #4
-  if (codewordStyle.value.has(4)) {
+  // codeword style for #1-#4 & #6-#9
+  if (STYLE_CORNER_KEYS.some((d) => codewordStyle.value.has(d))) {
     codeword += smoothDataBitPath(module, qr, codewordCorner);
   }
   // codeword style for #5
@@ -100,30 +91,32 @@ function qrModuleStyle(
 }
 
 function setStyle(value: number, type: "finder" | "codeword") {
-  if (type === "finder") {
-    if (finderStyle.value.has(value)) {
-      finderStyle.value.delete(value);
-      finderCorner.delete(STYLE_CORNER_MAPPING[value]);
-      return;
-    }
-    if (!combinedStyle.value) {
-      finderStyle.value.clear();
-      finderCorner.clear();
-    }
-    finderStyle.value.add(value);
-    finderCorner.add(STYLE_CORNER_MAPPING[value]);
-  } else {
-    if (codewordStyle.value.has(value)) {
-      codewordStyle.value.delete(value);
-      codewordCorner.delete(STYLE_CORNER_MAPPING[value]);
-      return;
-    }
-    if (!combinedStyle.value) {
-      codewordStyle.value.clear();
-      codewordCorner.clear();
-    }
-    codewordStyle.value.add(value);
-    codewordCorner.add(STYLE_CORNER_MAPPING[value]);
+  const styleObj = type === "finder" ? finderStyle : codewordStyle;
+  if (styleObj.value.has(value)) {
+    styleObj.value.delete(value);
+    modifyCornerSet(type, "delete", STYLE_CORNER_MAPPING[value]);
+    return;
+  }
+  styleObj.value.clear();
+  modifyCornerSet(type, "clear", STYLE_CORNER_MAPPING[value]);
+  styleObj.value.add(value);
+  modifyCornerSet(type, "add", STYLE_CORNER_MAPPING[value]);
+}
+
+function modifyCornerSet(
+  type: "finder" | "codeword",
+  operation: "add" | "delete" | "clear",
+  data?: CornerType[] | undefined
+) {
+  const set = type === "finder" ? finderCorner : codewordCorner;
+  if (operation === "clear") {
+    set.clear();
+  }
+  if (!data) {
+    return;
+  }
+  for (let i = 0; i < data.length; i++) {
+    set[operation](data[i]);
   }
 }
 
@@ -216,7 +209,7 @@ onUnmounted(() => {
                 :class="{ active: finderStyle.has(3) }"
                 @click="() => setStyle(3, 'finder')"
               >
-                <SquareBottomLeftCircleBorderIcon />
+                <SquareBottomRightCircleBorderIcon />
               </button>
               <button
                 type="button"
@@ -224,16 +217,71 @@ onUnmounted(() => {
                 :class="{ active: finderStyle.has(4) }"
                 @click="() => setStyle(4, 'finder')"
               >
-                <SquareBottomRightCircleBorderIcon />
+                <SquareBottomLeftCircleBorderIcon />
               </button>
               <button
                 type="button"
                 class="icon-btn"
-                :disabled="combinedStyle"
                 :class="{ active: finderStyle.has(5) }"
                 @click="() => setStyle(5, 'finder')"
               >
                 <Circle />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(6) }"
+                @click="() => setStyle(6, 'finder')"
+              >
+                <SquareTopCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(7) }"
+                @click="() => setStyle(7, 'finder')"
+              >
+                <SquareBottomCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(8) }"
+                @click="() => setStyle(8, 'finder')"
+              >
+                <SquareRightCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(9) }"
+                @click="() => setStyle(9, 'finder')"
+              >
+                <SquareLeftCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(10) }"
+                @click="() => setStyle(10, 'finder')"
+              >
+                <SquareCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(11) }"
+                @click="() => setStyle(11, 'finder')"
+              >
+                <SquareTopLeftBottomRightCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: finderStyle.has(12) }"
+                @click="() => setStyle(12, 'finder')"
+              >
+                <SquareBottomLeftTopRightCircleBorderIcon />
               </button>
             </div>
           </div>
@@ -270,7 +318,7 @@ onUnmounted(() => {
                 :class="{ active: codewordStyle.has(3) }"
                 @click="() => setStyle(3, 'codeword')"
               >
-                <SquareBottomLeftCircleBorderIcon />
+                <SquareBottomRightCircleBorderIcon />
               </button>
               <button
                 type="button"
@@ -278,16 +326,71 @@ onUnmounted(() => {
                 :class="{ active: codewordStyle.has(4) }"
                 @click="() => setStyle(4, 'codeword')"
               >
-                <SquareBottomRightCircleBorderIcon />
+                <SquareBottomLeftCircleBorderIcon />
               </button>
               <button
                 type="button"
                 class="icon-btn"
-                :disabled="combinedStyle"
                 :class="{ active: codewordStyle.has(5) }"
                 @click="() => setStyle(5, 'codeword')"
               >
                 <Circle />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(6) }"
+                @click="() => setStyle(6, 'codeword')"
+              >
+                <SquareTopCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(7) }"
+                @click="() => setStyle(7, 'codeword')"
+              >
+                <SquareBottomCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(8) }"
+                @click="() => setStyle(8, 'codeword')"
+              >
+                <SquareRightCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(9) }"
+                @click="() => setStyle(9, 'codeword')"
+              >
+                <SquareLeftCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(10) }"
+                @click="() => setStyle(10, 'codeword')"
+              >
+                <SquareCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(11) }"
+                @click="() => setStyle(11, 'codeword')"
+              >
+                <SquareTopLeftBottomRightCircleBorderIcon />
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                :class="{ active: codewordStyle.has(12) }"
+                @click="() => setStyle(12, 'codeword')"
+              >
+                <SquareBottomLeftTopRightCircleBorderIcon />
               </button>
             </div>
           </div>

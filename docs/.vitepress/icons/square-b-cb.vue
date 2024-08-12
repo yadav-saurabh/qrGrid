@@ -7,6 +7,6 @@
     fill="none"
     stroke="#ff5050"
   >
-    <path d="m3 3v18h10q8 0 8 -8v-10z" />
+    <path d="m3 3 v10q0 8 8 8h2q8 0 8 -8v-10h-18z" />
   </svg>
 </template>

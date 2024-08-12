@@ -28,7 +28,7 @@ const svgSize = ref(400);
 const combinedStyle = ref(false);
 const input = ref("https://qrgrid.dev");
 const finderColor = ref("#ff3131");
-const codewordColor = ref("#deddda");
+const codewordColor = ref("currentColor");
 const backgroundColor = ref("transparent");
 
 const finderCorner = new Set<CornerType>();
@@ -92,31 +92,20 @@ function qrModuleStyle(
 }
 
 function setStyle(value: number, type: "finder" | "codeword") {
-  if (type === "finder") {
-    if (finderStyle.value.has(value)) {
-      finderStyle.value.delete(value);
-      finderCorner.delete(STYLE_CORNER_MAPPING[value]);
-      return;
-    }
-    if (!combinedStyle.value) {
-      finderStyle.value.clear();
-      finderCorner.clear();
-    }
-    finderStyle.value.add(value);
-    finderCorner.add(STYLE_CORNER_MAPPING[value]);
-  } else {
-    if (codewordStyle.value.has(value)) {
-      codewordStyle.value.delete(value);
-      codewordCorner.delete(STYLE_CORNER_MAPPING[value]);
-      return;
-    }
-    if (!combinedStyle.value) {
-      codewordStyle.value.clear();
-      codewordCorner.clear();
-    }
-    codewordStyle.value.add(value);
-    codewordCorner.add(STYLE_CORNER_MAPPING[value]);
+  const styleObj = type === "finder" ? finderStyle : codewordStyle;
+  const set = type === "finder" ? finderCorner : codewordCorner;
+
+  if (styleObj.value.has(value)) {
+    styleObj.value.delete(value);
+    set.delete(STYLE_CORNER_MAPPING[value]);
+    return;
   }
+  if (!combinedStyle.value) {
+    styleObj.value.clear();
+    set.clear();
+  }
+  styleObj.value.add(value);
+  set.add(STYLE_CORNER_MAPPING[value]);
 }
 
 function onCombinedStyleChanged(e: Event) {
@@ -199,7 +188,7 @@ onUnmounted(() => {
               :class="{ active: finderStyle.has(3) }"
               @click="() => setStyle(3, 'finder')"
             >
-              <SquareBottomLeftCircleBorderIcon />
+              <SquareBottomRightCircleBorderIcon />
             </button>
             <button
               type="button"
@@ -207,7 +196,7 @@ onUnmounted(() => {
               :class="{ active: finderStyle.has(4) }"
               @click="() => setStyle(4, 'finder')"
             >
-              <SquareBottomRightCircleBorderIcon />
+              <SquareBottomLeftCircleBorderIcon />
             </button>
             <button
               type="button"
@@ -253,7 +242,7 @@ onUnmounted(() => {
               :class="{ active: codewordStyle.has(3) }"
               @click="() => setStyle(3, 'codeword')"
             >
-              <SquareBottomLeftCircleBorderIcon />
+              <SquareBottomRightCircleBorderIcon />
             </button>
             <button
               type="button"
@@ -261,7 +250,7 @@ onUnmounted(() => {
               :class="{ active: codewordStyle.has(4) }"
               @click="() => setStyle(4, 'codeword')"
             >
-              <SquareBottomRightCircleBorderIcon />
+              <SquareBottomLeftCircleBorderIcon />
             </button>
             <button
               type="button"
