@@ -51,7 +51,7 @@ features:
 
 
 <script setup>
-import HomeCustomQr from './.vitepress/theme/components/home/HomeCustomQr.vue'
+import HomeCustomQr from './.vitepress/components/home/HomeCustomQr.vue'
 </script>
 
 <HomeCustomQr />

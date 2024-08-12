@@ -16,7 +16,7 @@ export default defineConfig({
     },
     nav: [
       { text: "Home", link: "/" },
-      { text: "Guide", link: "/guide/", activeMatch: '/guide/' },
+      { text: "Guide", link: "/guide/", activeMatch: "/guide/" },
       { text: "Generate", link: "/generate/" },
     ],
 
@@ -26,6 +26,14 @@ export default defineConfig({
         items: [
           { text: "Get Started", link: "/guide/" },
           { text: "Customization", link: "/guide/customization" },
+        ],
+      },
+      {
+        text: "Packages",
+        items: [
+          { text: "Web", link: "/guide/packages/web" },
+          { text: "React", link: "/guide/packages/react" },
+          { text: "Vue", link: "/guide/packages/vue" },
         ],
       },
     ],

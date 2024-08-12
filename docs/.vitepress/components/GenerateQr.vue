@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import { QR, ReservedBits } from "@qrgrid/core";
 import { ModuleStyleFunctionParams, Qr } from "@qrgrid/vue/svg";
-import { CornerType, getCirclePath, getSquarePath } from "@qrgrid/styles/svg";
+import {
+  CornerType,
+  getCirclePath,
+  getSquarePath,
+  downloadQr,
+} from "@qrgrid/styles/svg";
 import { onMounted, onUnmounted, ref } from "vue";
 
 import ColorPicker from "./ColorPicker.vue";
-import Switch from "./Switch.vue";
 import {
   SquareTopLeftCircleBorderIcon,
   SquareTopRightCircleBorderIcon,
   SquareBottomLeftCircleBorderIcon,
   SquareBottomRightCircleBorderIcon,
   Circle,
+  ChevronDown,
 } from "../icons";
 import { roundCornerFinderPatternPath, smoothDataBitPath } from "./qrStyles";
 
@@ -25,6 +30,9 @@ const STYLE_CORNER_MAPPING: Record<number, CornerType> = {
 const finderStyle = ref<Set<number>>(new Set());
 const codewordStyle = ref<Set<number>>(new Set());
 const svgSize = ref(400);
+const qrRef = ref<InstanceType<typeof Qr> | null>(null);
+const downloadType = ref<"svg" | "png" | "jpeg" | "webp">("svg");
+const downloadDropdown = ref(false);
 const combinedStyle = ref(false);
 const input = ref("https://qrgrid.dev");
 const finderColor = ref("#ff3131");
@@ -119,19 +127,9 @@ function setStyle(value: number, type: "finder" | "codeword") {
   }
 }
 
-function onCombinedStyleChanged(e: Event) {
-  const value = (<HTMLInputElement>e.target!).checked;
-  combinedStyle.value = value;
-
-  finderStyle.value.clear();
-  codewordStyle.value.clear();
-  finderCorner.clear();
-  codewordCorner.clear();
-  if (value) {
-    finderStyle.value.add(1);
-    codewordStyle.value.add(1);
-    finderCorner.add(STYLE_CORNER_MAPPING[1]);
-    codewordCorner.add(STYLE_CORNER_MAPPING[1]);
+function onDownload() {
+  if (qrRef.value?.svgRef) {
+    downloadQr(qrRef.value?.svgRef, downloadType.value, "qrGrid");
   }
 }
 
@@ -150,12 +148,26 @@ const onWindowResize = () => {
   svgSize.value = getCanvasSize();
 };
 
+const toggleDropdown = (event: Event) => {
+  if (!event?.target) {
+    return;
+  }
+  const elem = event.target as Element;
+  if (elem.matches(".dropdown-btn") || elem.matches(".dropdown-btn-icon")) {
+    downloadDropdown.value = !downloadDropdown.value;
+  } else {
+    downloadDropdown.value = false;
+  }
+};
+
 onMounted(() => {
   svgSize.value = getCanvasSize();
   window.addEventListener("resize", onWindowResize);
+  window.addEventListener("click", toggleDropdown);
 });
 onUnmounted(() => {
   window.removeEventListener("resize", onWindowResize);
+  window.removeEventListener("click", toggleDropdown);
 });
 </script>
 
@@ -297,6 +309,7 @@ onUnmounted(() => {
       <div class="qr-container">
         <div>
           <Qr
+            ref="qrRef"
             :bgColor="backgroundColor"
             :input="input"
             :color="{ finder: finderColor, codeword: codewordColor }"
@@ -305,7 +318,23 @@ onUnmounted(() => {
             :data-codeword-style="[...codewordStyle].join()"
             :data-finder-style="[...finderStyle].join()"
           />
-          <button>Download</button>
+          <div class="btn-container">
+            <button class="btn" @click="onDownload">
+              Download .{{ downloadType }}
+            </button>
+            <button class="dropdown-btn">
+              <ChevronDown class="dropdown-btn-icon" />
+            </button>
+            <div
+              class="dropdown-list"
+              :style="{ display: downloadDropdown ? 'block' : 'none' }"
+            >
+              <button @click="downloadType = 'svg'">svg</button>
+              <button @click="downloadType = 'png'">png</button>
+              <button @click="downloadType = 'jpeg'">jpeg</button>
+              <button @click="downloadType = 'webp'">webp</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -371,5 +400,57 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.btn-container {
+  display: flex;
+  position: relative;
+}
+.btn-container .icon-btn {
+  margin-left: 0;
+  margin-right: 0;
+}
+.btn {
+  width: 100%;
+  padding: 10px;
+  margin: 2px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: var(--vp-button-alt-bg);
+}
+.dropdown-btn {
+  padding: 10px;
+  margin: 2px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: var(--vp-c-default-soft);
+}
+.dropdown-list {
+  position: absolute;
+  display: none;
+  z-index: 100;
+  top: 100%;
+  width: 100%;
+  padding: 10px;
+  margin: 2px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: var(--vp-button-alt-bg);
+}
+.dropdown-btn:hover,
+.btn:hover,
+.dropdown:hover {
+  border-color: var(--vp-c-brand);
+}
+.dropdown-list button {
+  display: block;
+  border-radius: 8px;
+  width: 100%;
+  color: var(--vp-button-alt-text);
+  border: 1px solid var(--vp-button-alt-border);
+  text-align: left;
+  padding: 5px 10px;
+}
+.dropdown-list button:hover {
+  background-color: var(--vp-c-brand-2);
 }
 </style>
