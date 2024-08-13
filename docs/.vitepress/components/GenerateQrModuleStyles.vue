@@ -132,7 +132,6 @@ defineProps<{
 
 <style scoped>
 .input-container {
-  margin: 4px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }

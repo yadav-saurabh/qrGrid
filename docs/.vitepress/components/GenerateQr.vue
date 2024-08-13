@@ -11,7 +11,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 
 import ColorPicker from "./ColorPicker.vue";
 import ModuleStyles from "./GenerateQrModuleStyles.vue";
-import { ChevronDown } from "../icons";
+import { ChevronDown, UploadIcon } from "../icons";
 import {
   roundCornerOuterFinderPatternPath,
   roundCornerInnerFinderPatternPath,
@@ -35,7 +35,6 @@ const STYLE_CORNER_MAPPING: Record<number, CornerType[]> = {
 
 const STYLE_CORNER_KEYS = Object.keys(STYLE_CORNER_MAPPING).map((d) => +d);
 
-const svgSize = ref(400);
 const qrRef = ref<InstanceType<typeof Qr> | null>(null);
 const input = ref("https://qrgrid.dev");
 
@@ -49,6 +48,8 @@ const downloadDropdown = ref(false);
 const finderColor = ref("#ff3131");
 const codewordColor = ref("currentColor");
 const backgroundColor = ref("transparent");
+
+const imgSrc = ref("");
 
 const outerFinderCorner = new Set<CornerType>();
 const innerFinderCorner = new Set<CornerType>();
@@ -153,19 +154,17 @@ function onDownload() {
   }
 }
 
-function getCanvasSize() {
-  const width = window.innerWidth;
-  if (width < 640) {
-    return 220;
-  }
-  if (width < 960) {
-    return 300;
-  }
-  return 360;
-}
+const setImageSrc = (src: string) => {
+  imgSrc.value = imgSrc.value === src ? "" : src;
+};
 
-const onWindowResize = () => {
-  svgSize.value = getCanvasSize();
+const onUpload = (event: Event) => {
+  if (!event.target) {
+    return;
+  }
+  const target = event.target as HTMLInputElement;
+  const files = target.files as FileList;
+  imgSrc.value = URL.createObjectURL(files[0]);
 };
 
 const toggleDropdown = (event: Event) => {
@@ -181,12 +180,9 @@ const toggleDropdown = (event: Event) => {
 };
 
 onMounted(() => {
-  svgSize.value = getCanvasSize();
-  window.addEventListener("resize", onWindowResize);
   window.addEventListener("click", toggleDropdown);
 });
 onUnmounted(() => {
-  window.removeEventListener("resize", onWindowResize);
   window.removeEventListener("click", toggleDropdown);
 });
 </script>
@@ -200,14 +196,14 @@ onUnmounted(() => {
         <textarea
           placeholder="Text To Encode"
           v-model="input"
-          rows="4"
+          rows="2"
           cols="50"
           class="input"
         />
         <!-- Finder  -->
         <p class="sub-title">Finder</p>
         <div :style="{ marginLeft: '1rem' }">
-          <div class="color-container">
+          <div class="input-container">
             <label class="label" for="finder-color">Color</label>
             <ColorPicker v-model="finderColor" id="finder-color" />
           </div>
@@ -227,7 +223,7 @@ onUnmounted(() => {
         <!-- Codewords  -->
         <p class="sub-title">Codeword</p>
         <div :style="{ marginLeft: '1rem' }">
-          <div class="color-container">
+          <div class="input-container">
             <label class="label" for="codeword-color">Color</label>
             <ColorPicker v-model="codewordColor" id="codeword-color" />
           </div>
@@ -238,7 +234,7 @@ onUnmounted(() => {
           />
         </div>
         <!-- Background Color  -->
-        <div class="color-container" :style="{ marginTop: '16px' }">
+        <div class="input-container" :style="{ marginTop: '16px' }">
           <p class="sub-title" :style="{ margin: 0 }">Background Color</p>
           <div>
             <label
@@ -250,19 +246,43 @@ onUnmounted(() => {
             <ColorPicker v-model="backgroundColor" id="background-color" />
           </div>
         </div>
+        <!-- Image  -->
+        <div class="input-container">
+          <p class="sub-title" :style="{ margin: 0 }">Image</p>
+          <div :style="{ display: 'flex' }">
+            <img
+              class="img"
+              src="../../assets/yadav-saurabh.png"
+              alt="saurabh yadav"
+              @click="() => setImageSrc('../../assets/yadav-saurabh.png')"
+            />
+            <div class="btn icon-btn upload-btn-container">
+              <UploadIcon stroke="currentcolor" />
+              <input
+                class="btn icon-btn upload-btn"
+                type="file"
+                @change="onUpload"
+                name="img"
+                accept="image/*"
+              />
+            </div>
+          </div>
+        </div>
       </div>
       <div class="qr-container">
         <div>
           <Qr
+            class="qr"
             ref="qrRef"
             :bgColor="backgroundColor"
             :input="input"
             :color="{ finder: finderColor, codeword: codewordColor }"
             :moduleStyle="qrModuleStyle"
-            :size="svgSize"
+            :size="999"
             :data-codeword-style="codewordStyle"
             :data-outer-finder-style="outerFinderStyle"
             :data-inner-finder-style="innerFinderStyle"
+            :image="{ src: imgSrc }"
           />
           <div class="btn-container">
             <button class="btn" @click="onDownload">
@@ -321,8 +341,8 @@ onUnmounted(() => {
   background-color: var(--vp-c-default-soft);
   margin-bottom: 14px;
 }
-.color-container {
-  margin: 4px;
+.input-container {
+  margin: 4px 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
@@ -330,10 +350,37 @@ onUnmounted(() => {
   font-size: 14px;
   font-weight: 400;
 }
+.img {
+  height: 45px;
+  width: 45px;
+  margin: 2px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.img:hover {
+  border-color: var(--vp-c-brand);
+}
 .qr-container {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.qr {
+  height: 400px;
+  width: 400px;
+}
+@media (max-width: 960px) {
+  .qr {
+    height: 300px;
+    width: 300px;
+  }
+}
+@media (max-width: 640px) {
+  .qr {
+    height: 220px;
+    width: 220px;
+  }
 }
 .btn-container {
   display: flex;
@@ -386,5 +433,19 @@ onUnmounted(() => {
 }
 .dropdown-list button:hover {
   background-color: var(--vp-c-brand-2);
+}
+.icon-btn {
+  height: 45px;
+  width: 45px;
+}
+.upload-btn-container {
+  position: relative;
+}
+.upload-btn {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  opacity: 0;
 }
 </style>

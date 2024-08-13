@@ -9,7 +9,7 @@ import SquareBottomCircleBorderIcon from "./square-b-cb.vue";
 import SquareRightCircleBorderIcon from "./square-r-cb.vue";
 import SquareLeftCircleBorderIcon from "./square-l-cb.vue";
 import SquareCircleBorderIcon from "./square-cb.vue";
-
+import UploadIcon from "./upload.vue";
 
 import Circle from "./circle.vue";
 import ChevronDown from "./chevron-down.vue";
@@ -28,4 +28,5 @@ export {
   SquareBottomLeftTopRightCircleBorderIcon,
   Circle,
   ChevronDown,
+  UploadIcon,
 };
