@@ -14,6 +14,140 @@ import { ModuleStyleFunctionParams } from "@qrgrid/vue/svg";
 
 const ON_GENERATED_STYLE = 4;
 
+export function roundCornerOuterFinderPatternPath(
+  module: ModuleType,
+  qr: QR,
+  corner: Set<CornerType>
+) {
+  const { reservedBits } = qr;
+  const { index, x, y, size } = module;
+  const neighbor = getNeighbor(index, qr);
+  const cornerSize = size;
+
+  if (reservedBits[index]?.type === ReservedBits.FinderPattern) {
+    let path = "";
+    if (
+      !neighbor.top &&
+      !neighbor.left &&
+      !neighbor.bottomRight &&
+      corner.has("top-left")
+    ) {
+      path += getRoundCornerPath(module, ["top-left"], cornerSize);
+      const arcCoords = { ...module, y: y + size, x: x + size };
+      path += getCornerArcPath(arcCoords, "top-left", cornerSize);
+    }
+    if (
+      !neighbor.top &&
+      !neighbor.right &&
+      !neighbor.bottomLeft &&
+      corner.has("top-right")
+    ) {
+      path += getRoundCornerPath(module, ["top-right"], cornerSize);
+      const arcCoords = { ...module, y: y + size };
+      path += getCornerArcPath(arcCoords, "top-right", cornerSize);
+    }
+    if (
+      !neighbor.bottom &&
+      !neighbor.right &&
+      !neighbor.topLeft &&
+      corner.has("bottom-right")
+    ) {
+      path += getRoundCornerPath(module, ["bottom-right"], cornerSize);
+      path += getCornerArcPath(module, "bottom-right", cornerSize);
+    }
+    if (
+      !neighbor.bottom &&
+      !neighbor.left &&
+      !neighbor.topRight &&
+      corner.has("bottom-left")
+    ) {
+      path += getRoundCornerPath(module, ["bottom-left"], cornerSize);
+      const arcCoords = { ...module, x: x + size };
+      path += getCornerArcPath(arcCoords, "bottom-left", cornerSize);
+    }
+    return path;
+  }
+  return "";
+}
+
+export function roundCornerInnerFinderPatternPath(
+  module: ModuleType,
+  qr: QR,
+  corner: Set<CornerType>
+) {
+  const { reservedBits } = qr;
+  const { index, x, y, size } = module;
+  const neighbor = getNeighbor(index, qr);
+  const cornerSize = size;
+
+  if (reservedBits[index]?.type === ReservedBits.FinderPattern) {
+    let path = "";
+    if (
+      !neighbor.top &&
+      !neighbor.left &&
+      neighbor.bottomRight &&
+      corner.has("top-left")
+    ) {
+      path += getRoundCornerPath(module, ["top-left"], cornerSize);
+    }
+    if (
+      !neighbor.top &&
+      !neighbor.right &&
+      neighbor.bottomLeft &&
+      corner.has("top-right")
+    ) {
+      path += getRoundCornerPath(module, ["top-right"], cornerSize);
+    }
+    if (
+      !neighbor.bottom &&
+      !neighbor.right &&
+      neighbor.topLeft &&
+      corner.has("bottom-right")
+    ) {
+      path += getRoundCornerPath(module, ["bottom-right"], cornerSize);
+    }
+    if (
+      !neighbor.bottom &&
+      !neighbor.left &&
+      neighbor.topRight &&
+      corner.has("bottom-left")
+    ) {
+      path += getRoundCornerPath(module, ["bottom-left"], cornerSize);
+    }
+    return path;
+  }
+  return "";
+}
+
+export function isOuterFinderPattern(module: ModuleType, qr: QR) {
+  const { index } = module;
+  const { reservedBits } = qr;
+  const neighbor = getNeighbor(module.index, qr);
+  if (!reservedBits[index]) {
+    return false;
+  }
+
+  if (!neighbor.top && !neighbor.bottom) {
+    return true;
+  }
+  if (!neighbor.left && !neighbor.right) {
+    return true;
+  }
+  if (!neighbor.top && !neighbor.left && !neighbor.bottomRight) {
+    return true;
+  }
+  if (!neighbor.top && !neighbor.right && !neighbor.bottomLeft) {
+    return true;
+  }
+  if (!neighbor.bottom && !neighbor.right && !neighbor.topLeft) {
+    return true;
+  }
+  if (!neighbor.bottom && !neighbor.left && !neighbor.topRight) {
+    return true;
+  }
+  return false;
+}
+
 export function roundCornerFinderPatternPath(
   module: ModuleType,
   qr: QR,
