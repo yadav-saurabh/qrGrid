@@ -309,13 +309,18 @@ onUnmounted(() => {
 <style scoped>
 .card {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: auto;
   margin-top: 60px;
   border: 1px solid var(--vp-c-bg-soft);
   border-radius: 12px;
   background-color: var(--vp-c-bg-soft);
   padding: 24px;
   text-decoration: none;
+}
+@media (min-width: 640px) {
+  .card {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
 }
 .title {
   font-size: 24px;
