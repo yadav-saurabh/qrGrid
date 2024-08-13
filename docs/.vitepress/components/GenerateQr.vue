@@ -154,8 +154,9 @@ function onDownload() {
   }
 }
 
-const setImageSrc = (src: string) => {
-  imgSrc.value = imgSrc.value === src ? "" : src;
+const setImageSrc = (name: string, type = ".png") => {
+  const imgUrl = new URL(`../../assets/${name}${type}`, import.meta.url).href;
+  imgSrc.value = imgSrc.value === imgUrl ? "" : imgUrl;
 };
 
 const onUpload = (event: Event) => {
@@ -254,7 +255,7 @@ onUnmounted(() => {
               class="img"
               src="../../assets/yadav-saurabh.png"
               alt="saurabh yadav"
-              @click="() => setImageSrc('../../assets/yadav-saurabh.png')"
+              @click="() => setImageSrc('yadav-saurabh')"
             />
             <div class="btn icon-btn upload-btn-container">
               <UploadIcon stroke="currentcolor" />
