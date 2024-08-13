@@ -1,7 +1,8 @@
 {
   "name": "@qrgrid/vue",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "type": "module",
+  "homepage": "https://www.qrgrid.dev/",
   "module": "src/index.ts",
   "main": "src/index.ts",
   "private": false,

@@ -1,5 +1,6 @@
 ---
 title: Get Started
+outline: deep
 ---
 
 # Get Started  
@@ -10,7 +11,7 @@ Qr grid is a powerful, customizable JavaScript library for generating QR codes. 
 
 ## Installation
 
-### Web
+### Web / Core
 
 Implementation of the Qr grid library for Web applications.
 

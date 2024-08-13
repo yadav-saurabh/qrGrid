@@ -1,5 +1,13 @@
 # @qrgrid/vue
 
+## 1.2.2
+
+### Patch Changes
+
+- updated docs added link for homepage
+- Updated dependencies
+  - @qrgrid/core@0.1.2
+
 ## 1.2.1
 
 ### Patch Changes

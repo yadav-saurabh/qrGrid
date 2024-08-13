@@ -1,5 +1,6 @@
 ---
 title: React
+outline: deep
 ---
 
 # React

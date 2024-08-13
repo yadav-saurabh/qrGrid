@@ -1,5 +1,13 @@
 # @qrgrid/react
 
+## 1.1.1
+
+### Patch Changes
+
+- updated docs added link for homepage
+- Updated dependencies
+  - @qrgrid/core@0.1.2
+
 ## 1.1.0
 
 ### Minor Changes
