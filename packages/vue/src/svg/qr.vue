@@ -98,6 +98,9 @@ function generateQr() {
   if (props.image) {
     const img = new Image();
     img.src = props.image.src;
+    if (!props.image!.src) {
+      imgData.value = { img: "", x: 0, y: 0, height: 0, width: 0 };
+    }
     img.onload = () => {
       const height =
         svgSize.value * (props.image!.sizePercent || DEFAULT_IMG_SIZE) * 0.01;

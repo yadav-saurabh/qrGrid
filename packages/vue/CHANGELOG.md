@@ -1,5 +1,11 @@
 # @qrgrid/vue
 
+## 1.2.1
+
+### Patch Changes
+
+- reset image if src is undefined
+
 ## 1.2.0
 
 ### Minor Changes
