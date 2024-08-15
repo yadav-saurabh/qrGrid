@@ -3,7 +3,7 @@
  * Qr component to generate QR Code on a canvas
  * @module
  */
-import { ref, onMounted, watch, defineExpose } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { QR } from "@qrgrid/core";
 
 import { ModuleStyleFunctionParams, QrProps } from "./types";
@@ -56,8 +56,8 @@ function generateQr() {
     props.getQrData(qr);
   }
   // calculate module size and adjusting canvas to height and wight
-  let size = Math.floor(canvasSize / (qr.noOfModules + 1.5));
-  const border = Math.ceil(size * qr.noOfModules - canvasSize) + size * 2;
+  let size = Math.floor(canvasSize / (qr.gridSize + 1.5));
+  const border = Math.ceil(size * qr.gridSize - canvasSize) + size * 2;
   canvasRef.value.height = canvasSize + border;
   canvasRef.value.width = canvasSize + border;
   // module color
@@ -76,15 +76,15 @@ function generateQr() {
   // placing each modules in x,y position in the canvas using fillRect
   let x = size;
   let y = size;
-  for (let i = 0; i < qr.noOfModules; i++) {
-    for (let j = 0; j < qr.noOfModules; j++) {
-      const index = i * qr.noOfModules + j;
+  for (let i = 0; i < qr.gridSize; i++) {
+    for (let j = 0; j < qr.gridSize; j++) {
+      const index = i * qr.gridSize + j;
       const bit = qr.data[index];
       if (bit) {
         moduleStyleFunction(ctx, { index, x, y, size }, qr);
       }
       x += size;
-      if (j === qr.noOfModules - 1) {
+      if (j === qr.gridSize - 1) {
         x = size;
         y += size;
       }

@@ -17,20 +17,20 @@ export type CornerType =
  * get Neighbor status of the given index
  */
 export function getNeighbor(index: number, qr: QR) {
-  const { noOfModules, data } = qr;
+  const { gridSize, data } = qr;
 
-  const firstModule = index % noOfModules === 0;
-  const lastModule = index % noOfModules === noOfModules - 1;
+  const firstModule = index % gridSize === 0;
+  const lastModule = index % gridSize === gridSize - 1;
 
   const leftNeighbor = data[index - 1];
   const rightNeighbor = data[index + 1];
-  const topNeighbor = data[index - noOfModules];
-  const bottomNeighbor = data[index + noOfModules];
+  const topNeighbor = data[index - gridSize];
+  const bottomNeighbor = data[index + gridSize];
 
-  const topLeftNeighbor = data[index - noOfModules - 1];
-  const topRightNeighbor = data[index - noOfModules + 1];
-  const bottomLeftNeighbor = data[index + noOfModules - 1];
-  const bottomRightNeighbor = data[index + noOfModules + 1];
+  const topLeftNeighbor = data[index - gridSize - 1];
+  const topRightNeighbor = data[index - gridSize + 1];
+  const bottomLeftNeighbor = data[index + gridSize - 1];
+  const bottomRightNeighbor = data[index + gridSize + 1];
 
   return {
     left: !firstModule && leftNeighbor,
@@ -48,18 +48,18 @@ export function getNeighbor(index: number, qr: QR) {
  * get the positions ans sizes of the finder patterns
  */
 export function getFinderPatternDetails(size: number, qr: QR) {
-  const { noOfModules } = qr;
+  const { gridSize } = qr;
 
   let positions = {
     inner: [
       { x: size * 3, y: size * 3 },
-      { x: size * (noOfModules - 4), y: size * 3 },
-      { x: size * 3, y: size * (noOfModules - 4) },
+      { x: size * (gridSize - 4), y: size * 3 },
+      { x: size * 3, y: size * (gridSize - 4) },
     ],
     outer: [
       { x: size * 1, y: size * 1 },
-      { x: size * (noOfModules - 6), y: size * 1 },
-      { x: size * 1, y: size * (noOfModules - 6) },
+      { x: size * (gridSize - 6), y: size * 1 },
+      { x: size * 1, y: size * (gridSize - 6) },
     ],
   };
   const sizes = { outer: size * 7, inner: size * 3 };

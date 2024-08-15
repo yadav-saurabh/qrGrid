@@ -55,7 +55,7 @@ function getQrData() {
   const qr = new QR(input, { errorCorrection: select });
 
   document.getElementById("version")!.innerText = qr.version.toString();
-  document.getElementById("noOfModules")!.innerText = qr.noOfModules.toString();
+  document.getElementById("gridSize")!.innerText = qr.gridSize.toString();
   document.getElementById("errorCorrection")!.innerText = qr.errorCorrection;
   document.getElementById("dataSize")!.innerText = qr.data.length.toString();
   document.getElementById("reservedBitSize")!.innerText = Object.keys(

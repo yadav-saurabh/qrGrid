@@ -44,7 +44,7 @@ The QR class has the following public properties
   inputData: string; // input data passed in the constructor
   segments: Segments; // segments of the input data to make the qr
   data: Uint8Array; // qr data in 1's and 0's representing the dark and light module of qr
-  noOfModules: number; // modules in qr ex: 21 represents 21 x 21 for version 1
+  gridSize: number; // modules in qr ex: 21 represents 21 x 21 for version 1
   version: number; // qr version
   errorCorrection: ErrorCorrectionLevel; // errorCorrection used
   reservedBits: { [key: number]: { type: ReservedBits; dark: boolean } }; // reserved bits used
@@ -74,8 +74,8 @@ const canvas = document.getElementById("defaultQrCanvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d")!;
 const canvasSize = 400;
 // calculate module size and adjusting canvas to height and wight 
-let size = Math.floor(canvasSize / (qr.noOfModules + 1.5));
-const border = Math.ceil(size * qr.noOfModules - canvasSize) + size * 2;
+let size = Math.floor(canvasSize / (qr.gridSize + 1.5));
+const border = Math.ceil(size * qr.gridSize - canvasSize) + size * 2;
 canvas.height = canvasSize + border;
 canvas.width = canvasSize + border;
 // module color
@@ -89,7 +89,7 @@ for (let i = 0; i < qr.data.length; i++) {
     ctx.fillRect(x, y, size, size);
   }
   x += size;
-  if (i % qr.noOfModules === qr.noOfModules - 1) {
+  if (i % qr.gridSize === qr.gridSize - 1) {
     x = size;
     y += size;
   }

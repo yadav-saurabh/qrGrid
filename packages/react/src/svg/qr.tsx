@@ -76,8 +76,8 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
     }
     // calculate module size and adjusting svg to height and wight
     const initialSvgSize = props.size || DEFAULT_SVG_SIZE;
-    let size = Math.floor(initialSvgSize / (qr.noOfModules + 1.5));
-    const border = Math.ceil(size * qr.noOfModules - initialSvgSize) + size * 2;
+    let size = Math.floor(initialSvgSize / (qr.gridSize + 1.5));
+    const border = Math.ceil(size * qr.gridSize - initialSvgSize) + size * 2;
     setSvgSize(initialSvgSize + border);
     // use default function to draw module or use the props function
     let moduleStyleFunction = applyModuleStyle;
@@ -94,7 +94,7 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
         moduleStyleFunction(path, { x, y, size, index: i }, qr);
       }
       x += size;
-      if (i % qr.noOfModules === qr.noOfModules - 1) {
+      if (i % qr.gridSize === qr.gridSize - 1) {
         x = size;
         y += size;
       }

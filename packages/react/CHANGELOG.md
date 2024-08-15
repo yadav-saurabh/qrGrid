@@ -1,5 +1,16 @@
 # @qrgrid/react
 
+## 1.2.0
+
+### Minor Changes
+
+- QR property name change noOfModules -> gridSize
+
+### Patch Changes
+
+- Updated dependencies
+  - @qrgrid/core@0.2.0
+
 ## 1.1.1
 
 ### Patch Changes

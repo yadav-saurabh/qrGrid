@@ -10,8 +10,8 @@ export function generateColoredFinderPatternQr(qr: QR) {
   const ctx = canvas.getContext("2d")!;
   const canvasSize = DEFAULT_CANVAS_SIZE;
 
-  let size = Math.floor(canvasSize / (qr.noOfModules + 1.5));
-  const border = Math.ceil(size * qr.noOfModules - canvasSize) + size * 2;
+  let size = Math.floor(canvasSize / (qr.gridSize + 1.5));
+  const border = Math.ceil(size * qr.gridSize - canvasSize) + size * 2;
   canvas.height = canvasSize + border;
   canvas.width = canvasSize + border;
   ctx.fillStyle = DEFAULT_COLOR;
@@ -28,7 +28,7 @@ export function generateColoredFinderPatternQr(qr: QR) {
       ctx.fillStyle = "white";
     }
     x += size;
-    if (i % qr.noOfModules === qr.noOfModules - 1) {
+    if (i % qr.gridSize === qr.gridSize - 1) {
       x = size;
       y += size;
     }

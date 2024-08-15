@@ -66,7 +66,7 @@ function SvgQr({ input, errorCorrection }: PropTypes) {
           <h2>Default Qr</h2>
           Version: {qrData?.version || 0}
           <br />
-          Size: {qrData?.noOfModules || 0}
+          Size: {qrData?.gridSize || 0}
           <br />
           Error Correction: {qrData?.errorCorrection || "N.A"}
           <br />

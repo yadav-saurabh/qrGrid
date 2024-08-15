@@ -9,9 +9,9 @@ const canvas = generateCanvas("gradientQr");
 export function generateGradientQr(qr: QR) {
   const ctx = canvas.getContext("2d")!;
 
-  let size = Math.floor(DEFAULT_CANVAS_SIZE / (qr.noOfModules + 1.5));
+  let size = Math.floor(DEFAULT_CANVAS_SIZE / (qr.gridSize + 1.5));
   const border =
-    Math.ceil(size * qr.noOfModules - DEFAULT_CANVAS_SIZE) + size * 2;
+    Math.ceil(size * qr.gridSize - DEFAULT_CANVAS_SIZE) + size * 2;
   const canvasSize = DEFAULT_CANVAS_SIZE + border;
   canvas.height = canvasSize;
   canvas.width = canvasSize;
@@ -25,7 +25,7 @@ export function generateGradientQr(qr: QR) {
       ctx.fillRect(x, y, size, size);
     }
     x += size;
-    if (i % qr.noOfModules === qr.noOfModules - 1) {
+    if (i % qr.gridSize === qr.gridSize - 1) {
       x = size;
       y += size;
     }

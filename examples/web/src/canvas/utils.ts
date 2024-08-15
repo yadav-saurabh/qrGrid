@@ -7,20 +7,20 @@ export type CornerType =
   | "bottom-right";
 
 export function getNeighbor(index: number, qr: QR) {
-  const { noOfModules, data } = qr;
+  const { gridSize, data } = qr;
 
-  const firstModule = index % noOfModules === 0;
-  const lastModule = index % noOfModules === noOfModules - 1;
+  const firstModule = index % gridSize === 0;
+  const lastModule = index % gridSize === gridSize - 1;
 
   const leftNeighbor = data[index - 1];
   const rightNeighbor = data[index + 1];
-  const topNeighbor = data[index - noOfModules];
-  const bottomNeighbor = data[index + noOfModules];
+  const topNeighbor = data[index - gridSize];
+  const bottomNeighbor = data[index + gridSize];
 
-  const topLeftNeighbor = data[index - noOfModules - 1];
-  const topRightNeighbor = data[index - noOfModules + 1];
-  const bottomLeftNeighbor = data[index + noOfModules - 1];
-  const bottomRightNeighbor = data[index + noOfModules + 1];
+  const topLeftNeighbor = data[index - gridSize - 1];
+  const topRightNeighbor = data[index - gridSize + 1];
+  const bottomLeftNeighbor = data[index + gridSize - 1];
+  const bottomRightNeighbor = data[index + gridSize + 1];
 
   return {
     left: !firstModule && leftNeighbor,

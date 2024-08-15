@@ -3,7 +3,7 @@
  * Qr component to generate QR Code on a canvas
  * @module
  */
-import { ref, onMounted, defineExpose, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { QR, ReservedBits } from "@qrgrid/core";
 
 import { ModuleStyleFunctionParams, QrProps } from "./types";
@@ -71,8 +71,8 @@ function generateQr() {
   }
   // calculate module size and adjusting svg to height and wight
   const initialSvgSize = props.size || DEFAULT_SVG_SIZE;
-  let size = Math.floor(initialSvgSize / (qr.noOfModules + 1.5));
-  const border = Math.ceil(size * qr.noOfModules - initialSvgSize) + size * 2;
+  let size = Math.floor(initialSvgSize / (qr.gridSize + 1.5));
+  const border = Math.ceil(size * qr.gridSize - initialSvgSize) + size * 2;
   svgSize.value = initialSvgSize + border;
   // use default function to draw module or use the props function
   let moduleStyleFunction = applyModuleStyle;
@@ -89,7 +89,7 @@ function generateQr() {
       moduleStyleFunction(path, { x, y, size, index: i }, qr);
     }
     x += size;
-    if (i % qr.noOfModules === qr.noOfModules - 1) {
+    if (i % qr.gridSize === qr.gridSize - 1) {
       x = size;
       y += size;
     }

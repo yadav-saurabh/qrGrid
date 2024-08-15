@@ -24,8 +24,8 @@ export function canvasStyle1(qr: QR) {
   const ctx = canvas1.getContext("2d")!;
   const canvasSize = DEFAULT_CANVAS_SIZE;
 
-  let size = Math.floor(canvasSize / (qr.noOfModules + 1.5));
-  const border = Math.ceil(size * qr.noOfModules - canvasSize) + size * 2;
+  let size = Math.floor(canvasSize / (qr.gridSize + 1.5));
+  const border = Math.ceil(size * qr.gridSize - canvasSize) + size * 2;
   canvas1.height = canvasSize + border;
   canvas1.width = canvasSize + border;
   ctx.fillStyle = DEFAULT_COLOR;
@@ -43,7 +43,7 @@ export function canvasStyle1(qr: QR) {
       }
     }
     x += size;
-    if (i % qr.noOfModules === qr.noOfModules - 1) {
+    if (i % qr.gridSize === qr.gridSize - 1) {
       x = size;
       y += size;
     }
@@ -59,8 +59,8 @@ export function canvasStyle2(qr: QR) {
   const ctx = canvas2.getContext("2d")!;
   const canvasSize = DEFAULT_CANVAS_SIZE;
 
-  let size = Math.floor(canvasSize / (qr.noOfModules + 1.5));
-  const border = Math.ceil(size * qr.noOfModules - canvasSize) + size * 2;
+  let size = Math.floor(canvasSize / (qr.gridSize + 1.5));
+  const border = Math.ceil(size * qr.gridSize - canvasSize) + size * 2;
   canvas2.height = canvasSize + border;
   canvas2.width = canvasSize + border;
   ctx.fillStyle = DEFAULT_COLOR;
@@ -100,7 +100,7 @@ export function canvasStyle2(qr: QR) {
       }
     }
     x += size;
-    if (i % qr.noOfModules === qr.noOfModules - 1) {
+    if (i % qr.gridSize === qr.gridSize - 1) {
       x = size;
       y += size;
     }
@@ -116,8 +116,8 @@ export function canvasStyle3(qr: QR) {
   const ctx = canvas3.getContext("2d")!;
   const canvasSize = DEFAULT_CANVAS_SIZE;
 
-  let size = Math.floor(canvasSize / (qr.noOfModules + 1.5));
-  const border = Math.ceil(size * qr.noOfModules - canvasSize) + size * 2;
+  let size = Math.floor(canvasSize / (qr.gridSize + 1.5));
+  const border = Math.ceil(size * qr.gridSize - canvasSize) + size * 2;
   canvas3.height = canvasSize + border;
   canvas3.width = canvasSize + border;
   ctx.fillStyle = DEFAULT_COLOR;
@@ -161,7 +161,7 @@ export function canvasStyle3(qr: QR) {
       }
     }
     x += size;
-    if (i % qr.noOfModules === qr.noOfModules - 1) {
+    if (i % qr.gridSize === qr.gridSize - 1) {
       x = size;
       y += size;
     }

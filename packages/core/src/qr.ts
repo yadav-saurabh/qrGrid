@@ -55,7 +55,7 @@ export class QR {
   readonly inputData: string;
   segments: Segments;
   data: Uint8Array;
-  noOfModules: number;
+  gridSize: number;
   version: number;
   errorCorrection: ErrorCorrectionLevelType;
   reservedBits: Record<number, { type: ReservedBitsType; dark: boolean }>;
@@ -75,9 +75,9 @@ export class QR {
 
     this.segments = getBasicInputSegments(inputData);
     this.version = this.#getVersion();
-    this.noOfModules = this.version * 4 + 17;
+    this.gridSize = this.version * 4 + 17;
 
-    this.data = new Uint8Array(this.noOfModules * this.noOfModules);
+    this.data = new Uint8Array(this.gridSize * this.gridSize);
     this.#codewords = new Uint8Array(CODEWORDS[this.version - 1]);
     this.#codeBitLength = 0;
     this.maskPatten = 0;
@@ -265,7 +265,7 @@ export class QR {
    * reserve Finder Pattern Separator bits, Format Information bits and Dark Module bit
    */
   #reserveBits() {
-    const size = this.noOfModules;
+    const size = this.gridSize;
 
     // top-left Finder pattern
     this.#reserveFinderSeparatorBits(0, 0);
@@ -336,12 +336,12 @@ export class QR {
     const height = size + x - 1;
     const width = size + y - 1;
     for (let i = 0; i < size + 1; i++) {
-      const left = this.noOfModules * (i + x - 1) + y - 1;
-      const top = this.noOfModules * (x - 1) + i + y;
-      const right = this.noOfModules * (i + x) + width + 1;
-      const down = this.noOfModules * (height + 1) + i + y - 1;
+      const left = this.gridSize * (i + x - 1) + y - 1;
+      const top = this.gridSize * (x - 1) + i + y;
+      const right = this.gridSize * (i + x) + width + 1;
+      const down = this.gridSize * (height + 1) + i + y - 1;
 
-      if (x > 0 && top - this.noOfModules * (x - 1) < this.noOfModules) {
+      if (x > 0 && top - this.gridSize * (x - 1) < this.gridSize) {
         this.reservedBits[top] = {
           type: ReservedBits.Separator,
           dark: false,
@@ -354,8 +354,8 @@ export class QR {
         };
       }
       if (
-        this.noOfModules - x > size &&
-        down - this.noOfModules * (height + 1) >= 0
+        this.gridSize - x > size &&
+        down - this.gridSize * (height + 1) >= 0
       ) {
         this.reservedBits[down] = {
           type: ReservedBits.Separator,
@@ -363,7 +363,7 @@ export class QR {
         };
       }
       if (
-        this.noOfModules - y > size &&
+        this.gridSize - y > size &&
         right >= 0 &&
         right <= this.data.length
       ) {
@@ -388,7 +388,7 @@ export class QR {
     const width = size + y - 1;
     for (let i = x; i <= height; i++) {
       for (let j = y; j <= width; j++) {
-        const index = i * this.noOfModules + j;
+        const index = i * this.gridSize + j;
         this.reservedBits[index] = { type: rbType, dark: false };
         // outer block
         if (j === y || j === width) {
@@ -412,10 +412,10 @@ export class QR {
    * set data for TimingPattern
    */
   #fillTimingPattern() {
-    let length = this.noOfModules - FINDER_PATTERN_SIZE * 2 - 2;
+    let length = this.gridSize - FINDER_PATTERN_SIZE * 2 - 2;
     for (let i = 1; i <= length; i++) {
-      const hIndex = FINDER_PATTERN_SIZE + i + this.noOfModules * 6;
-      const vIndex = (FINDER_PATTERN_SIZE + i) * this.noOfModules + 6;
+      const hIndex = FINDER_PATTERN_SIZE + i + this.gridSize * 6;
+      const vIndex = (FINDER_PATTERN_SIZE + i) * this.gridSize + 6;
 
       const dark = i % 2 !== 0;
       this.data[hIndex] = dark ? 1 : 0;
@@ -441,13 +441,13 @@ export class QR {
     // top-right finder pattern
     this.#fillBlock(
       0,
-      this.noOfModules - FINDER_PATTERN_SIZE,
+      this.gridSize - FINDER_PATTERN_SIZE,
       FINDER_PATTERN_SIZE,
       ReservedBits.FinderPattern
     );
     // bottom-left finder pattern
     this.#fillBlock(
-      this.noOfModules - FINDER_PATTERN_SIZE,
+      this.gridSize - FINDER_PATTERN_SIZE,
       0,
       FINDER_PATTERN_SIZE,
       ReservedBits.FinderPattern
@@ -467,7 +467,7 @@ export class QR {
     const subdivisionCount = Math.floor(this.version / 7);
     const total = ALIGNMENT_PATTERN_TOTALS[subdivisionCount];
     const first = 6; // first co-ordinates is always 6
-    const last = this.noOfModules - 7; // last co-ordinates is always Modules-7
+    const last = this.gridSize - 7; // last co-ordinates is always Modules-7
     const diff = ALIGNMENT_PATTERN_DIFFS[this.version - 1];
     const positions = [first];
     for (let i = subdivisionCount; i >= 1; i--) {
@@ -509,16 +509,16 @@ export class QR {
     for (let i = 0; i < 18; i++) {
       const bit = (bits >> i) & 1;
       const row = Math.floor(i / 3);
-      const col = this.noOfModules - 11 + (i % 3);
+      const col = this.gridSize - 11 + (i % 3);
       // Encode in top-right corner
-      const topRightIndex = row * this.noOfModules + col;
+      const topRightIndex = row * this.gridSize + col;
       this.data[topRightIndex] = bit;
       this.reservedBits[topRightIndex] = {
         type: ReservedBits.VersionInfo,
         dark: bit === 1,
       };
       // Encode in bottom-left corner
-      const bottomLeftIndex = col * this.noOfModules + row;
+      const bottomLeftIndex = col * this.gridSize + row;
       this.data[bottomLeftIndex] = bit;
       this.reservedBits[bottomLeftIndex] = {
         type: ReservedBits.VersionInfo,
@@ -544,7 +544,7 @@ export class QR {
 
       // vertical
       if (i < 6) {
-        const index = i * this.noOfModules + 8;
+        const index = i * this.gridSize + 8;
 
         data[index] = bit;
         this.reservedBits[index] = {
@@ -552,14 +552,14 @@ export class QR {
           dark: bit === 1,
         };
       } else if (i < 8) {
-        const index = (i + 1) * this.noOfModules + 8;
+        const index = (i + 1) * this.gridSize + 8;
         data[index] = bit;
         this.reservedBits[index] = {
           type: ReservedBits.FormatInfo,
           dark: bit === 1,
         };
       } else {
-        const index = (this.noOfModules - 15 + i) * this.noOfModules + 8;
+        const index = (this.gridSize - 15 + i) * this.gridSize + 8;
         data[index] = bit;
         this.reservedBits[index] = {
           type: ReservedBits.FormatInfo,
@@ -569,21 +569,21 @@ export class QR {
 
       // horizontal
       if (i < 8) {
-        const index = 8 * this.noOfModules + this.noOfModules - i - 1;
+        const index = 8 * this.gridSize + this.gridSize - i - 1;
         data[index] = bit;
         this.reservedBits[index] = {
           type: ReservedBits.FormatInfo,
           dark: bit === 1,
         };
       } else if (i < 9) {
-        const index = 8 * this.noOfModules + 15 - i;
+        const index = 8 * this.gridSize + 15 - i;
         data[index] = bit;
         this.reservedBits[index] = {
           type: ReservedBits.FormatInfo,
           dark: bit === 1,
         };
       } else {
-        const index = 8 * this.noOfModules + 15 - i - 1;
+        const index = 8 * this.gridSize + 15 - i - 1;
         data[index] = bit;
         this.reservedBits[index] = {
           type: ReservedBits.FormatInfo,
@@ -602,12 +602,12 @@ export class QR {
     let reverse = true;
 
     // Traverse the QR code in the zigzag pattern
-    for (let col = this.noOfModules - 1; col >= 1; col -= 2) {
+    for (let col = this.gridSize - 1; col >= 1; col -= 2) {
       if (col === 6) col = 5; // Skipping the vertical timing pattern
-      for (let i = this.noOfModules - 1; i >= 0; i--) {
+      for (let i = this.gridSize - 1; i >= 0; i--) {
         for (let j = 0; j < 2; j++) {
-          const row = reverse ? i : this.noOfModules - i - 1;
-          const index = row * this.noOfModules + col - j;
+          const row = reverse ? i : this.gridSize - i - 1;
+          const index = row * this.gridSize + col - j;
           if (this.reservedBits[index] === undefined) {
             if ((this.#codewords[dataIndex] & (1 << bitIndex)) !== 0) {
               this.data[index] = 1;
@@ -636,7 +636,7 @@ export class QR {
     for (let i = 0; i < MASK_PATTERNS.length; i++) {
       const maskedData = this.#applyMask(i, true);
       this.#fillFormatInfo(i, maskedData);
-      const penalty = getMaskPenalty(maskedData, this.noOfModules);
+      const penalty = getMaskPenalty(maskedData, this.gridSize);
 
       if (penalty < lowestPenalty) {
         lowestPenalty = penalty;
@@ -653,9 +653,9 @@ export class QR {
    */
   #applyMask(maskPattern: number, newData?: boolean) {
     const maskedData = newData ? new Uint8Array(this.data) : this.data;
-    for (let i = 0; i < this.noOfModules; i++) {
-      for (let j = 0; j < this.noOfModules; j++) {
-        const index = i * this.noOfModules + j;
+    for (let i = 0; i < this.gridSize; i++) {
+      for (let j = 0; j < this.gridSize; j++) {
+        const index = i * this.gridSize + j;
         if (this.reservedBits[index] === undefined) {
           maskedData[index] =
             this.data[index] ^ Number(MASK_PATTERNS[maskPattern](i, j));
