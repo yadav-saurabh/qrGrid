@@ -8,6 +8,7 @@ import {
   downloadQr,
 } from "@qrgrid/styles/svg";
 import { onMounted, onUnmounted, ref } from "vue";
+import SaurabhImg from "../../assets/yadav-saurabh.png";
 
 import ColorPicker from "./ColorPicker.vue";
 import ModuleStyles from "./GenerateQrModuleStyles.vue";
@@ -154,9 +155,8 @@ function onDownload() {
   }
 }
 
-const setImageSrc = (name: string, type = ".png") => {
-  const imgUrl = new URL(`../../assets/${name}${type}`, import.meta.url).href;
-  imgSrc.value = imgSrc.value === imgUrl ? "" : imgUrl;
+const setImageSrc = (img: string) => {
+  imgSrc.value = imgSrc.value === img ? "" : img;
 };
 
 const onUpload = (event: Event) => {
@@ -253,9 +253,9 @@ onUnmounted(() => {
           <div :style="{ display: 'flex' }">
             <img
               class="img"
-              src="../../assets/yadav-saurabh.png"
+              :src="SaurabhImg"
               alt="saurabh yadav"
-              @click="() => setImageSrc('yadav-saurabh')"
+              @click="() => setImageSrc(SaurabhImg)"
             />
             <div class="btn icon-btn upload-btn-container">
               <UploadIcon stroke="currentcolor" />

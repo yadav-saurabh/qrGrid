@@ -1,4 +1,5 @@
 import { defineConfig } from "vitepress";
+import svgLoader from "vite-svg-loader";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -25,6 +26,7 @@ export default defineConfig({
         text: "Introduction",
         items: [
           { text: "Get Started", link: "/guide/" },
+          { text: "How It Works", link: "/guide/how-it-works" },
           { text: "Customization", link: "/guide/customization" },
         ],
       },
@@ -50,6 +52,9 @@ export default defineConfig({
       message: "Released under the MIT License.",
       copyright: "Copyright © 2024-present Saurabh Yadav",
     },
+  },
+  vite: {
+    plugins: [svgLoader()],
   },
   sitemap: {
     hostname: "https://qrgrid.dev/",

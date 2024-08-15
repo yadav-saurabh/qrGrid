@@ -1,18 +1,18 @@
-import SquareTopLeftCircleBorderIcon from "./square-t-l-cb.vue";
-import SquareTopRightCircleBorderIcon from "./square-t-r-cb.vue";
-import SquareBottomLeftCircleBorderIcon from "./square-b-l-cb.vue";
-import SquareBottomRightCircleBorderIcon from "./square-b-r-cb.vue";
-import SquareTopLeftBottomRightCircleBorderIcon from "./square-t-l-b-r-cb.vue";
-import SquareBottomLeftTopRightCircleBorderIcon from "./square-b-l-t-r-cb.vue";
-import SquareTopCircleBorderIcon from "./square-t-cb.vue";
-import SquareBottomCircleBorderIcon from "./square-b-cb.vue";
-import SquareRightCircleBorderIcon from "./square-r-cb.vue";
-import SquareLeftCircleBorderIcon from "./square-l-cb.vue";
-import SquareCircleBorderIcon from "./square-cb.vue";
-import UploadIcon from "./upload.vue";
+import SquareTopLeftCircleBorderIcon from "../../assets/square-t-l-cb.svg";
+import SquareTopRightCircleBorderIcon from "../../assets/square-t-r-cb.svg";
+import SquareBottomLeftCircleBorderIcon from "../../assets/square-b-l-cb.svg";
+import SquareBottomRightCircleBorderIcon from "../../assets/square-b-r-cb.svg";
+import SquareTopLeftBottomRightCircleBorderIcon from "../../assets/square-t-l-b-r-cb.svg";
+import SquareBottomLeftTopRightCircleBorderIcon from "../../assets/square-b-l-t-r-cb.svg";
+import SquareTopCircleBorderIcon from "../../assets/square-t-cb.svg";
+import SquareBottomCircleBorderIcon from "../../assets/square-b-cb.svg";
+import SquareRightCircleBorderIcon from "../../assets/square-r-cb.svg";
+import SquareLeftCircleBorderIcon from "../../assets/square-l-cb.svg";
+import SquareCircleBorderIcon from "../../assets/square-cb.svg";
+import UploadIcon from "../../assets/upload.svg";
+import Circle from "../../assets/circle.svg";
+import ChevronDown from "../../assets/chevron-down.svg";
 
-import Circle from "./circle.vue";
-import ChevronDown from "./chevron-down.vue";
 
 export {
   SquareTopLeftCircleBorderIcon,
