@@ -51,7 +51,7 @@ function qrModuleStyle(
         bgColor="transparent"
         :color="{ finder: '#ff3131', codeword: 'currentColor' }"
         :moduleStyle="qrModuleStyle"
-        :data-shape-type="shapeType"
+        :key="shapeType"
       />
       <QrSvg class="shape-qr-stroke" />
     </div>
