@@ -48,7 +48,7 @@ export function getBitsLength(data: Segments[0]) {
       firstBit * (dataLength % modeLength)
     );
   }
-  return dataLength * MODE_BITS[Mode.Byte][0];
+  return new TextEncoder().encode(data.value).length * MODE_BITS[Mode.Byte][0];
 }
 
 /**
@@ -200,8 +200,9 @@ export function getEncodedSegmentData(data: Segments[0]) {
     return bitArray;
   }
   if (mode === Mode.Byte) {
-    for (let i = 0; i < value.length; i++) {
-      let num = value.charCodeAt(i);
+    const encodedData = new TextEncoder().encode(value);
+    for (let i = 0; i < encodedData.length; i++) {
+      let num = encodedData[i];
       bitArray.push({ data: num, bitLength: MODE_BITS[Mode.Byte][0] });
     }
   }

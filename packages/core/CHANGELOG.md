@@ -1,5 +1,11 @@
 # @qrgrid/core
 
+## 0.2.1
+
+### Patch Changes
+
+- fix: Byte mode utf-8 encoding
+
 ## 0.2.0
 
 ### Minor Changes

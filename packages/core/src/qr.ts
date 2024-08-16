@@ -21,6 +21,7 @@ import {
 import {
   ErrorCorrectionLevel,
   ErrorCorrectionLevelType,
+  Mode,
   ReservedBits,
   ReservedBitsType,
 } from "./enums.js";
@@ -112,7 +113,13 @@ export class QR {
       const isMixedMode = segments.length > 1;
       const mode = isMixedMode ? "Mixed" : segments[0].mode;
       const maxCapacityVersion = CHARACTER_COUNT_MAX_VERSION[ccIndex];
-      let bitSize: number = isMixedMode ? 0 : segments[0].value.length;
+      let bitSize = 0;
+      if (!isMixedMode) {
+        bitSize =
+          segments[0].mode === Mode.Byte
+            ? getEncodedSegmentData(segments[0]).length
+            : segments[0].value.length;
+      }
 
       const maxDataCapacity = getCapacity(
         maxCapacityVersion,
@@ -128,7 +135,6 @@ export class QR {
             getBitsLength(d);
         });
       }
-
       if (bitSize <= maxDataCapacity) {
         let startIndex = CHARACTER_COUNT_MAX_VERSION[ccIndex - 1] || 1;
 
@@ -187,14 +193,19 @@ export class QR {
         MODE_INDICATOR[segment.mode],
         MODE_INDICATOR_BITS
       );
+      // get encoded segment data
+      const segmentBitArray = getEncodedSegmentData(segment);
       // encode character count indicator
+      const ccLength =
+        segment.mode === Mode.Byte
+          ? segmentBitArray.length
+          : segment.value.length;
       this.#encodeCodeword(
         dcData,
-        segment.value.length,
+        ccLength,
         getCharCountIndicator(segment.mode, this.version)
       );
-      // encode segment data
-      const segmentBitArray = getEncodedSegmentData(segment);
+      // encode segment
       for (let i = 0; i < segmentBitArray.length; i++) {
         const segmentBit = segmentBitArray[i];
         this.#encodeCodeword(dcData, segmentBit.data, segmentBit.bitLength);
@@ -362,11 +373,7 @@ export class QR {
           dark: false,
         };
       }
-      if (
-        this.gridSize - y > size &&
-        right >= 0 &&
-        right <= this.data.length
-      ) {
+      if (this.gridSize - y > size && right >= 0 && right <= this.data.length) {
         this.reservedBits[right] = {
           type: ReservedBits.FinderPattern,
           dark: false,
