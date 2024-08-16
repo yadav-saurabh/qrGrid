@@ -13,8 +13,14 @@ The Ultimate Customizable QR Code JavaScript Library
 
 <p>
   <a href="https://github.com/yadav-saurabh/qrGrid/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@qrgrid/core" alt="license"></a>
-  <a href="https://www.npmjs.com/package/@qrgrid/core"><img src="https://img.shields.io/npm/v/@qrgrid/core" alt="npm package"></a>
+  <a href="https://www.npmjs.com/package/@qrgrid/core"><img src="https://img.shields.io/npm/v/@qrgrid/core?label=core" alt="npm package"></a>
+  <a href="https://www.npmjs.com/package/@qrgrid/react"><img src="https://img.shields.io/npm/v/@qrgrid/react?label=react" alt="npm package"></a>
+  <a href="https://www.npmjs.com/package/@qrgrid/vue"><img src="https://img.shields.io/npm/v/@qrgrid/vue?label=vue" alt="npm package"></a>
+  <a href="https://www.npmjs.com/package/@qrgrid/styles"><img src="https://img.shields.io/npm/v/@qrgrid/styles?label=styles" alt="npm package"></a>
 </p>
+
+> [!NOTE]
+> For complete documentation visit: [qrgrid.dev](https://www.qrgrid.dev/)
 
 ## Table of Contents
 
@@ -22,7 +28,6 @@ The Ultimate Customizable QR Code JavaScript Library
   - [Core](#core)
   - [React](#react)
   - [Vue](#vue)
-- [TODO](#todo)
 - [Credits](#credits)
 - [License](#license)
 
@@ -89,15 +94,6 @@ import { Canvas, Svg } from "@qrgrid/vue";
 ```
 
 For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/vue) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/vue)
-
-## TODO
-
-- [ ] (core) Support for Kanji Mode
-- [x] (react) Support for using SVG
-- [ ] (web) examples using svg
-- [ ] package and examples for angular
-- [x] package and examples for vue
-- [ ] package and examples more frameworks
 
 ## Credits
 
