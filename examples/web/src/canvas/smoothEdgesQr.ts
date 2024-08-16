@@ -2,12 +2,12 @@ import { QR, ReservedBits } from "@qrgrid/core";
 import {
   cornerArc,
   CornerType,
-  generateCanvas,
   getNeighbor,
   roundCorner,
   roundCornerFinderPattern,
   smoothEdges,
-} from "./utils";
+} from "@qrgrid/styles/canvas";
+import { generateCanvas } from "./utils";
 
 const DEFAULT_CANVAS_SIZE = 400;
 const DEFAULT_BG_COLOR = "black";

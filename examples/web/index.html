@@ -20,6 +20,9 @@
       <option value="H">H</option>
     </select>
   </div>
+  <h2 class="heading">
+    Using Canvas
+  </h2>
   <div class="defaultQrContainer">
     <div style="position:relative; left:-4rem">
       <h2>Default Qr</h2>
@@ -48,11 +51,41 @@
   <!-- canvas qr will be appended here -->
   <div class="qrContainer" id="qrContainerCanvas">
   </div>
-  <!-- svg qr will be appended here -->
-  <div class="qrContainer" id="qrContainerSvg">
-  </div>
 
-  <script type="module" src="/src/main.ts"></script>
+  <h2 class="heading">
+    Using Svg
+  </h2>
+  <div class="defaultQrContainer">
+    <div style="position:relative; left:-4rem">
+      <h2>Default Qr</h2>
+      Version: <span id="svgVersion"></span>
+      <br />
+      Size: <span id="svgGridSize"></span>
+      <br />
+      Error Correction: <span id="svgErrorCorrection"></span>
+      <br />
+      Total bits size: <span id="svgDataSize"></span>
+      <br />
+      Reserved bits length: <span id="svgReservedBitSize"></span>
+      <br />
+      Segments:
+      <br />
+      <span class="segments" id="svgSegments"></span>
+      <div>
+        <button type="button" id="svgDownloadBtn">
+          Download
+        </button>
+      </div>
+    </div>
+    <!-- default qr canvas -->
+    <svg id="defaultQrSvg" xmlns="http://www.w3.org/2000/svg" height="400" width="400" viewBox="0 0 400 400">
+      <path id="defaultQrSvgPath" />
+    </svg>
+    <!-- svg qr will be appended here -->
+  </div>
+  <div class="qrContainer" id="qrContainerSvg">
+
+    <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>

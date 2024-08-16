@@ -47,10 +47,16 @@ button:hover {
   cursor: pointer;
 }
 
+
 .defaultQrContainer {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.heading {
+  margin: 2rem;
+  border-bottom: 1px solid;
 }
 
 .segments {
