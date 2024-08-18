@@ -16,11 +16,12 @@
   },
   "keywords": [
     "qr",
-    "styling",
     "qrgrid",
-    "typescript",
+    "styling",
     "react",
+    "preact",
     "vue",
+    "server",
     "angular"
   ],
   "files": [

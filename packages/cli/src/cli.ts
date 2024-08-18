@@ -39,7 +39,7 @@ const versionIndex = process.argv.findIndex((arg) =>
 );
 if (helpIndex > 0) {
   console.log("Usage: qrgrid [options]\n\nOptions:");
-  console.log(`-v ${"--version".padEnd(30)} output the version number`);
+  console.log(`${'-v'.padEnd(4)} ${"--version".padEnd(30)} output the version number`);
   Object.keys(cliOptionMeta).forEach((k) => {
     let key = k as keyof typeof cliOptionMeta;
     const { short, long, desc, bool } = cliOptionMeta[key];
@@ -47,7 +47,7 @@ if (helpIndex > 0) {
       `${short.padEnd(4)} ${(long + (bool ? " " : " <value>")).padEnd(30)} ${desc}`
     );
   });
-  console.log(`-h ${"--help".padEnd(30)} display help for command`);
+  console.log(`${'-h'.padEnd(4)} ${"--help".padEnd(30)} display help for command`);
   process.exit(0);
 }
 if (versionIndex > 0) {

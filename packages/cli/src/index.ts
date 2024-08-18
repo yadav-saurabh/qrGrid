@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Qr function to generate QR Code as a svg
+ * Qr function to generate QR Code prints to cli or save as a svg file on disk
  * @module
  */
 import fs from "fs/promises";
@@ -10,35 +10,8 @@ import {
   ReservedBits,
   ErrorCorrectionLevel,
 } from "@qrgrid/core";
+
 import { cliOptions } from "./cli.js";
-
-/**
- * Function type (ModuleStyleFunction is to style the module)
- */
-export type ModuleStyleFunction = (
-  path: { codeword: string; finder: string },
-  module: { index: number; x: number; y: number; size: number },
-  qr: QR
-) => void;
-
-export type ModuleStyleFunctionParams = Parameters<ModuleStyleFunction>;
-
-/**
- * Qr component Props Type
- */
-export type QrOptionType = {
-  size?: number;
-  qrOptions?: QrOptions;
-  bgColor?: string;
-  color?: string | { codeword?: string; finder?: string };
-  moduleStyle?: ModuleStyleFunction;
-  getQrData?: (qr: QR) => void;
-  onGenerated?: (
-    path: ModuleStyleFunctionParams[0],
-    size: number,
-    qr: QR
-  ) => void;
-};
 
 const DEFAULT_SIZE = 400;
 const DEFAULT_BG_COLOR = "black";
@@ -59,7 +32,7 @@ if (cliOptions?.errorCorrection) {
   }
   qrOptions = { errorCorrection: ec };
 }
-generateQr(cliOptions.input as string, { qrOptions });
+generateQr(cliOptions.input as string, qrOptions);
 
 /**
  * write file to disk
@@ -76,8 +49,8 @@ async function saveFile(data: string, name = "QrGrid.svg") {
  * To apply default module style
  */
 function applyModuleStyle(
-  path: ModuleStyleFunctionParams[0],
-  module: ModuleStyleFunctionParams[1],
+  path: { codeword: string; finder: string },
+  module: { index: number; x: number; y: number; size: number },
   qr: QR
 ) {
   const { x, y, size, index } = module;
@@ -89,44 +62,17 @@ function applyModuleStyle(
 }
 
 /**
- * get the svg path color
- */
-function getColor(
-  colorProp: QrOptionType["color"],
-  type: "finder" | "codeword"
-) {
-  let color = DEFAULT_COLOR;
-  if (colorProp && typeof colorProp === "string") {
-    color = colorProp;
-  }
-  if (colorProp && typeof colorProp === "object") {
-    if (type === "codeword" && colorProp.codeword) {
-      color = colorProp.codeword;
-    }
-    if (type === "finder" && colorProp.finder) {
-      color = colorProp.finder;
-    }
-  }
-  return color;
-}
-
-/**
  * generates the svg string
  */
-function generateSvg(qr: QR, options?: QrOptionType) {
+function generateSvg(qr: QR) {
   // svg meta string
   const svgMeta =
-    '<svg xmlns="http://www.w3.org/2000/svg" height="{{size}}" width="{{size}}" viewBox="0 0 {{size}} {{size}}" style="background: {{bgColor}};"><path id="finder" fill="{{finderColor}}" d="{{finderPath}}" /><path id="codeword" fill="{{codewordColor}}" d="{{codewordPath}}" />{{onGenerated}}</svg>';
+    '<svg xmlns="http://www.w3.org/2000/svg" height="{{size}}" width="{{size}}" viewBox="0 0 {{size}} {{size}}" style="background: {{bgColor}};"><path id="finder" fill="{{finderColor}}" d="{{finderPath}}" /><path id="codeword" fill="{{codewordColor}}" d="{{codewordPath}}" /></svg>';
   // calculate module size and adjusting svg to height and wight
-  const initialSvgSize = options?.size || DEFAULT_SIZE;
+  const initialSvgSize = DEFAULT_SIZE;
   let size = Math.floor(initialSvgSize / (qr.gridSize + 1.5));
   const border = Math.ceil(size * qr.gridSize - initialSvgSize) + size * 2;
   const svgSize = initialSvgSize + border;
-  // use default function to draw module or use the props function
-  let moduleStyleFunction = applyModuleStyle;
-  if (options?.moduleStyle && typeof options.moduleStyle === "function") {
-    moduleStyleFunction = options.moduleStyle;
-  }
   // placing each modules in x,y position in the svg
   let x = size;
   let y = size;
@@ -134,7 +80,7 @@ function generateSvg(qr: QR, options?: QrOptionType) {
   for (let i = 0; i < qr.data.length; i++) {
     const bit = qr.data[i];
     if (bit) {
-      moduleStyleFunction(path, { index: i, x, y, size }, qr);
+      applyModuleStyle(path, { index: i, x, y, size }, qr);
     }
     x += size;
     if (i % qr.gridSize === qr.gridSize - 1) {
@@ -142,23 +88,18 @@ function generateSvg(qr: QR, options?: QrOptionType) {
       y += size;
     }
   }
-  // event once everything is generated but not updated the path value
-  if (options?.onGenerated) {
-    options.onGenerated(path, size, qr);
-  }
   return svgMeta
     .replaceAll("{{size}}", svgSize.toString())
-    .replace("{{bgColor}}", options?.bgColor || DEFAULT_BG_COLOR)
-    .replace("{{finderColor}}", getColor(options?.color, "finder"))
-    .replace("{{codewordColor}}", getColor(options?.color, "codeword"))
-    .replace("{{onGenerated}}", "")
+    .replace("{{bgColor}}", DEFAULT_BG_COLOR)
+    .replace("{{finderColor}}", DEFAULT_COLOR)
+    .replace("{{codewordColor}}", DEFAULT_COLOR)
     .replace("{{finderPath}}", path.finder)
     .replace("{{codewordPath}}", path.codeword);
 }
 
-export function generateQr(input: string, options?: QrOptionType) {
+export function generateQr(input: string, qrOptions?: QrOptions) {
   // generate the qr data
-  const qr = new QR(input, options?.qrOptions);
+  const qr = new QR(input, qrOptions);
 
   // print / save svg file if using cli
   let cliTxt = "\n";
@@ -184,7 +125,7 @@ export function generateQr(input: string, options?: QrOptionType) {
   }
   // save svg file
   if (cliOptions.file || cliOptions.silent) {
-    const svg = generateSvg(qr, options);
+    const svg = generateSvg(qr);
     saveFile(svg);
   }
   return cliTxt;

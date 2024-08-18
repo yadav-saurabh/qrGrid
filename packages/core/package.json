@@ -18,7 +18,7 @@
     "qr",
     "qrGrid",
     "styling",
-    "typescript"
+    "core"
   ],
   "files": [
     "/dist"

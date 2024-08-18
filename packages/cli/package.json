@@ -17,9 +17,7 @@
   "keywords": [
     "qr",
     "qrGrid",
-    "cli",
-    "styling",
-    "typescript"
+    "cli"
   ],
   "files": [
     "/dist"

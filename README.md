@@ -55,8 +55,6 @@ import { QR } from "@qrgrid/core";
 new QR("Hello World!")
 ```
 
-For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/core) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/web)
-
 ### Cli
 
 Generate QR codes directly from the command line with this straightforward CLI tool. It supports generating SVG output for easy conversion to other formats. While it doesn't offer customization options, it provides a reliable and efficient way to create standard QR codes quickly in terminal-based environments.
@@ -105,8 +103,6 @@ app.use("/", (req, res) => {
 
 app.listen(5000);
 ```
-
-For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/react) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/react)
 
 ### React
 

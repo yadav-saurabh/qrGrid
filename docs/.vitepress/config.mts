@@ -50,9 +50,12 @@ export default defineConfig({
       {
         text: "Packages",
         items: [
-          { text: "Web", link: "/guide/packages/web" },
+          { text: "Core", link: "/guide/packages/core" },
           { text: "React", link: "/guide/packages/react" },
           { text: "Vue", link: "/guide/packages/vue" },
+          { text: "Styles", link: "/guide/packages/styles" },
+          { text: "Server", link: "/guide/packages/server" },
+          { text: "Cli", link: "/guide/packages/cli" },
         ],
       },
     ],
