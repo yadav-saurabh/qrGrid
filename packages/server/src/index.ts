@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Qr function to generate QR Code as a svg
  * @module

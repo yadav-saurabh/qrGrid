@@ -17,6 +17,8 @@ The Ultimate Customizable QR Code JavaScript Library
   <a href="https://www.npmjs.com/package/@qrgrid/react"><img src="https://img.shields.io/npm/v/@qrgrid/react?label=react" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/vue"><img src="https://img.shields.io/npm/v/@qrgrid/vue?label=vue" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/styles"><img src="https://img.shields.io/npm/v/@qrgrid/styles?label=styles" alt="npm package"></a>
+  <a href="https://www.npmjs.com/package/@qrgrid/cli"><img src="https://img.shields.io/npm/v/@qrgrid/cli?label=cli" alt="npm package"></a>
+  <a href="https://www.npmjs.com/package/@qrgrid/server"><img src="https://img.shields.io/npm/v/@qrgrid/server?label=server" alt="npm package"></a>
 </p>
 
 > [!NOTE]
@@ -26,6 +28,8 @@ The Ultimate Customizable QR Code JavaScript Library
 
 - [Usage](#usage)
   - [Core](#core)
+  - [Cli](#cli)
+  - [Server](#server)
   - [React](#react)
   - [Vue](#vue)
 - [Credits](#credits)
@@ -39,7 +43,7 @@ This package serves as the foundational component for encoding QR codes, utilize
 
 Installation:
 
-```bash
+```sh
 npm i @qrgrid/core
 ```
 
@@ -53,13 +57,64 @@ new QR("Hello World!")
 
 For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/core) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/web)
 
+### Cli
+
+Generate QR codes directly from the command line with this straightforward CLI tool. It supports generating SVG output for easy conversion to other formats. While it doesn't offer customization options, it provides a reliable and efficient way to create standard QR codes quickly in terminal-based environments.
+
+Installation:
+
+```sh
+# Use it directly with npx
+npx @qrgrid/cli 
+# Or install globally
+npm i -g @qrgrid/cli 
+```
+
+Example usage:
+
+```sh
+# Using npx
+npx @qrgrid/cli -i "Hello world in cli"
+# If installed globally
+qrgrid -i "Hello world in cli"
+```
+
+### Server
+
+Generate QR codes seamlessly in the backend with official support for SVG output, enabling easy conversion to other formats. This package offers robust and flexible options for creating QR codes, making it a versatile choice for any backend application.
+
+Installation:
+
+```sh
+npm i @qrgrid/server
+```
+
+Example usage (Express server):
+
+```javascript
+import { generateQr } from "@qrgrid/server";
+import express from "express";
+
+const app = express();
+// api routes
+app.use("/", (req, res) => {
+  const qr = generateQr("hello world from server");
+  res.set("Content-Type", "text/html");
+  res.send(Buffer.from(qr));
+});
+
+app.listen(5000);
+```
+
+For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/react) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/react)
+
 ### React
 
 This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**. It also includes utility functions to download images and styling Qr codes.
 
 Installation:
 
-```bash
+```sh
 npm i @qrgrid/react
 ```
 
@@ -72,15 +127,13 @@ import { Canvas, Svg } from "@qrgrid/react";
 <Svg.Qr input="Hello World!"/>
 ```
 
-For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/react) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/react)
-
 ### Vue
 
 This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**. It also includes utility functions to download images and styling Qr codes.
 
 Installation:
 
-```bash
+```sh
 npm i @qrgrid/vue
 ```
 
@@ -92,8 +145,6 @@ import { Canvas, Svg } from "@qrgrid/vue";
 <Canvas input="Hello World!"/>
 <Svg input="Hello World!"/>
 ```
-
-For more details, see the [documentation](https://github.com/yadav-saurabh/qrgrid/tree/main/packages/vue) and [example code](https://github.com/yadav-saurabh/qrgrid/tree/main/examples/vue)
 
 ## Credits
 
