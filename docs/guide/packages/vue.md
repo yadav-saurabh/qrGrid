@@ -187,7 +187,7 @@ Explore [Styles](./styles) for custom styling and other utilities
   ```vue [Svg]
   <script>
     import { Qr } from "@qrgrid/vue/svg";
-    import { downloadQr} from "@qrgrid/styles/canvas/utils";
+    import { downloadQr} from "@qrgrid/styles/svg/utils";
 
     const qrRef = ref<InstanceType<typeof Qr> | null>(null);
 

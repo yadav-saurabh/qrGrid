@@ -141,7 +141,8 @@ Explore [Styles](./styles) for custom styling and other utilities
   :::code-group
 
   ```tsx [Canvas]
-  import { downloadQr} from "@qrgrid/styles/canvas/utils";
+  import { Qr } from "@qrgrid/react/canvas";
+  import { downloadQr } from "@qrgrid/styles/canvas/utils";
 
   const qrRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -155,7 +156,8 @@ Explore [Styles](./styles) for custom styling and other utilities
   ```
 
   ```tsx [Svg]
-  import { downloadQr} from "@qrgrid/styles/canvas/utils";
+  import { Qr } from "@qrgrid/react/svg";
+  import { downloadQr} from "@qrgrid/styles/svg/utils";
 
   const qrRef = useRef<SVGSVGElement | null>(null);
 

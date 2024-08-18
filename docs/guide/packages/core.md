@@ -127,7 +127,7 @@ let path = "";
 for (let i = 0; i < qr.data.length; i++) {
   const bit = qr.data[i];
   if (bit) {
-    path += getSquarePath(x, y, size);
+    path += `M${x} ${y}v${size}h${size}v-${size}z`;
   }
   x += size;
   if (i % qr.gridSize === qr.gridSize - 1) {

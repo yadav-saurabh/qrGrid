@@ -87,6 +87,8 @@ yarn add @qrgrid/vue
 
 :::
 
+For more details, see the [documentation](./packages/vue).
+
 ### Server
 
 Implementation of the Qr grid library for server applications.
@@ -110,6 +112,8 @@ yarn add @qrgrid/server
 ```
 
 :::
+
+For more details, see the [documentation](./packages/server).
 
 ### Cli
 
@@ -135,4 +139,4 @@ yarn dlx @qrgrid/cli -i "Hello world"
 
 :::
 
-For more details, see the [documentation](./packages/vue).
+For more details, see the [documentation](./packages/cli).
