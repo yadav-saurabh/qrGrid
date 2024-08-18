@@ -2,7 +2,8 @@
 
 This library offers two methods for generating QR codes: using **Canvas** and **Svg**. It also includes utility functions for downloading images and styling QR codes.
 
-For full documentation, visit [qrgrid.dev](https://www.qrgrid.dev/)
+> [!NOTE]
+> For complete documentation visit: [qrgrid.dev](https://www.qrgrid.dev/)
 
 ## Key Features
 

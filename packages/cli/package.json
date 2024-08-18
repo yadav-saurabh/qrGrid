@@ -1,0 +1,52 @@
+{
+  "name": "@qrgrid/cli",
+  "version": "1.0.0-beta",
+  "module": "src/index.ts",
+  "main": "src/index.ts",
+  "type": "module",
+  "homepage": "https://www.qrgrid.dev/",
+  "private": false,
+  "description": "The Ultimate Customizable QR Code JavaScript Library",
+  "license": "MIT",
+  "bugs": "https://github.com/yadav-saurabh/qrgrid/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yadav-saurabh/qrgrid",
+    "directory": "packages/cli"
+  },
+  "keywords": [
+    "qr",
+    "qrGrid",
+    "cli",
+    "styling",
+    "typescript"
+  ],
+  "files": [
+    "/dist"
+  ],
+  "bin": {
+    "qrgrid": "./dist/index.mjs"
+  },
+  "scripts": {
+    "build": "npm run clean && rollup -c && npm run cp:license && npm run mod:pkg",
+    "clean": "rimraf ./dist",
+    "cp:license": "cp ../../LICENSE ./LICENSE",
+    "mod:pkg": "node ./scripts/modify-package.mjs",
+    "type-check": "tsc --noEmit",
+    "tsc:build": "tsc -b"
+  },
+  "dependencies": {
+    "@qrgrid/core": "*"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^22.4.0",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.19.0",
+    "tslib": "^2.6.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

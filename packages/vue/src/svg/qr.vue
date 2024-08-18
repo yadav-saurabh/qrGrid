@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Qr component to generate QR Code on a canvas
+ * Qr component to generate QR Code as a svg
  * @module
  */
 import { ref, onMounted, watch } from "vue";

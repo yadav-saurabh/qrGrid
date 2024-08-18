@@ -2,7 +2,8 @@
 
 This package serves as the foundational component for encoding QR codes, utilized by all other qrgrid packages. For maximum customization and full control over QR code generation, it is recommended to use this core package directly.
 
-For full documentation, visit [qrgrid.dev](https://www.qrgrid.dev/)
+> [!NOTE]
+> For complete documentation visit: [qrgrid.dev](https://www.qrgrid.dev/)
 
 ## Installation
 
