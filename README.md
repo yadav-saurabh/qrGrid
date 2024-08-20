@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://github.com/yadav-saurabh/qrGrid#gh-light-mode-only">
-    <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/docs/public/logo-dark.svg#gh-light-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="350">
+    <img src="https://raw.githubusercontent.com/yadav-saurabh/qrGrid/main/docs/public/logo-dark.svg#gh-light-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="350">
   </a>
   <a href="https://github.com/yadav-saurabh/qrGrid#gh-dark-mode-only">
-    <img src="https://github.com/yadav-saurabh/qrGrid/blob/main/docs/public/logo-light.svg#gh-dark-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="350">
+    <img src="https://raw.githubusercontent.com/yadav-saurabh/qrGrid/main/docs/public/logo-light.svg#gh-dark-mode-only" alt="QrGrid - JavaScript Library for QR Code Encoding and Generation" width="350">
   </a>
 </p>
 
@@ -33,6 +33,7 @@ The Ultimate Customizable QR Code JavaScript Library
   - [Server](#server)
   - [React](#react)
   - [Vue](#vue)
+  - [Angular](#angular)
 - [Credits](#credits)
 - [License](#license)
 
@@ -141,6 +142,24 @@ import { Canvas, Svg } from "@qrgrid/vue";
 
 <Canvas input="Hello World!"/>
 <Svg input="Hello World!"/>
+```
+
+### Angular
+
+This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**. It also includes utility functions to download images and styling Qr codes.
+
+Installation:
+
+```sh
+npm i @qrgrid/angular
+```
+
+Example usage:
+
+```javascript
+import { CanvasQr, SvgQr } from "@qrgrid/angular";
+
+<qr input="Hello World!"/>
 ```
 
 ## Credits
