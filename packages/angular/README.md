@@ -1,24 +1,34 @@
-# Angular
+# Qr Grid Angular
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.0.
+This library offers two methods for generating QR codes: using **Canvas** and **Svg**. It also includes utility functions for downloading images and styling QR codes.
 
-## Code scaffolding
+> [!NOTE]
+> For complete documentation visit: [qrgrid.dev](https://www.qrgrid.dev/)
 
-Run `ng generate component component-name --project angular` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project angular`.
-> Note: Don't forget to add `--project angular` or else it will be added to the default project in your `angular.json` file.
+## Key Features
 
-## Build
+- **Canvas-based QR Code Generation**: Create QR codes using the HTML5 Canvas element for high-performance rendering.
+- **SVG-based QR Code Generation**: Generate QR codes as scalable vector graphics (SVG) for infinite scalability without loss of quality.
+- **Utility Functions**: Easily download QR codes as images and apply custom styles.
 
-Run `ng build angular` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Installation
 
-## Publishing
+```bash
+npm i @qrgrid/angular
+```
 
-After building your library with `ng build angular`, go to the dist folder `cd dist/angular` and run `npm publish`.
+## Using Canvas
 
-## Running unit tests
+```javascript
+import { CanvasQr } from "@qrgrid/react";
 
-Run `ng test angular` to execute the unit tests via [Karma](https://karma-runner.github.io).
+<qr input="Hello World!"/>
+```
 
-## Further help
+## Using Svg
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```javascript
+import { SvgQr } from "@qrgrid/react";
+
+<qr input="Hello World!"/>
+```

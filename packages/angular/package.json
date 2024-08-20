@@ -1,6 +1,6 @@
 {
   "name": "@qrgrid/angular",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta.1",
   "type": "module",
   "homepage": "https://www.qrgrid.dev/",
   "private": false,
@@ -24,15 +24,15 @@
     "/dist"
   ],
   "scripts": {
-    "build": "ng build && npm run cp:license",
+    "build": "ng build && npm run cp:license && npm run mod:pkg",
     "cp:license": "cp ../../LICENSE ./LICENSE",
+    "mod:pkg": "node ./scripts/modify-package.mjs",
     "ng": "ng",
     "start": "ng serve",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
   "peerDependencies": {
-    "@angular/common": "^18.2.0",
     "@angular/core": "^18.2.0"
   },
   "dependencies": {
@@ -61,5 +61,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "sideEffects": false
 }

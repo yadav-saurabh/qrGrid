@@ -1,5 +1,11 @@
 # @qrgrid/core
 
+## 0.2.2
+
+### Patch Changes
+
+- CI/CD remove devDependency and scripts from package during build
+
 ## 0.2.1
 
 ### Patch Changes

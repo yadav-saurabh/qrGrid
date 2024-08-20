@@ -17,6 +17,7 @@ The Ultimate Customizable QR Code JavaScript Library
   <a href="https://www.npmjs.com/package/@qrgrid/react"><img src="https://img.shields.io/npm/v/@qrgrid/react?label=react" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/vue"><img src="https://img.shields.io/npm/v/@qrgrid/vue?label=vue" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/styles"><img src="https://img.shields.io/npm/v/@qrgrid/styles?label=styles" alt="npm package"></a>
+  <a href="https://www.npmjs.com/package/@qrgrid/angular"><img src="https://img.shields.io/npm/v/@qrgrid/angular?label=angular" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/cli"><img src="https://img.shields.io/npm/v/@qrgrid/cli?label=cli" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/server"><img src="https://img.shields.io/npm/v/@qrgrid/server?label=server" alt="npm package"></a>
 </p>

@@ -269,6 +269,7 @@ export class Qr implements OnInit, OnChanges {
 
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext("2d")!;
+    this.generateQr();
   }
 
   ngOnChanges() {

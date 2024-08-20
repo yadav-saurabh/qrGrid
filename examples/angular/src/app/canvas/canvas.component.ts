@@ -9,7 +9,7 @@ import {
 import {
   ModuleStyleFunctionParams,
   Qr,
-} from '../../../../../packages/angular/src/canvas/qr.component'; // @qrgrid/angular/canvas
+} from '../../../../../packages/angular/src/canvas'; // @qrgrid/angular/canvas
 
 @Component({
   selector: 'app-canvas',

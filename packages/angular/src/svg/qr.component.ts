@@ -63,7 +63,6 @@ function applyModuleStyle(
 }
 
 function getColor(colorProp: QrColor, type: "finder" | "codeword") {
-  console.log(colorProp, type);
   let color = DEFAULT_COLOR;
   if (colorProp && typeof colorProp === "string") {
     color = colorProp;

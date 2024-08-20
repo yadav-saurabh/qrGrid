@@ -14,7 +14,7 @@ import {
 import {
   ModuleStyleFunctionParams,
   Qr,
-} from '../../../../../packages/angular/src/svg/qr.component'; // @qrgrid/angular/svg
+} from '../../../../../packages/angular/src/svg'; // @qrgrid/angular/svg
 
 @Component({
   selector: 'app-svg',
