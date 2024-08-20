@@ -1,14 +1,36 @@
 {
   "name": "@qrgrid/angular",
   "version": "1.0.0-beta",
+  "type": "module",
+  "homepage": "https://www.qrgrid.dev/",
+  "private": false,
+  "description": "The Ultimate Customizable QR Code JavaScript Library",
+  "license": "MIT",
+  "bugs": "https://github.com/yadav-saurabh/qrgrid/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yadav-saurabh/qrgrid",
+    "directory": "packages/angular"
+  },
+  "keywords": [
+    "qr",
+    "qrGrid",
+    "canvas",
+    "svg",
+    "styling",
+    "angular"
+  ],
+  "files": [
+    "/dist"
+  ],
   "scripts": {
+    "build": "ng build && npm run cp:license",
+    "cp:license": "cp ../../LICENSE ./LICENSE",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
-  "private": true,
   "peerDependencies": {
     "@angular/common": "^18.2.0",
     "@angular/core": "^18.2.0"
@@ -36,5 +58,8 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^18.2.0",
     "typescript": "~5.5.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
