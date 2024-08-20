@@ -1,13 +1,19 @@
 # @qrgrid/angular
 
-## 1.0.0-beta
+## 1.0.0-beta.2
 
-### Major Changes
+### Patch Changes
 
-- Beta release
+- Fix package path exports
 
 ## 1.0.0-beta.1
 
 ### Patch Changes
 
 - Fix Canvas qr
+
+## 1.0.0-beta
+
+### Major Changes
+
+- Beta release
