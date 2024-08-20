@@ -52,7 +52,7 @@ function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
 
     // if no input clear the canvas
     if (!input) {
-      ctx.clearRect(0, 0, canvasSize, canvasSize);
+      ctx.clearRect(0, 0, canvasRef.current.height, canvasRef.current.width);
       return;
     }
 
@@ -80,18 +80,15 @@ function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
     // placing each modules in x,y position in the canvas using fillRect
     let x = size;
     let y = size;
-    for (let i = 0; i < qr.gridSize; i++) {
-      for (let j = 0; j < qr.gridSize; j++) {
-        const index = i * qr.gridSize + j;
-        const bit = qr.data[index];
-        if (bit) {
-          moduleStyleFunction(ctx, { index, x, y, size }, qr);
-        }
-        x += size;
-        if (j === qr.gridSize - 1) {
-          x = size;
-          y += size;
-        }
+    for (let i = 0; i < qr.data.length; i++) {
+      const bit = qr.data[i];
+      if (bit) {
+        moduleStyleFunction(ctx, { index: i, x, y, size }, qr);
+      }
+      x += size;
+      if (i % qr.gridSize === qr.gridSize - 1) {
+        x = size;
+        y += size;
       }
     }
     // if image place the image in center, QR ErrorCorrectionLevel Should be high and Image should not be more that 25-30% of the Canvas size to scan the QR code properly

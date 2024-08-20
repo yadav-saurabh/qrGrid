@@ -1,5 +1,5 @@
 ---
-title: Web
+title: Core
 outline: deep
 ---
 

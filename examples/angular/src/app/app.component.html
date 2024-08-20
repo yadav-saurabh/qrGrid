@@ -1,0 +1,22 @@
+<div class="inputContainer">
+  <textarea id="inputText" [formControl]="inputText" placeholder="Text To Encode" rows=4 cols=50> </textarea>
+  <select name="errorCorrection" id="errorCorrectionSelect" [formControl]="errorCorrection">
+    <option disabled>Choose a ErrorCorrectionLevel</option>
+    <option value="L">L</option>
+    <option value="M" selected>M</option>
+    <option value="Q">Q</option>
+    <option value="H">H</option>
+  </select>
+
+  <h2 style="margin: 2rem;border-bottom:1px solid;">
+    Using Canvas
+  </h2>
+  <app-canvas [input]="inputText.value || ''" [errorCorrection]="errorCorrection.value" />
+
+  <h2 style="margin: 2rem;border-bottom:1px solid;">
+    Using Svg
+  </h2>
+  <app-svg [input]="inputText.value || ''" [errorCorrection]="errorCorrection.value" />
+</div>
+
+<router-outlet />

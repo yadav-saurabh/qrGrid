@@ -183,3 +183,6 @@ dist
 #vitepress
 **/.vitepress/cache
 **/.vitepress/dist
+
+# Angular
+.angular
