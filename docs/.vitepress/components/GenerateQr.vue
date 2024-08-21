@@ -298,7 +298,7 @@ onUnmounted(() => {
             :data-codeword-style="codewordStyle"
             :data-outer-finder-style="outerFinderStyle"
             :data-inner-finder-style="innerFinderStyle"
-            :image="{ src: imgSrc, overlap: imgOverlap, border: imgBorder }"
+            :image="imgSrc ? { src: imgSrc, overlap: imgOverlap, border: imgBorder } : undefined"
           />
           <div class="btn-container">
             <button class="btn" @click="onDownload">

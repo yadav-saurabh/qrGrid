@@ -48,13 +48,12 @@ function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
   }, [
     props.input,
     props.qrOptions?.errorCorrection,
-    props.bgColor,
-    props.color,
+    props.size,
     props.image?.src,
     props.image?.opacity,
     props.image?.sizePercent,
-    props.size,
-    props.moduleStyle,
+    props.image?.overlap,
+    props.image?.border,
   ]);
 
   /**

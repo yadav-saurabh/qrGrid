@@ -76,11 +76,12 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
   }, [
     props.input,
     props.qrOptions?.errorCorrection,
+    props.size,
     props.image?.src,
     props.image?.opacity,
     props.image?.sizePercent,
-    props.size,
-    props.moduleStyle,
+    props.image?.overlap,
+    props.image?.border,
   ]);
 
   /**
@@ -102,21 +103,6 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
     let moduleStyleFunction = applyModuleStyle;
     if (props.moduleStyle && typeof props.moduleStyle === "function") {
       moduleStyleFunction = props.moduleStyle;
-    }
-    // placing each modules in x,y position in the svg using fillRect
-    let path = { finder: "", codeword: "" };
-    let x = size;
-    let y = size;
-    for (let i = 0; i < qr.data.length; i++) {
-      const bit = qr.data[i];
-      if (bit) {
-        moduleStyleFunction(path, { x, y, size, index: i }, qr);
-      }
-      x += size;
-      if (i % qr.gridSize === qr.gridSize - 1) {
-        x = size;
-        y += size;
-      }
     }
     // if image place the image in center, QR ErrorCorrectionLevel Should be high and Image should not be more that 25-30% of the qr size to scan the QR code properly
     if (props.image) {

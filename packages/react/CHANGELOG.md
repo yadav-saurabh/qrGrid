@@ -1,5 +1,11 @@
 # @qrgrid/react
 
+## 1.3.2
+
+### Patch Changes
+
+- remove watch on all props
+
 ## 1.3.1
 
 ### Patch Changes

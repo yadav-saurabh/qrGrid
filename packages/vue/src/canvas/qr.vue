@@ -20,7 +20,6 @@ const DEFAULT_IMG_OPACITY = 1;
 const DEFAULT_IMG_BORDER = false;
 const DEFAULT_IMG_OVERLAP = true;
 
-
 /**
  * To apply default module style
  */
@@ -225,9 +224,21 @@ function drawBackgroundColor(ctx: CanvasRenderingContext2D) {
 }
 
 onMounted(() => generateQr());
-watch(props, () => {
-  generateQr();
-});
+watch(
+  [
+    () => props.input,
+    () => props.qrOptions?.errorCorrection,
+    () => props.size,
+    () => props.image?.src,
+    () => props.image?.opacity,
+    () => props.image?.sizePercent,
+    () => props.image?.overlap,
+    () => props.image?.border,
+  ],
+  () => {
+    generateQr();
+  }
+);
 defineExpose({ canvasRef });
 </script>
 

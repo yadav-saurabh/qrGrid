@@ -1,5 +1,11 @@
 # @qrgrid/vue
 
+## 1.4.2
+
+### Patch Changes
+
+- remove watch on all props
+
 ## 1.4.1
 
 ### Patch Changes
