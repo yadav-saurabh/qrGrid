@@ -52,7 +52,7 @@ const codewordColor = ref("currentColor");
 const backgroundColor = ref("transparent");
 
 const imgSrc = ref("");
-const imgOverlap = ref(false);
+const imgOverlap = ref(true);
 const imgBorder = ref(false);
 
 const outerFinderCorner = new Set<CornerType>();

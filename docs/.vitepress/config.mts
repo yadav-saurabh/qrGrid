@@ -68,7 +68,7 @@ export default defineConfig({
     },
     footer: {
       message: "Released under the MIT License.",
-      copyright: "Copyright © 2024-present Saurabh Yadav",
+      copyright: "Copyright © 2024-present <a href='https://yadav-saurabh.com' target='_blank'>Saurabh Yadav </a>",
     },
   },
   vite: {

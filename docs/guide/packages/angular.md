@@ -138,7 +138,7 @@ Explore [Styles](./styles) for custom styling and other utilities
   import { downloadQr } from "@qrgrid/styles/canvas/utils";
 
   // inside class component
-  @ViewChild(Qr) canvasQr!: CanvasQr;
+  @ViewChild(CanvasQr) canvasQr!: CanvasQr;
 
   download() {
     if (this.canvasQr?.canvas?.nativeElement) {
@@ -152,7 +152,7 @@ Explore [Styles](./styles) for custom styling and other utilities
   import { downloadQr} from "@qrgrid/styles/svg/utils";
 
   // inside class component
-  @ViewChild(Qr) svgQr!: SvgQr;
+  @ViewChild(SvgQr) svgQr!: SvgQr;
 
   download() {
     if (this.svgQr?.svg?.nativeElement) {
