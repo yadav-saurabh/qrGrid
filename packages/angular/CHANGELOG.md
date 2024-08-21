@@ -1,5 +1,11 @@
 # @qrgrid/angular
 
+## 1.0.0-beta.3
+
+### Patch Changes
+
+- fix canvas clear before drawing
+
 ## 1.0.0-beta.2
 
 ### Patch Changes

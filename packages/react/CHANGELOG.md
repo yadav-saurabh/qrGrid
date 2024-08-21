@@ -1,5 +1,11 @@
 # @qrgrid/react
 
+## 1.3.0
+
+### Minor Changes
+
+- image overlap and background
+
 ## 1.2.1
 
 ### Patch Changes

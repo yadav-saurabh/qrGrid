@@ -6,13 +6,36 @@
 import { ref, onMounted, watch } from "vue";
 import { QR, ReservedBits } from "@qrgrid/core";
 
-import { ModuleStyleFunctionParams, QrProps } from "./types";
+import {
+  ModuleStyleFunction,
+  ModuleStyleFunctionParams,
+  QrProps,
+} from "./types";
 
+/**
+ * constants
+ */
 const DEFAULT_SVG_SIZE = 400;
 const DEFAULT_BG_COLOR = "black";
 const DEFAULT_COLOR = "white";
-const DEFAULT_IMG_SIZE = 20;
+const DEFAULT_IMG_SIZE = 15;
 const DEFAULT_IMG_OPACITY = 1;
+const DEFAULT_IMG_BORDER = false;
+const DEFAULT_IMG_OVERLAP = true;
+
+/**
+ * props
+ */
+const props = defineProps<QrProps>();
+
+/**
+ * refs
+ */
+const finderPatternPath = ref<string>("");
+const svgRef = ref(null);
+const codewordPath = ref("");
+const svgSize = ref(props.size || DEFAULT_SVG_SIZE);
+const imgData = ref({ img: "", a: 0, x: 0, y: 0, height: 0, width: 0 });
 
 /**
  * To apply default module style
@@ -30,6 +53,9 @@ function applyModuleStyle(
   }
 }
 
+/**
+ * get the fill color of the svg path
+ */
 function getColor(colorProp: QrProps["color"], type: "finder" | "codeword") {
   let color = DEFAULT_COLOR;
   if (colorProp && typeof colorProp === "string") {
@@ -46,15 +72,8 @@ function getColor(colorProp: QrProps["color"], type: "finder" | "codeword") {
   return color;
 }
 
-const props = defineProps<QrProps>();
-const finderPatternPath = ref<string>("");
-const svgRef = ref(null);
-const codewordPath = ref("");
-const svgSize = ref(props.size || DEFAULT_SVG_SIZE);
-const imgData = ref({ img: "", x: 0, y: 0, height: 0, width: 0 });
-
 /**
- * generateQr draws the QR code on a canvas
+ * generateQr draws the QR code as a svg
  */
 function generateQr() {
   // if no input clear the svg
@@ -94,38 +113,128 @@ function generateQr() {
       y += size;
     }
   }
-  // if image place the image in center, QR ErrorCorrectionLevel Should be high and Image should not be more that 25-30% of the svg size to scan the QR code properly
+  // if image place the image in center, QR ErrorCorrectionLevel Should be high and Image should not be more that 25-30% of the qr size to scan the QR code properly
   if (props.image) {
-    const img = new Image();
-    img.src = props.image.src;
-    if (!props.image!.src) {
-      imgData.value = { img: "", x: 0, y: 0, height: 0, width: 0 };
-    }
-    img.onload = () => {
-      const height =
-        svgSize.value * (props.image!.sizePercent || DEFAULT_IMG_SIZE) * 0.01;
-      const width =
-        svgSize.value * (props.image!.sizePercent || DEFAULT_IMG_SIZE) * 0.01;
-      const x = (svgSize.value - width) / 2;
-      const y = (svgSize.value - height) / 2;
-
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx = canvas.getContext("2d")!;
-      ctx.globalAlpha = props.image!.opacity || DEFAULT_IMG_OPACITY;
-      ctx.drawImage(img, 0, 0, height, width);
-
-      imgData.value = { img: canvas.toDataURL(), height, width, x, y };
-    };
+    drawImageInCenter(qr, size, moduleStyleFunction);
+    return;
   }
-  // event once everything is generated but not updated the path value to render
-  if (props.onGenerated) {
-    props.onGenerated(path, size, qr);
+  // placing each modules in x,y position in the qr using fillRect
+  drawQrModules(qr, size, moduleStyleFunction);
+}
+
+/**
+ * if image place it in center of the qr
+ */
+function drawImageInCenter(
+  qr: QR,
+  size: number,
+  moduleStyleFunction: ModuleStyleFunction
+) {
+  const img = new Image();
+  img.src = props.image!.src;
+  if (!props.image?.src) {
+    imgData.value = { img: "", a: 0, x: 0, y: 0, height: 0, width: 0 };
+  }
+  // set overlap and border to bool if undefined
+  props.image!.overlap =
+    props.image!.overlap === undefined
+      ? DEFAULT_IMG_OVERLAP
+      : props.image!.overlap;
+  props.image!.border =
+    props.image!.border === undefined
+      ? DEFAULT_IMG_BORDER
+      : props.image!.border;
+  // on image load
+  img.onload = () => {
+    // Calculate the desired height and width while maintaining the aspect ratio
+    const maxImgSizePercent = props.image?.sizePercent || DEFAULT_IMG_SIZE;
+    const maxDimension = svgSize.value * (maxImgSizePercent * 0.01);
+    let { height, width } = img;
+    // Calculate aspect ratio
+    const imgAspectRatio = img.width / img.height;
+    if (width > height) {
+      width = maxDimension;
+      height = maxDimension / imgAspectRatio;
+    } else {
+      height = maxDimension;
+      width = maxDimension * imgAspectRatio;
+    }
+    const x = (svgSize.value - width) / 2;
+    const y = (svgSize.value - height) / 2;
+
+    // draw qr module first
+    const imgArea = { x, y, dx: x + width, dy: y + height };
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d")!;
+    ctx.globalAlpha = props.image!.opacity || DEFAULT_IMG_OPACITY;
+    ctx.drawImage(img, 0, 0, height, width);
+    const a = props.image?.opacity || DEFAULT_IMG_OPACITY;
+    imgData.value = { img: canvas.toDataURL(), height, width, x, y, a };
+    // qr modules
+    drawQrModules(qr, size, moduleStyleFunction, imgArea);
+  };
+  // on image load fail
+  img.onerror = () => {
+    console.error("qrgrid: Error while loading the image");
+    // qr modules
+    drawQrModules(qr, size, moduleStyleFunction);
+  };
+}
+
+/**
+ * placing each modules in x,y position
+ */
+function drawQrModules(
+  qr: QR,
+  size: number,
+  moduleStyleFunction: ModuleStyleFunction,
+  imgArea?: { x: number; y: number; dx: number; dy: number }
+) {
+  let path = { finder: "", codeword: "" };
+  let x = size;
+  let y = size;
+  for (let i = 0; i < qr.data.length; i++) {
+    const bit = qr.data[i];
+    if (bit && !overlappingImage({ x, y, size }, imgArea)) {
+      moduleStyleFunction(path, { index: i, x, y, size }, qr);
+    }
+    x += size;
+    if (i % qr.gridSize === qr.gridSize - 1) {
+      x = size;
+      y += size;
+    }
   }
   finderPatternPath.value = path.finder;
   codewordPath.value = path.codeword;
+  // event once everything is done
+  if (props.onGenerated) {
+    props.onGenerated(path, size, qr);
+  }
+}
+
+/**
+ * check if the image overlaps with the path bit
+ */
+function overlappingImage(
+  module: { x: number; y: number; size: number },
+  imgArea?: { x: number; y: number; dx: number; dy: number }
+): boolean {
+  if (!imgArea || props.image?.overlap === true) {
+    return false;
+  }
+
+  const moduleXEnd = module.x + module.size;
+  const moduleYEnd = module.y + module.size;
+  const border = props.image?.border ? module.size : 0;
+
+  return (
+    module.x < imgArea.dx + border &&
+    module.y < imgArea.dy + border &&
+    moduleXEnd > imgArea.x - border &&
+    moduleYEnd > imgArea.y - border
+  );
 }
 
 onMounted(() => generateQr());
@@ -162,7 +271,7 @@ defineExpose({ svgRef });
       :y="imgData.y"
       :height="imgData.height"
       :width="imgData.width"
-      :opacity="props.image?.opacity || DEFAULT_IMG_OPACITY"
+      :opacity="imgData.a"
       :href="imgData.img"
     />
   </svg>

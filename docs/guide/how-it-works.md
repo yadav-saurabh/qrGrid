@@ -33,3 +33,79 @@ After encoding, a grid is created based on the `gridSize`. This grid includes bo
 Finally, the binary data is mapped onto the grid. Each `1` corresponds to a dark-colored module, while each `0` corresponds to a light-colored module. This pattern of dark and light modules forms the visual structure of the QR code, allowing it to store and transmit data effectively.
 
 <ModuleQr />
+
+## Code Example
+
+### Data Encoding
+
+Encoding using `@qrgrid/core`
+
+```typescript
+import { QR } from "@qrgrid/core";
+
+const qr = new QR("Hello World!");
+
+```
+
+### Grid Formation
+
+Calculate module size
+
+```typescript
+import { QR } from "@qrgrid/core";
+// data encoding
+const qr = new QR("Hello World!");
+// [!code focus:8]
+// QR_SIZE -> size of QR without border
+const moduleSize = Math.floor(QR_SIZE / (qr.gridSize + 1.5));
+// calculating border
+const border = Math.ceil(moduleSize * qr.gridSize - QR_SIZE) + moduleSize * 2;
+// Assuming canvas is used, update the canvas size
+canvas.height = QR_SIZE + border;
+canvas.width = QR_SIZE + border;
+```
+
+Looping through the data
+
+```typescript
+import { QR } from "@qrgrid/core";
+// data encoding
+const qr = new QR("Hello World!");
+// [!code focus:4]
+let x = moduleSize;
+let y = moduleSize;
+for (let i = 0; i < qr.data.length; i++) {
+  /**
+   * Module Assignment logic in between
+   */
+  x += size; // [!code focus:6]
+  if (i % qr.gridSize === qr.gridSize - 1) {
+    x = moduleSize;
+    y += moduleSize;
+  }
+}
+```
+
+### Module Assignment
+
+Fill the dark modules
+
+```typescript
+import { QR } from "@qrgrid/core";
+// data encoding
+const qr = new QR("Hello World!");
+let x = moduleSize;
+let y = moduleSize;
+for (let i = 0; i < qr.data.length; i++) {
+  const bit = qr.data[i]; // [!code focus:5]
+  if (bit) {
+    // Assuming canvas is used, fill the content
+    ctx.fillRect(x, y, moduleSize, moduleSize);
+  }
+  x += moduleSize;
+  if (i % qr.gridSize === qr.gridSize - 1) {
+    x = moduleSize;
+    y += moduleSize;
+  }
+}
+```

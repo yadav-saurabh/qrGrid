@@ -177,6 +177,15 @@ function CanvasQr({ input, errorCorrection }: PropTypes) {
           />
           <p>image:- with image in between</p>
         </div>
+        <div className="qr">
+          <Qr
+            input={input}
+            qrOptions={{ errorCorrection }}
+            moduleStyle={qrModuleStyleA}
+            image={{ src: "./vite.svg", overlap: false }}
+          />
+          <p>image:- overlap: false</p>
+        </div>
       </div>
     </>
   );

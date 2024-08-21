@@ -11,12 +11,12 @@ npm install
 
 ```sh
 # Start docs dev server
-npm run dev
+npm run dev -- --filter @qrgrid/docs
 ```
 
 ## Build
 
 ```sh
 # Build docs
-npm run docs:build
+npm run docs:build -- --filter @qrgrid/docs
 ```

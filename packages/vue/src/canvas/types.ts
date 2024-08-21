@@ -30,6 +30,8 @@ export type QrImageOption = {
   src: string;
   sizePercent?: number;
   opacity?: number;
+  border?: boolean;
+  overlap?: boolean;
 };
 
 /**

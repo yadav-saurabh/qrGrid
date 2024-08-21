@@ -129,6 +129,8 @@ export class Qr {
 
   private generateQr() {
     if (!this.input) {
+      this.finderPath = "";
+      this.codewordPath = "";
       return;
     }
     // Encode data

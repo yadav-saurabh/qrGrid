@@ -1,5 +1,11 @@
 # @qrgrid/vue
 
+## 1.4.0
+
+### Minor Changes
+
+- image overlap and background
+
 ## 1.3.1
 
 ### Patch Changes

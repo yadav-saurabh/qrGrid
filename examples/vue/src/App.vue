@@ -14,8 +14,8 @@ const errorCorrection = ref<ErrorCorrectionLevelType>("M");
     <textarea
       placeholder="Text To Encode"
       v-model="input"
-      rows="{4}"
-      cols="{50}"
+      :rows="4"
+      :cols="50"
     />
     <select
       name="errorCorrection"

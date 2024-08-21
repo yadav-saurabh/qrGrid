@@ -97,8 +97,8 @@ function SvgQr({ input, errorCorrection }: PropTypes) {
           getQrData={setQrData}
         />
       </div>
+      {/* module style */}
       <div className="qrContainer">
-        {/* module style */}
         <div className="qr">
           <Qr
             input={input}
@@ -153,6 +153,14 @@ function SvgQr({ input, errorCorrection }: PropTypes) {
             image={{ src: "./vite.svg" }}
           />
           <p>image:- with image in between</p>
+        </div>
+        <div className="qr">
+          <Qr
+            input={input}
+            qrOptions={{ errorCorrection }}
+            image={{ src: "./vite.svg", overlap: false }}
+          />
+          <p>image:- overlap: false</p>
         </div>
       </div>
     </>

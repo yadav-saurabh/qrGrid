@@ -159,6 +159,8 @@ export class Qr implements OnInit, OnChanges {
         : this.image!.border;
     img.onload = () => {
       const canvasSize = this.canvas.nativeElement.height;
+      // clear previous canvas
+      this.ctx.clearRect(0, 0, canvasSize, canvasSize);
       // Calculate the desired height and width while maintaining the aspect ratio
       const maxImgSizePercent = this.image?.sizePercent || DEFAULT_IMG_SIZE;
       const maxDimension = canvasSize * (maxImgSizePercent * 0.01);
