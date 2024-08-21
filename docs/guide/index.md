@@ -87,7 +87,31 @@ yarn add @qrgrid/vue
 
 :::
 
-For more details, see the [documentation](./packages/vue).
+### Angular
+
+Implementation of the Qr grid library for Angular applications.
+
+::: code-group
+
+```sh [npm]
+npm install @qrgrid/angular
+```
+
+```sh [bun]
+bun add @qrgrid/angular
+```
+
+```sh [pnpm]
+pnpm install @qrgrid/angular
+```
+
+```sh [yarn]
+yarn add @qrgrid/angular
+```
+
+:::
+
+For more details, see the [documentation](./packages/angular).
 
 ### Server
 

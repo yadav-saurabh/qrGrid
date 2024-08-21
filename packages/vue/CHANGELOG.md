@@ -1,5 +1,11 @@
 # @qrgrid/vue
 
+## 1.4.1
+
+### Patch Changes
+
+- Fix on generate event call
+
 ## 1.4.0
 
 ### Minor Changes

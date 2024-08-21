@@ -8,8 +8,9 @@ import {
   downloadQr,
 } from "@qrgrid/styles/svg";
 import { onMounted, onUnmounted, ref } from "vue";
-import SaurabhImg from "../../assets/yadav-saurabh.png";
 
+import SaurabhImg from "../../assets/yadav-saurabh.png";
+import Switch from "./Switch.vue";
 import ColorPicker from "./ColorPicker.vue";
 import ModuleStyles from "./GenerateQrModuleStyles.vue";
 import { ChevronDown, UploadIcon } from "../icons";
@@ -51,6 +52,8 @@ const codewordColor = ref("currentColor");
 const backgroundColor = ref("transparent");
 
 const imgSrc = ref("");
+const imgOverlap = ref(false);
+const imgBorder = ref(false);
 
 const outerFinderCorner = new Set<CornerType>();
 const innerFinderCorner = new Set<CornerType>();
@@ -269,6 +272,18 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
+        <div class="input-container" v-if="imgSrc">
+          <p class="label" :style="{ margin: 0, paddingLeft: '1rem' }">
+            Overlap
+          </p>
+          <Switch class="img-switch" v-model:checked="imgOverlap" />
+        </div>
+        <div class="input-container" v-if="imgSrc && !imgOverlap">
+          <p class="label" :style="{ margin: 0, paddingLeft: '1rem' }">
+            Border
+          </p>
+          <Switch class="img-switch" v-model:checked="imgBorder" />
+        </div>
       </div>
       <div class="qr-container">
         <div>
@@ -283,7 +298,7 @@ onUnmounted(() => {
             :data-codeword-style="codewordStyle"
             :data-outer-finder-style="outerFinderStyle"
             :data-inner-finder-style="innerFinderStyle"
-            :image="{ src: imgSrc }"
+            :image="{ src: imgSrc, overlap: imgOverlap, border: imgBorder }"
           />
           <div class="btn-container">
             <button class="btn" @click="onDownload">
@@ -361,6 +376,10 @@ onUnmounted(() => {
 }
 .img:hover {
   border-color: var(--vp-c-brand);
+}
+.img-switch {
+  margin: 0;
+  padding: 0;
 }
 .qr-container {
   display: flex;

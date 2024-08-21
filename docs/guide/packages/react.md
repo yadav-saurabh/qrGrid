@@ -51,7 +51,7 @@ import { Canvas } from "@qrgrid/react";
 | ----------- | ----------------------------------------------------------- | -------------- | --------------------- |
 | input       | string                                                      | Data to encode |                       |
 | qrOptions?  | [QrOptions](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/core/src/qr.ts#L47-L49) | Options for QR encoding |     |
-| image?      | [QrImageOption](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L29-L33) | Image options for the image in QR code | sizePercent: `20` <br> opacity: `1`  |
+| image?      | [QrImageOption](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L29-L37) | Image options for the image in QR code | sizePercent: `15`  opacity: `1`  overlap: `true`  border: `false`  |
 | size?        | number                                                      | Canvas size |  400   |
 | bgColor?     | [QrColor](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L24) \| ((ctx: CanvasRenderingContext2D) => [QrColor]((https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L24)))     | Background color | black   |
 | color?       | [QrColor](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L24) \| ((ctx: CanvasRenderingContext2D) => [QrColor]((https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L24)))     | QR code color |  white   |
@@ -84,7 +84,7 @@ import { Qr } from "@qrgrid/react/svg";
 | ----------- | ----------------------------------------------------------- | -------------- | --------------------- |
 | input       | string                                                      | Data to encode |                       |
 | qrOptions?  | [QrOptions](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/core/src/qr.ts#L47-L49) | Qr Options for QR encoding |     |
-| image?      | [QrImageOption](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/svg/types.ts#L21-L25) | Image options for image in the QR code | sizePercent: `20` <br> opacity: `1`  |
+| image?      | [QrImageOption](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/svg/types.ts#L21-L27) | Image options for image in the QR code | sizePercent: `15`  opacity: `1`  overlap: `true`  border: `false`  |
 | size?        | number                                                      | SVG size |  400   |
 | bgColor?     | string                                                      | Background color | black   |
 | color?       | string \| \{ codeword?: string; finder?: string \}  | QR code color            |  white   |
@@ -134,6 +134,10 @@ Explore [Styles](./styles) for custom styling and other utilities
 
   ```tsx
   <Qr input="Hello World!" image={{ src: "./vite.svg" }} />
+  ```
+
+  ```tsx
+  <Qr input="Hello World!" image={{ src: "./vite.svg", overlap: false }} />
   ```
 
 - Downloading using [@qrgrid/styles](https://www.npmjs.com/package/@qrgrid/styles)

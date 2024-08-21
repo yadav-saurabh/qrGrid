@@ -211,12 +211,12 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
         y += size;
       }
     }
-    setFinderPatternPath(path.finder);
-    setCodewordPath(path.codeword);
-    // event once everything is done
+    // event once everything is done before updating the path
     if (props.onGenerated) {
       props.onGenerated(path, size, qr);
     }
+    setFinderPatternPath(path.finder);
+    setCodewordPath(path.codeword);
   }
 
   /**

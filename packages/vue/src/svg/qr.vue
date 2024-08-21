@@ -206,12 +206,12 @@ function drawQrModules(
       y += size;
     }
   }
-  finderPatternPath.value = path.finder;
-  codewordPath.value = path.codeword;
-  // event once everything is done
+  // event once everything is done before updating the path
   if (props.onGenerated) {
     props.onGenerated(path, size, qr);
   }
+  finderPatternPath.value = path.finder;
+  codewordPath.value = path.codeword;
 }
 
 /**
