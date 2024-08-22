@@ -13,7 +13,7 @@ Qr grid is a powerful, customizable JavaScript library for generating QR codes. 
 
 ### Core
 
-Implementation of the Qr grid library for Web applications.
+Installation of the Qr grid library for Web applications.
 
 ::: code-group
 
@@ -39,7 +39,7 @@ For more details, see the [documentation](./packages/core).
 
 ### React
 
-Implementation of the Qr grid library for React applications.
+Installation of the Qr grid library for React applications.
 
 ::: code-group
 
@@ -65,7 +65,7 @@ For more details, see the [documentation](./packages/react).
 
 ### Vue
 
-Implementation of the Qr grid library for Vue applications.
+Installation of the Qr grid library for Vue applications.
 
 ::: code-group
 
@@ -89,7 +89,7 @@ yarn add @qrgrid/vue
 
 ### Angular
 
-Implementation of the Qr grid library for Angular applications.
+Installation of the Qr grid library for Angular applications.
 
 ::: code-group
 
@@ -115,7 +115,7 @@ For more details, see the [documentation](./packages/angular).
 
 ### Server
 
-Implementation of the Qr grid library for server applications.
+Installation of the Qr grid library for server applications.
 
 ::: code-group
 

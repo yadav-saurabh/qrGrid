@@ -29,7 +29,7 @@ export type QrOptionType = {
     path: ModuleStyleFunctionParams[0],
     size: number,
     qr: QR
-  ) => void;
+  ) => void | string;
 };
 
 const DEFAULT_SIZE = 400;
@@ -107,15 +107,16 @@ function generateSvg(qr: QR, options?: QrOptionType) {
     }
   }
   // event once everything is generated but not updated the path value
+  let onGeneratedString = "";
   if (options?.onGenerated) {
-    options.onGenerated(path, size, qr);
+    onGeneratedString = options.onGenerated(path, size, qr) || "";
   }
   return svgMeta
     .replaceAll("{{size}}", svgSize.toString())
     .replace("{{bgColor}}", options?.bgColor || DEFAULT_BG_COLOR)
     .replace("{{finderColor}}", getColor(options?.color, "finder"))
     .replace("{{codewordColor}}", getColor(options?.color, "codeword"))
-    .replace("{{onGenerated}}", "")
+    .replace("{{onGenerated}}", onGeneratedString)
     .replace("{{finderPath}}", path.finder)
     .replace("{{codewordPath}}", path.codeword);
 }

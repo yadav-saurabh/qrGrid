@@ -16,8 +16,8 @@ The Ultimate Customizable QR Code JavaScript Library
   <a href="https://www.npmjs.com/package/@qrgrid/core"><img src="https://img.shields.io/npm/v/@qrgrid/core?label=core" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/react"><img src="https://img.shields.io/npm/v/@qrgrid/react?label=react" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/vue"><img src="https://img.shields.io/npm/v/@qrgrid/vue?label=vue" alt="npm package"></a>
-  <a href="https://www.npmjs.com/package/@qrgrid/styles"><img src="https://img.shields.io/npm/v/@qrgrid/styles?label=styles" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/angular"><img src="https://img.shields.io/npm/v/@qrgrid/angular?label=angular" alt="npm package"></a>
+  <a href="https://www.npmjs.com/package/@qrgrid/styles"><img src="https://img.shields.io/npm/v/@qrgrid/styles?label=styles" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/cli"><img src="https://img.shields.io/npm/v/@qrgrid/cli?label=cli" alt="npm package"></a>
   <a href="https://www.npmjs.com/package/@qrgrid/server"><img src="https://img.shields.io/npm/v/@qrgrid/server?label=server" alt="npm package"></a>
 </p>
@@ -34,6 +34,7 @@ The Ultimate Customizable QR Code JavaScript Library
   - [React](#react)
   - [Vue](#vue)
   - [Angular](#angular)
+  - [Styles](#styles)
 - [Credits](#credits)
 - [License](#license)
 
@@ -108,7 +109,7 @@ app.listen(5000);
 
 ### React
 
-This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**. It also includes utility functions to download images and styling Qr codes.
+This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**.
 
 Installation:
 
@@ -127,7 +128,7 @@ import { Canvas, Svg } from "@qrgrid/react";
 
 ### Vue
 
-This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**. It also includes utility functions to download images and styling Qr codes.
+This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**.
 
 Installation:
 
@@ -146,7 +147,7 @@ import { Canvas, Svg } from "@qrgrid/vue";
 
 ### Angular
 
-This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**. It also includes utility functions to download images and styling Qr codes.
+This package serves as a wrapper for `@qrgrid/core`. Provides two ways to generate the Qr using **Canvas** and **Svg**.
 
 Installation:
 
@@ -160,6 +161,29 @@ Example usage:
 import { CanvasQr, SvgQr } from "@qrgrid/angular";
 
 <qr input="Hello World!"/>
+```
+
+### Styles
+
+It provides utility functions and styling options for customizing QR codes.
+
+Installation:
+
+```sh
+npm i @qrgrid/styles
+```
+
+Example usage (React):
+
+```javascript
+import { Qr } from "@qrgrid/react/canvas";
+import { downloadQr } from "@qrgrid/styles/canvas/utils"
+
+const canvasRef = useRef<HTMLCanvasElement | null>(null);
+// pass the ref to the download utility function
+downloadQr(canvasRef.current, "png", "qr");
+
+<Qr input="Hello World" ref="canvasRef" />
 ```
 
 ## Credits
