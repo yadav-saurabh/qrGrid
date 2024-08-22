@@ -290,15 +290,17 @@ onUnmounted(() => {
           <Qr
             class="qr"
             ref="qrRef"
+            :watchKey="`${codewordStyle}-${outerFinderStyle}-${innerFinderStyle}`"
             :bgColor="backgroundColor"
             :input="input"
             :color="{ finder: finderColor, codeword: codewordColor }"
             :moduleStyle="qrModuleStyle"
             :size="999"
-            :data-codeword-style="codewordStyle"
-            :data-outer-finder-style="outerFinderStyle"
-            :data-inner-finder-style="innerFinderStyle"
-            :image="imgSrc ? { src: imgSrc, overlap: imgOverlap, border: imgBorder } : undefined"
+            :image="
+              imgSrc
+                ? { src: imgSrc, overlap: imgOverlap, border: imgBorder }
+                : undefined
+            "
           />
           <div class="btn-container">
             <button class="btn" @click="onDownload">

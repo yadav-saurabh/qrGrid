@@ -42,6 +42,7 @@ export type QrProps = {
   qrOptions?: QrOptions;
   image?: QrImageOption;
   size?: number;
+  watchKey?: string | number;
   bgColor?: QrColor | ((ctx: CanvasRenderingContext2D) => QrColor);
   color?: QrColor | ((ctx: CanvasRenderingContext2D) => QrColor);
   moduleStyle?: ModuleStyleFunction;

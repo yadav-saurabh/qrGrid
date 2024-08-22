@@ -299,8 +299,7 @@ onUnmounted(() => {
         :color="{ finder: finderColor, codeword: codewordColor }"
         :moduleStyle="qrModuleStyle"
         :size="svgSize"
-        :data-codeword-style="[...codewordStyle].join()"
-        :data-finder-style="[...finderStyle].join()"
+        :watchKey="`${[...codewordStyle].join()}-${[...finderStyle].join()}`"
       />
     </div>
   </div>

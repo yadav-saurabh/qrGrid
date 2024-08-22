@@ -61,6 +61,7 @@ OR
 | qrOptions?  | [QrOptions](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/core/src/qr.ts#L47-L49) | Options for QR encoding |     |
 | image?      | [QrImageOption](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/vue/src/canvas/types.ts#L29-L35) | Image options for the image in QR code | sizePercent: `15`  opacity: `1`  overlap: `true`  border: `false`  |
 | size?        | number                                                      | Canvas size |  400   |
+| watchKey?    | string \| number                                            | Key to watch for regenerating the QR code (besides `input`, `size`,`qrOptions` and `image`). |    |
 | bgColor?     | [QrColor](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/vue/src/canvas/types.ts#L22) \| ((ctx: CanvasRenderingContext2D) => [QrColor]((https://github.com/yadav-saurabh/qrGrid/blob/main/packages/vue/src/canvas/types.ts#L22)))     | Background color | black   |
 | color?       | [QrColor](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/vue/src/canvas/types.ts#L22) \| ((ctx: CanvasRenderingContext2D) => [QrColor]((https://github.com/yadav-saurabh/qrGrid/blob/main/packages/vue/src/canvas/types.ts#L22)))     | QR code color |  white   |
 | moduleStyle?        | [ModuleStyleFunction](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/vue/src/canvas/types.ts#L10-L14)               | Custom styles for QR modules |    |
@@ -102,6 +103,7 @@ OR
 | qrOptions?  | [QrOptions](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/core/src/qr.ts#L47-L49) | Qr Options for QR encoding |     |
 | image?      | [QrImageOption](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/vue/src/svg/types.ts#L21-L27) | Image options for image in the QR code | sizePercent: `15`  opacity: `1`  overlap: `true`  border: `false` |
 | size?        | number                                                      | SVG size |  400   |
+| watchKey?    | string \| number                                            | Key to watch for regenerating the QR code (besides `input`, `size`, `qrOptions` and `image`). |    |
 | bgColor?     | string                                                      | Background color | black   |
 | color?       | string \| \{ codeword?: string; finder?: string \}  | QR code color            |  white   |
 | moduleStyle? | [ModuleStyleFunction](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/vue/src/svg/types.ts#L10-L14)               | Custom styles for QR modules |    |

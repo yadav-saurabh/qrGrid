@@ -53,6 +53,7 @@ import { Canvas } from "@qrgrid/react";
 | qrOptions?  | [QrOptions](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/core/src/qr.ts#L47-L49) | Options for QR encoding |     |
 | image?      | [QrImageOption](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L29-L37) | Image options for the image in QR code | sizePercent: `15`  opacity: `1`  overlap: `true`  border: `false`  |
 | size?        | number                                                      | Canvas size |  400   |
+| watchKey?    | string \| number                                            | Key to watch for regenerating the QR code (besides `input`, `size`, `qrOptions` and `image`). |    |
 | bgColor?     | [QrColor](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L24) \| ((ctx: CanvasRenderingContext2D) => [QrColor]((https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L24)))     | Background color | black   |
 | color?       | [QrColor](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L24) \| ((ctx: CanvasRenderingContext2D) => [QrColor]((https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L24)))     | QR code color |  white   |
 | moduleStyle?        | [ModuleStyleFunction](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/canvas/types.ts#L10-L14)               | Custom styles for QR modules |    |
@@ -86,6 +87,7 @@ import { Qr } from "@qrgrid/react/svg";
 | qrOptions?  | [QrOptions](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/core/src/qr.ts#L47-L49) | Qr Options for QR encoding |     |
 | image?      | [QrImageOption](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/svg/types.ts#L21-L27) | Image options for image in the QR code | sizePercent: `15`  opacity: `1`  overlap: `true`  border: `false`  |
 | size?        | number                                                      | SVG size |  400   |
+| watchKey?    | string \| number                                            | Key to watch for regenerating the QR code (besides `input`, `size`, `qrOptions` and `image`). |    |
 | bgColor?     | string                                                      | Background color | black   |
 | color?       | string \| \{ codeword?: string; finder?: string \}  | QR code color            |  white   |
 | moduleStyle? | [ModuleStyleFunction](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/react/src/svg/types.ts#L10-L14)               | Custom styles for QR modules |    |

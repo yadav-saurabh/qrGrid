@@ -54,6 +54,7 @@ function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
     props.image?.sizePercent,
     props.image?.overlap,
     props.image?.border,
+    props.watchKey,
   ]);
 
   /**

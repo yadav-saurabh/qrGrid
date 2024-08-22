@@ -82,6 +82,7 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
     props.image?.sizePercent,
     props.image?.overlap,
     props.image?.border,
+    props.watchKey,
   ]);
 
   /**
@@ -142,14 +143,9 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
       const maxDimension = svgSize * (maxImgSizePercent * 0.01);
       let { height, width } = img;
       // Calculate aspect ratio
-      const imgAspectRatio = img.width / img.height;
-      if (width > height) {
-        width = maxDimension;
-        height = maxDimension / imgAspectRatio;
-      } else {
-        height = maxDimension;
-        width = maxDimension * imgAspectRatio;
-      }
+      const ratio = Math.min(maxDimension / width, maxDimension / height);
+      width = width * ratio;
+      height = height * ratio;
       const x = (svgSize - width) / 2;
       const y = (svgSize - height) / 2;
 
@@ -160,7 +156,7 @@ function QrComponent(props: QrProps, ref: Ref<SVGSVGElement>) {
       canvas.height = height;
       const ctx = canvas.getContext("2d")!;
       ctx.globalAlpha = props.image!.opacity || DEFAULT_IMG_OPACITY;
-      ctx.drawImage(img, 0, 0, height, width);
+      ctx.drawImage(img, 0, 0, width, height);
       const a = props.image?.opacity || DEFAULT_IMG_OPACITY;
       setImgData({ img: canvas.toDataURL(), height, width, x, y, a });
       // qr modules

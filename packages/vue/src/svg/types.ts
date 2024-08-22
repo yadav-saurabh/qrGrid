@@ -36,6 +36,7 @@ export type QrProps = {
   bgColor?: string;
   color?: string | { codeword?: string; finder?: string };
   image?: QrImageOption;
+  watchKey?: string | number;
   moduleStyle?: ModuleStyleFunction;
   getQrData?: (qr: QR) => void;
   onGenerated?: (

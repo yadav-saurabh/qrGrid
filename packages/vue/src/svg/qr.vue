@@ -136,14 +136,9 @@ function drawImageInCenter(
     const maxDimension = svgSize.value * (maxImgSizePercent * 0.01);
     let { height, width } = img;
     // Calculate aspect ratio
-    const imgAspectRatio = img.width / img.height;
-    if (width > height) {
-      width = maxDimension;
-      height = maxDimension / imgAspectRatio;
-    } else {
-      height = maxDimension;
-      width = maxDimension * imgAspectRatio;
-    }
+    const ratio = Math.min(maxDimension / width, maxDimension / height);
+    width = width * ratio;
+    height = height * ratio;
     const x = (svgSize.value - width) / 2;
     const y = (svgSize.value - height) / 2;
 
@@ -233,6 +228,7 @@ watch(
     () => props.image?.sizePercent,
     () => props.image?.overlap,
     () => props.image?.border,
+    () => props.watchKey,
   ],
   () => {
     generateQr();

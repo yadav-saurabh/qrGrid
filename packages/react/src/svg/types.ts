@@ -33,6 +33,7 @@ export type QrProps = {
   input: string;
   size?: number;
   qrOptions?: QrOptions;
+  watchKey?: string | number;
   bgColor?: string;
   color?: string | { codeword?: string; finder?: string };
   image?: QrImageOption;

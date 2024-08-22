@@ -1,5 +1,11 @@
 # @qrgrid/vue
 
+## 1.4.3
+
+### Patch Changes
+
+- refactor
+
 ## 1.4.2
 
 ### Patch Changes

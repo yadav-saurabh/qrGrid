@@ -194,14 +194,9 @@ export class Qr {
       const maxDimension = this.svgSize * (maxImgSizePercent * 0.01);
       let { height, width } = img;
       // Calculate aspect ratio
-      const imgAspectRatio = img.width / img.height;
-      if (width > height) {
-        width = maxDimension;
-        height = maxDimension / imgAspectRatio;
-      } else {
-        height = maxDimension;
-        width = maxDimension * imgAspectRatio;
-      }
+      const ratio = Math.min(maxDimension / width, maxDimension / height);
+      width = width * ratio;
+      height = height * ratio;
       const x = (this.svgSize - width) / 2;
       const y = (this.svgSize - height) / 2;
 
@@ -212,7 +207,7 @@ export class Qr {
       canvas.height = height;
       const ctx = canvas.getContext("2d")!;
       ctx.globalAlpha = this.image!.opacity || DEFAULT_IMG_OPACITY;
-      ctx.drawImage(img, 0, 0, height, width);
+      ctx.drawImage(img, 0, 0, width, height);
       const a = this.image?.opacity || DEFAULT_IMG_OPACITY;
       this.imgData = { img: canvas.toDataURL(), height, width, x, y, a };
       // qr modules
