@@ -31,8 +31,8 @@ yarn dlx @qrgrid/cli -i "Hello world"
 
 :::
 
-| Option            |  Alias | Description                                                    |
-| ----------------  |  ------ | ------------------------------------------------------------- |
+| Option            |  Alias  | Description                                                   |
+| ----------------- | ------- | ------------------------------------------------------------- |
 | --input           |  -i     | Input data for generating the QR code.                        |
 | --errorCorrection |  -ec    | Set the error correction level (L, M, Q, H). Default `M`      |
 | --file            |  -f     | Save the QR code to a specified file path. (SVG format only)  |
@@ -45,20 +45,17 @@ yarn dlx @qrgrid/cli -i "Hello world"
 Generate and display a QR code for "Hello World" in the terminal:
 
 ```sh
-
 npx @qrgrid/cli -i "Hello World"
 ```
 
 Generate a QR code and save it as a SVG file:
 
 ```sh
-
 npx @qrgrid/cli -i "Hello World" -f qr.svg
 ```
 
 Run the CLI silently and save the output without displaying it:
 
 ```sh
-
 npx @qrgrid/cli -i "Hello World" -f qr.svg -s
 ```
