@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { QR, ReservedBits } from "@qrgrid/core";
+import {
+  ErrorCorrectionLevel,
+  ErrorCorrectionLevelType,
+  QR,
+  ReservedBits,
+} from "@qrgrid/core";
 import { ModuleStyleFunctionParams, Qr } from "@qrgrid/vue/svg";
 import {
   CornerType,
@@ -39,6 +44,7 @@ const STYLE_CORNER_KEYS = Object.keys(STYLE_CORNER_MAPPING).map((d) => +d);
 
 const qrRef = ref<InstanceType<typeof Qr> | null>(null);
 const input = ref("https://qrgrid.dev");
+const errorCorrection = ref<ErrorCorrectionLevelType>(ErrorCorrectionLevel.M);
 
 const outerFinderStyle = ref<number>(0);
 const innerFinderStyle = ref<number>(0);
@@ -204,6 +210,23 @@ onUnmounted(() => {
           cols="50"
           class="input"
         />
+        <div class="input-container">
+          <label class="label" for="errorCorrection">Error Correction</label>
+          <div>
+            <select
+              class="input"
+              name="errorCorrection"
+              :defaultValue="ErrorCorrectionLevel.M"
+              v-model="errorCorrection"
+            >
+              <option :value="ErrorCorrectionLevel.L">L (Low)</option>
+              <option :value="ErrorCorrectionLevel.M">M (Medium)</option>
+              <option :value="ErrorCorrectionLevel.Q">Q (Quartile)</option>
+              <option :value="ErrorCorrectionLevel.H">H (High)</option>
+            </select>
+            <p class="info">Use a higher error correction level for images.</p>
+          </div>
+        </div>
         <!-- Finder  -->
         <p class="sub-title">Finder</p>
         <div :style="{ marginLeft: '1rem' }">
@@ -296,6 +319,7 @@ onUnmounted(() => {
             :color="{ finder: finderColor, codeword: codewordColor }"
             :moduleStyle="qrModuleStyle"
             :size="999"
+            :qr-options="{ errorCorrection }"
             :image="
               imgSrc
                 ? { src: imgSrc, overlap: imgOverlap, border: imgBorder }
@@ -358,6 +382,17 @@ onUnmounted(() => {
   border-radius: 8px;
   background-color: var(--vp-c-default-soft);
   margin-bottom: 14px;
+}
+select.input {
+  padding: 8px;
+  margin: 0;
+}
+select.input option {
+  background-color: var(--vp-c-bg);
+}
+.info {
+  font-size: 10px;
+  margin: 0;
 }
 .input-container {
   margin: 4px 0;

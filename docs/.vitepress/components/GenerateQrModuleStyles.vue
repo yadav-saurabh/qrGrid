@@ -139,9 +139,9 @@ defineProps<{
   font-weight: 400;
 }
 .icon-btn {
-  padding: 10px;
-  margin: 2px;
-  border-radius: 8px;
+  padding: 6px;
+  margin: 1.2px;
+  border-radius: 6px;
   border: 1px solid transparent;
   background-color: var(--vp-c-default-soft);
 }
