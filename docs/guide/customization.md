@@ -38,6 +38,17 @@ Finder patterns are the three large squares located at the corners of a QR code.
 
 <FinderQr />
 
+## Error Correction
+
+Error correction in QR codes is a vital feature that allows them to remain scannable even if parts of the code are damaged or obscured. The error correction level determines how much of the QR code can be restored if it is partially lost. There are four error correction levels:
+
+- `L` (Low): Recovers 7% of data.
+- `M` (Medium): Recovers 15% of data.
+- `Q` (Quartile): Recovers 25% of data.
+- `H` (High): Recovers 30% of data.
+
+Choosing a higher error correction level provides more robustness but increases the QR code's complexity, leading to more modules. For customized QR codes with logos or unique designs, a higher error correction level is recommended to ensure the code remains functional despite design alterations.
+
 ## Customization Techniques
 
 ### Color Customization
@@ -52,9 +63,9 @@ Modules can be customized into different shapes, such as circles, hexagons etc. 
 
 <ShapeQr />
 
-### Logo Integration
+### Logo/Image Integration
 
-A logo can be added at the center of the QR code, but it's essential to avoid covering key elements like the finder patterns. Keep the logo size moderate to ensure that the QR code remains functional.
+When adding a logo to a QR code, it’s crucial to avoid covering key elements like the finder patterns. A moderately sized logo placed at the center works best. To ensure the QR code remains scannable even with a logo, it’s advisable to use a higher [error correction level](#error-correction). This allows the code to restore data if parts are obscured by the logo, ensuring reliable scanning across devices. Adjust the logo size and position carefully, balancing design with functionality.
 
 <LogoQr />
 
