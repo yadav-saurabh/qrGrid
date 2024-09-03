@@ -1,5 +1,12 @@
 # @qrgrid/cli
 
+## 1.0.0
+
+### Major Changes
+
+- release v1.0.0
+- Error Message on -ec to choose a valid option
+
 ## 1.0.0-beta.1
 
 ### Patch Changes

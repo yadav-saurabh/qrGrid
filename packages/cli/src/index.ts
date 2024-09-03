@@ -27,7 +27,8 @@ let qrOptions = {};
 if (cliOptions?.errorCorrection) {
   const ec = cliOptions.errorCorrection as keyof typeof ErrorCorrectionLevel;
   if (!(ec in ErrorCorrectionLevel)) {
-    console.log("error: errorCorrection is not a valid one");
+    const validEc = Object.keys(ErrorCorrectionLevel).join(" ");
+    console.log("error: valid errorCorrection are:-", validEc);
     process.exit(1);
   }
   qrOptions = { errorCorrection: ec };
