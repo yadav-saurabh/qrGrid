@@ -1,5 +1,11 @@
 # @qrgrid/vue
 
+## 1.4.4
+
+### Patch Changes
+
+- Fix: canvas size chnage
+
 ## 1.4.3
 
 ### Patch Changes

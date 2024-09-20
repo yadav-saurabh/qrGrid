@@ -245,9 +245,5 @@ defineExpose({ canvasRef });
 
 <!-- Qr component forwardRef  Qr component draws the QR code on a canvas / -->
 <template>
-  <canvas
-    :height="props.size || DEFAULT_CANVAS_SIZE"
-    :width="props.size || DEFAULT_CANVAS_SIZE"
-    ref="canvasRef"
-  />
+  <canvas ref="canvasRef" />
 </template>
