@@ -24,7 +24,7 @@ function qrModuleStyle(
   path.codeword += codeword;
 }
 
-function getCanvasSize() {
+function getSvgSize() {
   const width = window.innerWidth;
   if (width < 640) {
     return 220;
@@ -48,11 +48,11 @@ const animate = (timeStamp: number) => {
 };
 
 const onWindowResize = () => {
-  svgSize.value = getCanvasSize();
+  svgSize.value = getSvgSize();
 };
 
 onMounted(() => {
-  svgSize.value = getCanvasSize();
+  svgSize.value = getSvgSize();
   animationFrame = requestAnimationFrame(animate);
   window.addEventListener("resize", onWindowResize);
 });
