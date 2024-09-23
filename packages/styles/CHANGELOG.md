@@ -1,5 +1,12 @@
 # @qrgrid/styles
 
+## 1.2.2
+
+### Patch Changes
+
+- Renamed canvas utility functions
+- Removed extra code
+
 ## 1.2.1
 
 ### Patch Changes

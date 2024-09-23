@@ -2,9 +2,9 @@
  * Styling function that can be used to pass in Qr component
  * @module
  */
-import { QR, ReservedBits } from "@qrgrid/core";
+import { QR } from "@qrgrid/core";
 
-import { ModuleType, roundCornerFinderPattern, smoothEdges } from "./utils";
+import { ModuleType, drawSmoothEdges } from "./utils";
 
 /**
  * Qr Module styles as dots(circles)
@@ -28,9 +28,5 @@ export function smoothModuleStyle(
   qr: QR
 ) {
   ctx.fillStyle = "white";
-  if (qr.reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
-    roundCornerFinderPattern(ctx, module, qr);
-    return;
-  }
-  smoothEdges(ctx, module, qr);
+  drawSmoothEdges(ctx, module, qr);
 }
