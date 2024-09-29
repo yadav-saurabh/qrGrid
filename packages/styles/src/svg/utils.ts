@@ -2,7 +2,8 @@
  * Utils functions that can be used in styling the module or downloading the qr image
  * @module
  */
-import { QR, ReservedBits } from "@qrgrid/core";
+import { QR } from "@qrgrid/core";
+import { getNeighbor } from "../common";
 
 export type ModuleType = { index: number; x: number; y: number; size: number };
 export type PathType = { codeword: string; finder: string };
@@ -12,60 +13,6 @@ export type CornerType =
   | "top-right"
   | "bottom-left"
   | "bottom-right";
-
-/**
- * get Neighbor status of the given index
- */
-export function getNeighbor(index: number, qr: QR) {
-  const { gridSize, data } = qr;
-
-  const firstModule = index % gridSize === 0;
-  const lastModule = index % gridSize === gridSize - 1;
-
-  const leftNeighbor = data[index - 1];
-  const rightNeighbor = data[index + 1];
-  const topNeighbor = data[index - gridSize];
-  const bottomNeighbor = data[index + gridSize];
-
-  const topLeftNeighbor = data[index - gridSize - 1];
-  const topRightNeighbor = data[index - gridSize + 1];
-  const bottomLeftNeighbor = data[index + gridSize - 1];
-  const bottomRightNeighbor = data[index + gridSize + 1];
-
-  return {
-    left: !firstModule && leftNeighbor,
-    right: !lastModule && rightNeighbor,
-    top: topNeighbor,
-    bottom: bottomNeighbor,
-    topLeft: !firstModule && topLeftNeighbor,
-    topRight: !lastModule && topRightNeighbor,
-    bottomLeft: !firstModule && bottomLeftNeighbor,
-    bottomRight: !lastModule && bottomRightNeighbor,
-  };
-}
-
-/**
- * get the positions ans sizes of the finder patterns
- */
-export function getFinderPatternDetails(size: number, qr: QR) {
-  const { gridSize } = qr;
-
-  let positions = {
-    inner: [
-      { x: size * 3, y: size * 3 },
-      { x: size * (gridSize - 4), y: size * 3 },
-      { x: size * 3, y: size * (gridSize - 4) },
-    ],
-    outer: [
-      { x: size * 1, y: size * 1 },
-      { x: size * (gridSize - 6), y: size * 1 },
-      { x: size * 1, y: size * (gridSize - 6) },
-    ],
-  };
-  const sizes = { outer: size * 7, inner: size * 3 };
-
-  return { positions, sizes };
-}
 
 /**
  * make a module corner (square) round
@@ -181,12 +128,8 @@ export function getSquarePath(x: number, y: number, size: number) {
 /**
  * get smooth edge path
  */
-export function getSmoothDataBitPath(module: ModuleType, qr: QR) {
-  const { reservedBits } = qr;
+export function getSmoothEdgesPath(module: ModuleType, qr: QR) {
   const { index, x, y, size } = module;
-  if (reservedBits[index]?.type === ReservedBits.FinderPattern) {
-    return;
-  }
   let path = "";
   const neighbor = getNeighbor(index, qr);
   const cornerDist = size * 0.5;
@@ -229,48 +172,6 @@ export function getSmoothDataBitPath(module: ModuleType, qr: QR) {
   }
 
   return path + getSquarePath(x, y, size);
-}
-
-/**
- * get finderPatterns path to make it round
- */
-export function roundCornerFinderPatternPath(module: ModuleType, qr: QR) {
-  const { reservedBits } = qr;
-  const { index, x, y, size } = module;
-  const neighbor = getNeighbor(index, qr);
-
-  if (reservedBits[index]?.type === ReservedBits.FinderPattern) {
-    let path = "";
-    if (!neighbor.top && !neighbor.left) {
-      path += getRoundCornerPath(module, ["top-left"]);
-      if (!neighbor.bottomRight) {
-        const arcCoords = { ...module, y: y + size, x: x + size };
-        path += getCornerArcPath(arcCoords, "top-left");
-      }
-    }
-    if (!neighbor.top && !neighbor.right) {
-      path += getRoundCornerPath(module, ["top-right"]);
-      if (!neighbor.bottomLeft) {
-        const arcCoords = { ...module, y: y + size };
-        path += getCornerArcPath(arcCoords, "top-right");
-      }
-    }
-    if (!neighbor.bottom && !neighbor.right) {
-      path += getRoundCornerPath(module, ["bottom-right"]);
-      if (!neighbor.topLeft) {
-        path += getCornerArcPath(module, "bottom-right");
-      }
-    }
-    if (!neighbor.bottom && !neighbor.left) {
-      path += getRoundCornerPath(module, ["bottom-left"]);
-      if (!neighbor.topRight) {
-        const arcCoords = { ...module, x: x + size };
-        path += getCornerArcPath(arcCoords, "bottom-left");
-      }
-    }
-    return path || getSquarePath(module.x, module.y, module.size);
-  }
-  return "";
 }
 
 function downloadFile(blob: Blob, name?: string) {

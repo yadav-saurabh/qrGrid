@@ -5,8 +5,7 @@
 import { QR, ReservedBits } from "@qrgrid/core";
 
 import {
-  getSmoothDataBitPath,
-  roundCornerFinderPatternPath,
+  getSmoothEdgesPath,
   getCirclePath,
   ModuleType,
   PathType,
@@ -31,8 +30,8 @@ export function dotModuleStyle(path: PathType, module: ModuleType, qr: QR) {
  */
 export function smoothModuleStyle(path: PathType, module: ModuleType, qr: QR) {
   if (qr.reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
-    path.finder += roundCornerFinderPatternPath(module, qr);
+    path.finder += getSmoothEdgesPath(module, qr);
     return;
   }
-  path.codeword += getSmoothDataBitPath(module, qr);
+  path.codeword += getSmoothEdgesPath(module, qr);
 }

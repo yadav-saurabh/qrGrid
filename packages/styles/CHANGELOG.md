@@ -1,5 +1,11 @@
 # @qrgrid/styles
 
+## 1.3.0
+
+### Minor Changes
+
+- Refactor moved common code to different file
+
 ## 1.2.2
 
 ### Patch Changes

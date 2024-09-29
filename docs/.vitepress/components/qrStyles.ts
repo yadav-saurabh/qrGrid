@@ -4,12 +4,11 @@ import {
   getCircleOutlinePath,
   getCirclePath,
   getCornerArcPath,
-  getFinderPatternDetails,
-  getNeighbor,
   getRoundCornerPath,
   getSquarePath,
   ModuleType,
 } from "@qrgrid/styles/svg";
+import { getFinderPatternDetails, getNeighbor } from "@qrgrid/styles/common";
 import { ModuleStyleFunctionParams } from "@qrgrid/vue/svg";
 
 const ON_GENERATED_STYLE = 4;
@@ -117,35 +116,6 @@ export function roundCornerInnerFinderPatternPath(
     return path;
   }
   return "";
-}
-
-export function isOuterFinderPattern(module: ModuleType, qr: QR) {
-  const { index } = module;
-  const { reservedBits } = qr;
-  const neighbor = getNeighbor(module.index, qr);
-  if (!reservedBits[index]) {
-    return false;
-  }
-
-  if (!neighbor.top && !neighbor.bottom) {
-    return true;
-  }
-  if (!neighbor.left && !neighbor.right) {
-    return true;
-  }
-  if (!neighbor.top && !neighbor.left && !neighbor.bottomRight) {
-    return true;
-  }
-  if (!neighbor.top && !neighbor.right && !neighbor.bottomLeft) {
-    return true;
-  }
-  if (!neighbor.bottom && !neighbor.right && !neighbor.topLeft) {
-    return true;
-  }
-  if (!neighbor.bottom && !neighbor.left && !neighbor.topRight) {
-    return true;
-  }
-  return false;
 }
 
 export function roundCornerFinderPatternPath(

@@ -1,0 +1,25 @@
+<script setup lang="ts">
+import { QR, ReservedBits } from "@qrgrid/core";
+import { Qr } from "@qrgrid/vue/canvas";
+
+const props = defineProps<{
+  input: string;
+  finderColor: string;
+}>();
+
+function qrModuleStyle(
+  ctx: CanvasRenderingContext2D,
+  module: { index: number; x: number; y: number; size: number },
+  { reservedBits }: QR
+) {
+  if (reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
+    ctx.fillStyle = props.finderColor;
+  }
+  ctx.fillRect(module.x, module.y, module.size, module.size);
+  ctx.fillStyle = "white";
+}
+</script>
+
+<template>
+  <Qr :input="props.input" :moduleStyle="qrModuleStyle" />
+</template>

@@ -12,6 +12,7 @@ import {
   getSquarePath,
   downloadQr,
 } from "@qrgrid/styles/svg";
+import { isOuterFinderPattern } from "@qrgrid/styles/common";
 import { onMounted, onUnmounted, ref } from "vue";
 
 import SaurabhImg from "../../assets/yadav-saurabh.png";
@@ -23,7 +24,6 @@ import {
   roundCornerOuterFinderPatternPath,
   roundCornerInnerFinderPatternPath,
   smoothDataBitPath,
-  isOuterFinderPattern,
 } from "./qrStyles";
 
 const STYLE_CORNER_MAPPING: Record<number, CornerType[]> = {
@@ -93,11 +93,11 @@ function qrModuleStyle(
       );
     }
     // outer finder style for #5
-    if (outerFinderStyle.value === 5 && isOuterFinderPattern(module, qr)) {
+    if (outerFinderStyle.value === 5 && isOuterFinderPattern(module.index, qr)) {
       finder += getCirclePath(x, y, size);
     }
     // inner finder style for #5
-    if (innerFinderStyle.value === 5 && !isOuterFinderPattern(module, qr)) {
+    if (innerFinderStyle.value === 5 && !isOuterFinderPattern(module.index, qr)) {
       finder += getCirclePath(x, y, size);
     }
     path.finder += finder || getSquarePath(x, y, size);
