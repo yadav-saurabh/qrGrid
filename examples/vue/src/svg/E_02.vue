@@ -10,7 +10,7 @@ const props = defineProps<{
 
 function qrModuleStyle(
   path: ModuleStyleFunctionParams[0],
-  module: { index: number; x: number; y: number; size: number },
+  module: ModuleStyleFunctionParams[1],
   qr: QR
 ) {
   if (qr.reservedBits[module.index]?.type === ReservedBits.FinderPattern) {

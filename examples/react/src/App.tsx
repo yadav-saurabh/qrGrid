@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { ErrorCorrectionLevel, ErrorCorrectionLevelType } from "@qrgrid/core";
 
-import CanvasQr from "./qr/canvas";
-import SvgQr from "./qr/svg";
+import CanvasQr from "./canvas";
+import SvgQr from "./svg";
+
+
+const FINDER_COLOR = "#ff3131";
 
 function App() {
   const [input, setInput] = useState("");
@@ -38,10 +41,10 @@ function App() {
       <h2 style={{ margin: "2rem", borderBottom: "1px solid" }}>
         Using Canvas
       </h2>
-      <CanvasQr input={input} errorCorrection={errorCorrection} />
+      <CanvasQr input={input} finderColor={FINDER_COLOR} errorCorrection={errorCorrection} />
 
       <h2 style={{ margin: "2rem", borderBottom: "1px solid" }}>Using Svg</h2>
-      <SvgQr input={input} errorCorrection={errorCorrection} />
+      <SvgQr input={input} finderColor={FINDER_COLOR} errorCorrection={errorCorrection} />
     </div>
   );
 }

@@ -21,7 +21,6 @@ function qrModuleStyle(
 }
 
 function onGenerated(path: ModuleStyleFunctionParams[0], size: number, qr: QR) {
-  // ctx.fillStyle = props.finderColor;
   const { positions, sizes } = getFinderPatternDetails(size, qr);
   for (let i = 0; i < positions.inner.length; i++) {
     const pos = positions.inner[i];

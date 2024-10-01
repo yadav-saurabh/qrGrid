@@ -72,3 +72,7 @@ button:hover {
   padding: 1rem;
   border: 1px solid white;
 }
+
+.qr p {
+  text-align: center;
+}
