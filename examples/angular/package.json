@@ -2,8 +2,11 @@
   "name": "@qrgrid/example-angular",
   "version": "0.0.0",
   "scripts": {
+    "prestart": "cd ../../packages/angular && ng build",
+    "watch:library": "cd ../../packages/angular && ng build --watch --configuration development",
+    "start:app": "ng serve",
     "ng": "ng",
-    "dev": "ng serve",
+    "dev": "npm run prestart &&  npm run start:app",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -17,6 +20,7 @@
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
+    "@qrgrid/angular": "file:../../packages/angular/dist",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

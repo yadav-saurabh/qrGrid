@@ -5,16 +5,16 @@ import {
   dotModuleStyle,
   smoothModuleStyle,
   downloadQr,
-  getNeighbor,
   getRoundCornerPath,
   getCornerArcPath,
   getSquarePath,
   getCirclePath,
 } from '../../../../../packages/styles/src/svg'; // @qrgrid/styles/svg
+import { getNeighbor } from '../../../../../packages/styles/src/common';
 import {
   ModuleStyleFunctionParams,
   Qr,
-} from '../../../../../packages/angular/src/svg'; // @qrgrid/angular/svg
+} from '@qrgrid/angular/src/svg';
 
 @Component({
   selector: 'app-svg',
@@ -26,6 +26,7 @@ import {
 export class SvgComponent {
   @Input({ required: true }) input: string = '';
   @Input() errorCorrection!: ErrorCorrectionLevelType;
+  @Input({ required: true }) finderColor: string = '';
   @ViewChild(Qr) svgQr!: Qr;
 
   qrData?: QR;

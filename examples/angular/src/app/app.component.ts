@@ -17,4 +17,6 @@ export class AppComponent {
   errorCorrection = new FormControl<ErrorCorrectionLevelType>('M', {
     nonNullable: true,
   });
+
+  FINDER_COLOR = '#ff3131';
 }

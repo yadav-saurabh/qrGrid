@@ -11,12 +11,12 @@
   <h2 style="margin: 2rem;border-bottom:1px solid;">
     Using Canvas
   </h2>
-  <app-canvas [input]="inputText.value || ''" [errorCorrection]="errorCorrection.value" />
+  <app-canvas [input]="inputText.value || ''" [errorCorrection]="errorCorrection.value" [finderColor]="FINDER_COLOR" />
 
   <h2 style="margin: 2rem;border-bottom:1px solid;">
     Using Svg
   </h2>
-  <app-svg [input]="inputText.value || ''" [errorCorrection]="errorCorrection.value" />
+  <app-svg [input]="inputText.value || ''" [errorCorrection]="errorCorrection.value" [finderColor]="FINDER_COLOR" />
 </div>
 
 <router-outlet />
