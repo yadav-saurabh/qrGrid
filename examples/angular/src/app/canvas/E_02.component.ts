@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ErrorCorrectionLevelType, QR, ReservedBits } from '@qrgrid/core';
 
 import { Qr } from '@qrgrid/angular/src/canvas'; // @qrgrid/angular/canvas
@@ -21,7 +21,6 @@ export class E_02 {
   @Input({ required: true }) input: string = '';
   @Input({ required: true }) finderColor: string = '';
   @Input() errorCorrection!: ErrorCorrectionLevelType;
-  @ViewChild(Qr) canvasQr!: Qr;
 
   qrModuleStyle = (
     ctx: CanvasRenderingContext2D,

@@ -25,6 +25,15 @@ export type ModuleStyleFunction = (
 export type ModuleStyleFunctionParams = Parameters<ModuleStyleFunction>;
 
 /**
+ * Function type (GeneratedFunction is to called when the Qr is generated)
+ */
+export type GeneratedFunction = (
+  ctx: CanvasRenderingContext2D,
+  size: number,
+  qr: QR
+) => void;
+
+/**
  * Qr component bgColor and color Prop Type
  */
 export type QrColor = string | CanvasGradient | CanvasPattern;
@@ -81,13 +90,9 @@ export class Qr implements OnInit, OnChanges {
   @Input() bgColor?: QrColor | ((ctx: CanvasRenderingContext2D) => QrColor);
   @Input() color?: QrColor | ((ctx: CanvasRenderingContext2D) => QrColor);
   @Input() moduleStyle?: ModuleStyleFunction;
+  @Input() generated?: GeneratedFunction;
 
   @Output() onQrDataEncoded = new EventEmitter<QR>();
-  @Output() onQrRendered = new EventEmitter<{
-    ctx: CanvasRenderingContext2D;
-    size: number;
-    qr: QR;
-  }>();
 
   private generateQr() {
     if (!this.ctx) {
@@ -135,10 +140,9 @@ export class Qr implements OnInit, OnChanges {
     // background color
     this.drawBackgroundColor();
     // event once everything is drawn
-    // Use setTimeout to delay the emission to the next change detection cycle
-    setTimeout(() => {
-      this.onQrRendered.emit({ ctx: this.ctx, size, qr });
-    });
+    if (this.generated) {
+      this.generated(this.ctx, size, qr);
+    }
   }
 
   private drawImageInCenter(
@@ -195,10 +199,9 @@ export class Qr implements OnInit, OnChanges {
       // background color
       this.drawBackgroundColor();
       // event once everything is drawn
-      // Use setTimeout to delay the emission to the next change detection cycle
-      setTimeout(() => {
-        this.onQrRendered.emit({ ctx: this.ctx, size, qr });
-      });
+      if (this.generated) {
+        this.generated(this.ctx, size, qr);
+      }
     };
     img.onerror = () => {
       console.error("qrgrid: Error while loading the image");
@@ -207,10 +210,9 @@ export class Qr implements OnInit, OnChanges {
       // background color
       this.drawBackgroundColor();
       // event once everything is drawn
-      // Use setTimeout to delay the emission to the next change detection cycle
-      setTimeout(() => {
-        this.onQrRendered.emit({ ctx: this.ctx, size, qr });
-      });
+      if (this.generated) {
+        this.generated(this.ctx, size, qr);
+      }
     };
   }
 

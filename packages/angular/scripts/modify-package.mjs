@@ -9,13 +9,17 @@ function changePath(data) {
   if (typeof data === "object") {
     modifiedData = {};
     Object.keys(data).forEach((parentKey) => {
-      modifiedData[parentKey] = {};
-      Object.keys(data[parentKey]).forEach((key) => {
+      let key = parentKey;
+      if (parentKey.includes("./src/")) {
+        key = parentKey.replace("./src/", "./");
+      }
+      modifiedData[key] = {};
+      Object.keys(data[parentKey]).forEach((childKey) => {
         if (parentKey !== "./package.json") {
-          const modPath = "./" + path.join("./dist", data[parentKey][key]);
-          modifiedData[parentKey][key] = modPath;
+          const modPath = "./" + path.join("./dist", data[parentKey][childKey]);
+          modifiedData[key][childKey] = modPath;
         } else {
-          modifiedData[parentKey][key] = data[parentKey][key];
+          modifiedData[key][childKey] = data[parentKey][childKey];
         }
       });
     });

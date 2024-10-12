@@ -1,13 +1,17 @@
 import { Component, Input } from '@angular/core';
 import { ErrorCorrectionLevelType, QR, ReservedBits } from '@qrgrid/core';
 
-import { Qr } from '@qrgrid/angular/src/canvas'; // @qrgrid/angular/canvas
+import { ModuleStyleFunctionParams, Qr } from '@qrgrid/angular/src/svg'; // @qrgrid/angular/svg
 import {
-  drawCircle,
-  drawCircleOutline,
-  ModuleType,
-} from '../../../../../packages/styles/src/canvas'; // @qrgrid/styles/canvas
+  getCircleOutlinePath,
+  getCirclePath,
+} from '../../../../../packages/styles/src/svg'; // @qrgrid/styles/svg
 import { getFinderPatternDetails } from '../../../../../packages/styles/src/common'; // @qrgrid/styles/common
+
+type OnQrRenderedEventType = {
+  size: number;
+  qr: QR;
+};
 
 @Component({
   selector: 'E_04',
@@ -19,6 +23,7 @@ import { getFinderPatternDetails } from '../../../../../packages/styles/src/comm
       [qrOptions]="{ errorCorrection: this.errorCorrection }"
       [moduleStyle]="qrModuleStyle"
       [generated]="onGenerated"
+      [color]="{ finder: this.finderColor }"
     />
   `,
   styleUrl: '../app.component.css',
@@ -29,28 +34,25 @@ export class E_04 {
   @Input() errorCorrection!: ErrorCorrectionLevelType;
 
   qrModuleStyle = (
-    ctx: CanvasRenderingContext2D,
-    module: { index: number; x: number; y: number; size: number },
+    path: ModuleStyleFunctionParams[0],
+    module: ModuleStyleFunctionParams[1],
     qr: QR,
   ) => {
-    if (qr.reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
-      ctx.fillStyle = this.finderColor;
-    } else {
-      ctx.fillStyle = 'white';
-      drawCircle(ctx, module);
+    const { x, y, size } = module;
+    if (!(qr.reservedBits[module.index]?.type === ReservedBits.FinderPattern)) {
+      path.codeword += getCirclePath(x, y, size);
     }
   };
 
-  onGenerated = (ctx: CanvasRenderingContext2D, size: number, qr: QR) => {
-    ctx.fillStyle = this.finderColor;
+  onGenerated = (path: ModuleStyleFunctionParams[0], size: number, qr: QR) => {
     const { positions, sizes } = getFinderPatternDetails(size, qr);
     for (let i = 0; i < positions.inner.length; i++) {
       const pos = positions.inner[i];
-      drawCircle(ctx, { ...pos, size: sizes.inner } as ModuleType);
+      path.finder += getCirclePath(pos.x, pos.y, sizes.inner);
     }
     for (let i = 0; i < positions.outer.length; i++) {
       const pos = positions.outer[i];
-      drawCircleOutline(ctx, { ...pos, size: sizes.outer } as ModuleType);
+      path.finder += getCircleOutlinePath(pos.x, pos.y, sizes.outer);
     }
   };
 }

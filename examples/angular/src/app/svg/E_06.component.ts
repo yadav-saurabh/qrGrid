@@ -1,15 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { ErrorCorrectionLevelType, QR, ReservedBits } from '@qrgrid/core';
 
-import { Qr } from '@qrgrid/angular/src/canvas'; // @qrgrid/angular/canvas
+import { Qr, ModuleStyleFunctionParams } from '@qrgrid/angular/src/svg'; // @qrgrid/angular/svg
 import {
   getFinderPatternDetails,
   isOuterFinderPattern,
 } from '../../../../../packages/styles/src/common'; // @qrgrid/angular/common
 import {
-  drawCircle,
-  ModuleType,
-} from '../../../../../packages/styles/src/canvas'; // @qrgrid/angular/canvas
+  getCirclePath,
+  getSquarePath,
+} from '../../../../../packages/styles/src/svg'; // @qrgrid/angular/svg
 
 @Component({
   selector: 'E_06',
@@ -20,8 +20,10 @@ import {
       [input]="input"
       [qrOptions]="{ errorCorrection: this.errorCorrection }"
       [moduleStyle]="qrModuleStyle"
+      [moduleStyle]="qrModuleStyle"
       [generated]="onGenerated"
       [image]="{ src: './favicon.ico', overlap: false }"
+      [color]="{ finder: this.finderColor }"
     />
   `,
   styleUrl: '../app.component.css',
@@ -32,28 +34,28 @@ export class E_06 {
   @Input() errorCorrection!: ErrorCorrectionLevelType;
 
   qrModuleStyle = (
-    ctx: CanvasRenderingContext2D,
-    module: { index: number; x: number; y: number; size: number },
+    path: ModuleStyleFunctionParams[0],
+    module: ModuleStyleFunctionParams[1],
     qr: QR,
   ) => {
     const { reservedBits } = qr;
+    const { x, y } = module;
     if (reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
-      ctx.fillStyle = this.finderColor;
       if (isOuterFinderPattern(module.index, qr)) {
-        ctx.fillRect(module.x, module.y, module.size, module.size);
+        path.finder += getSquarePath(x, y, module.size);
       }
     } else {
-      ctx.fillRect(module.x, module.y, module.size * 0.95, module.size * 0.95);
+      const size = module.size * 0.95;
+      const squarePath = `M${x} ${y}v${size}h${size}v-${size}z`;
+      path.codeword += squarePath;
     }
-    ctx.fillStyle = 'white';
   };
 
-  onGenerated = (ctx: CanvasRenderingContext2D, size: number, qr: QR) => {
-    ctx.fillStyle = this.finderColor;
+  onGenerated = (path: ModuleStyleFunctionParams[0], size: number, qr: QR) => {
     const { positions, sizes } = getFinderPatternDetails(size, qr);
     for (let i = 0; i < positions.inner.length; i++) {
       const pos = positions.inner[i];
-      drawCircle(ctx, { ...pos, size: sizes.inner } as ModuleType);
+      path.finder += getCirclePath(pos.x, pos.y, sizes.inner);
     }
   };
 }

@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { ErrorCorrectionLevelType, QR, ReservedBits } from '@qrgrid/core';
 
-import { Qr } from '@qrgrid/angular/src/canvas'; // @qrgrid/angular/canvas
-import { drawCircle } from '../../../../../packages/styles/src/canvas'; // @qrgrid/styles/canvas
+import { ModuleStyleFunctionParams, Qr } from '@qrgrid/angular/src/svg'; // @qrgrid/angular/svg
+import { getSmoothEdgesPath } from '../../../../../packages/styles/src/svg'; // @qrgrid/angular/svg
 
 @Component({
-  selector: 'E_03',
+  selector: 'E_02',
   standalone: true,
   imports: [Qr],
   template: `
@@ -13,24 +13,25 @@ import { drawCircle } from '../../../../../packages/styles/src/canvas'; // @qrgr
       [input]="input"
       [qrOptions]="{ errorCorrection: this.errorCorrection }"
       [moduleStyle]="qrModuleStyle"
+      [color]="{ finder: this.finderColor }"
     />
   `,
   styleUrl: '../app.component.css',
 })
-export class E_03 {
+export class E_02 {
   @Input({ required: true }) input: string = '';
   @Input({ required: true }) finderColor: string = '';
   @Input() errorCorrection!: ErrorCorrectionLevelType;
 
   qrModuleStyle = (
-    ctx: CanvasRenderingContext2D,
-    module: { index: number; x: number; y: number; size: number },
+    path: ModuleStyleFunctionParams[0],
+    module: ModuleStyleFunctionParams[1],
     qr: QR,
   ) => {
     if (qr.reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
-      ctx.fillStyle = this.finderColor;
+      path.finder += getSmoothEdgesPath(module, qr);
+    } else {
+      path.codeword += getSmoothEdgesPath(module, qr);
     }
-    drawCircle(ctx, module);
-    ctx.fillStyle = 'white';
   };
 }

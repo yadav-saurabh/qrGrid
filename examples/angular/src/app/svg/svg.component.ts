@@ -1,81 +1,80 @@
-import { Component, Input, ViewChild } from '@angular/core';
-import { ErrorCorrectionLevelType, QR, ReservedBits } from '@qrgrid/core';
+import { Component, Input } from '@angular/core';
+import { ErrorCorrectionLevelType } from '@qrgrid/core';
 
-import {
-  dotModuleStyle,
-  smoothModuleStyle,
-  downloadQr,
-  getRoundCornerPath,
-  getCornerArcPath,
-  getSquarePath,
-  getCirclePath,
-} from '../../../../../packages/styles/src/svg'; // @qrgrid/styles/svg
-import { getNeighbor } from '../../../../../packages/styles/src/common';
-import {
-  ModuleStyleFunctionParams,
-  Qr,
-} from '@qrgrid/angular/src/svg';
+import { Default } from './Default.component';
+import { E_01 } from './E_01.component';
+import { E_02 } from './E_02.component';
+import { E_03 } from './E_03.component';
+import { E_04 } from './E_04.component';
+import { E_05 } from './E_05.component';
+import { E_06 } from './E_06.component';
 
 @Component({
   selector: 'app-svg',
   standalone: true,
-  imports: [Qr],
-  templateUrl: './svg.component.html',
+  imports: [Default, E_01, E_02, E_03, E_04, E_05, E_06],
+  template: `
+    <Default [input]="input || ''" [errorCorrection]="errorCorrection" />
+    <div class="qrContainer">
+      <div class="qr">
+        <E_01
+          [input]="input || ''"
+          [finderColor]="finderColor"
+          [errorCorrection]="errorCorrection"
+        />
+        <p>E 01</p>
+      </div>
+
+      <div class="qr">
+        <E_02
+          [input]="input || ''"
+          [finderColor]="finderColor"
+          [errorCorrection]="errorCorrection"
+        />
+        <p>E 02</p>
+      </div>
+
+      <div class="qr">
+        <E_03
+          [input]="input || ''"
+          [finderColor]="finderColor"
+          [errorCorrection]="errorCorrection"
+        />
+        <p>E 03</p>
+      </div>
+
+      <div class="qr">
+        <E_04
+          [input]="input || ''"
+          [finderColor]="finderColor"
+          [errorCorrection]="errorCorrection"
+        />
+        <p>E 04</p>
+      </div>
+
+      <div class="qr">
+        <E_05
+          [input]="input || ''"
+          [finderColor]="finderColor"
+          [errorCorrection]="errorCorrection"
+        />
+        <p>E 05</p>
+      </div>
+
+      <div class="qr">
+        <E_06
+          [input]="input || ''"
+          [finderColor]="finderColor"
+          [errorCorrection]="errorCorrection"
+        />
+        <p>E 06</p>
+      </div>
+    </div>
+  `,
   styleUrl: '../app.component.css',
 })
 export class SvgComponent {
   @Input({ required: true }) input: string = '';
-  @Input() errorCorrection!: ErrorCorrectionLevelType;
   @Input({ required: true }) finderColor: string = '';
-  @ViewChild(Qr) svgQr!: Qr;
-
-  qrData?: QR;
-  dotModuleStyle = dotModuleStyle;
-  smoothModuleStyle = smoothModuleStyle;
-
-  getReservedBitsLength() {
-    Object.keys(this.qrData?.reservedBits || {}).length;
-  }
-
-  onQrDataEncoded(qr: QR) {
-    this.qrData = qr;
-  }
-
-  customModuleStyle(
-    path: ModuleStyleFunctionParams[0],
-    module: ModuleStyleFunctionParams[1],
-    qr: QR,
-  ) {
-    const { reservedBits } = qr;
-    const { x, y, size } = module;
-    const neighbor = getNeighbor(module.index, qr);
-    const cornerDist = size * 0.9;
-
-    if (reservedBits[module.index]?.type === ReservedBits.FinderPattern) {
-      if (!neighbor.top && !neighbor.left) {
-        path.finder += getRoundCornerPath(module, ['top-left'], cornerDist);
-        if (!neighbor.bottomRight) {
-          const arcCoords = { ...module, y: y + size, x: x + size };
-          path.finder += getCornerArcPath(arcCoords, 'top-left', cornerDist);
-        }
-        return;
-      }
-      if (!neighbor.bottom && !neighbor.right) {
-        path.finder += getRoundCornerPath(module, ['bottom-right']);
-        if (!neighbor.topLeft) {
-          path.finder += getCornerArcPath(module, 'bottom-right', cornerDist);
-        }
-        return;
-      }
-      path.finder += getSquarePath(x, y, size);
-      return;
-    }
-    path.codeword += getCirclePath(x, y, size);
-  }
-
-  download() {
-    if (this.svgQr?.svg?.nativeElement) {
-      downloadQr(this.svgQr.svg.nativeElement);
-    }
-  }
+  @Input() errorCorrection!: ErrorCorrectionLevelType;
 }

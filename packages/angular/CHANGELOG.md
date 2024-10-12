@@ -1,5 +1,11 @@
 # @qrgrid/angular
 
+## 1.1.0
+
+### Minor Changes
+
+- Changed event emitter onQrRendered to function generated
+
 ## 1.0.0
 
 ### Major Changes

@@ -20,6 +20,15 @@ export type ModuleStyleFunction = (
 export type ModuleStyleFunctionParams = Parameters<ModuleStyleFunction>;
 
 /**
+ * Function type (ModuleStyleFunction is to style the module)
+ */
+export type GeneratedFunction = (
+  path: { codeword: string; finder: string },
+  size: number,
+  qr: QR
+) => void;
+
+/**
  * Qr component Image Prop Type
  */
 export type QrImageOption = {
@@ -114,9 +123,9 @@ export class Qr {
   @Input() bgColor?: string;
   @Input() color?: QrColor;
   @Input() moduleStyle?: ModuleStyleFunction;
+  @Input() generated?: GeneratedFunction;
 
   @Output() onQrDataEncoded = new EventEmitter<QR>();
-  @Output() onQrRendered = new EventEmitter<{ size: number; qr: QR }>();
 
   finderPath: string = "";
   codewordPath: string = "";
@@ -242,13 +251,11 @@ export class Qr {
         y += size;
       }
     }
+    if (this.generated) {
+      this.generated(path, size, qr);
+    }
     this.finderPath = path.finder;
     this.codewordPath = path.codeword;
-    // event once everything is drawn
-    // Use setTimeout to delay the emission to the next change detection cycle
-    setTimeout(() => {
-      this.onQrRendered.emit({ size, qr });
-    });
   }
 
   private overlappingImage(
