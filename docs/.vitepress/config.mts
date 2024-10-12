@@ -36,6 +36,7 @@ export default defineConfig({
     nav: [
       { text: "Home", link: "/" },
       { text: "Guide", link: "/guide/", activeMatch: "/guide/" },
+      { text: "Examples", link: "/examples/" },
       { text: "Generate", link: "/generate/" },
     ],
     sidebar: [
@@ -68,7 +69,8 @@ export default defineConfig({
     },
     footer: {
       message: "Released under the MIT License.",
-      copyright: "Copyright © 2024-present <a href='https://yadav-saurabh.com' target='_blank'>Saurabh Yadav </a>",
+      copyright:
+        "Copyright © 2024-present <a href='https://yadav-saurabh.com' target='_blank'>Saurabh Yadav </a>",
     },
   },
   vite: {

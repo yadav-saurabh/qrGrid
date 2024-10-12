@@ -13,7 +13,6 @@ import UploadIcon from "../../assets/upload.svg";
 import Circle from "../../assets/circle.svg";
 import ChevronDown from "../../assets/chevron-down.svg";
 
-
 export {
   SquareTopLeftCircleBorderIcon,
   SquareTopRightCircleBorderIcon,

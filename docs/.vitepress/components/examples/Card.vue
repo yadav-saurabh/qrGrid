@@ -14,7 +14,7 @@ const FRONTEND_TYPE = [
   { name: "web", file: ".ts" },
   { name: "vue", file: ".vue" },
   { name: "react", file: ".tsx" },
-  { name: "angular", file: ".ts" },
+  { name: "angular", prefix: "app", file: ".component.ts" },
 ];
 </script>
 
@@ -26,39 +26,42 @@ const FRONTEND_TYPE = [
   >
     <slot>Fallback content</slot>
     <p class="heading">{{ props.example.replace("E_", "") }}</p>
-    <div class="description" v-if="description">
-      <p>
-        <a
-          target="_blank"
-          :href="`${REPO_EXAMPLE_URL}/server/src/${example}.vue`"
-        >
-          Server: <span class="link">.../{{ example }}.ts </span>
-        </a>
-      </p>
-      <p>Svg:</p>
-      <ul>
-        <li v-for="item in FRONTEND_TYPE">
+    <div class="description-container" v-if="description">
+      <div class="description">
+        <div class="d-flex">
+          <span class="w-45">Server:</span>
           <a
             target="_blank"
-            :href="`${REPO_EXAMPLE_URL}/${item.name}/src/svg/${example}${item.file}`"
+            :href="`${REPO_EXAMPLE_URL}/server/src/${example}.ts`"
           >
-            <span class="name">{{ item.name }}: </span>
-            <span class="link">.../svg/{{ example }}{{ item.file }}</span>
+            <span class="link"> Express</span>
           </a>
-        </li>
-      </ul>
-      <p>Canvas:</p>
-      <ul>
-        <li v-for="item in FRONTEND_TYPE">
+        </div>
+
+        <div class="d-flex">
+          <span class="w-45">Svg:</span>
           <a
             target="_blank"
-            :href="`${REPO_EXAMPLE_URL}/${item.name}/src/canvas/${example}${item.file}`"
+            v-for="item in FRONTEND_TYPE"
+            :key="item.name"
+            :href="`${REPO_EXAMPLE_URL}/${item.name}/src/${item.prefix || ''}/svg/${example}${item.file}`"
           >
-            <span class="name">{{ item.name }}: </span>
-            <span class="link">.../canvas/{{ example }}{{ item.file }}</span>
+            <span class="link"> {{ item.name }} </span>
           </a>
-        </li>
-      </ul>
+        </div>
+
+        <div class="d-flex">
+          <span class="w-45">Canvas:</span>
+          <a
+            target="_blank"
+            v-for="item in FRONTEND_TYPE"
+            :key="item.name"
+            :href="`${REPO_EXAMPLE_URL}/${item.name}/src/${item.prefix || ''}/canvas/${example}${item.file}`"
+          >
+            <span class="link"> {{ item.name }} </span>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -81,31 +84,35 @@ const FRONTEND_TYPE = [
   text-align: center;
   border-top: 1px dotted var(--vp-c-text-1);
 }
-.description {
+.description-container {
   position: absolute;
-  padding: 20px;
   top: 0;
   left: 0;
   height: calc(100% - 25px);
   width: 100%;
-  backdrop-filter: blur(20px);
-  color: white;
-  text-shadow:
-    -1px 0 black,
-    0 1px black,
-    1px 0 black,
-    0 -1px black;
-  font-size: small;
+  backdrop-filter: blur(5px);
 }
-.description ul {
-  margin-left: 20px;
-}
-.name {
-  display: inline-block;
-  min-width: 60px;
+.description {
+  padding: 10px;
+  background-color: var(--vp-c-bg);
+  position: absolute;
+  bottom: 0;
+  height: 30%;
+  overflow: scroll;
+  width: 100%;
 }
 .link {
-  font-size: small;
-  color: #c8abfa;
+  margin-left: 20px;
+  color: var(--vp-c-important-3);
+  text-transform: capitalize;
+}
+.link:hover {
+  color: var(--vp-c-brand);
+}
+.d-flex {
+  display: flex;
+}
+.w-45 {
+  width: 45px;
 }
 </style>
