@@ -177,7 +177,7 @@ export function getSmoothEdgesPath(module: ModuleType, qr: QR) {
 function downloadFile(blob: Blob, name?: string) {
   const url = URL.createObjectURL(blob!);
   const link = document.createElement("a");
-  link.download = name || "qrgrid-react";
+  link.download = name || "qrgrid";
   link.href = url;
   link.click();
   URL.revokeObjectURL(url);
