@@ -28,10 +28,10 @@
     "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.7",
+    "@changesets/cli": "^2.27.9",
     "prettier": "^3.3.3",
-    "turbo": "^2.1.2",
-    "typescript": "^5.5.3"
+    "turbo": "^2.2.3",
+    "typescript": "^5.6.3"
   },
   "engines": {
     "node": ">=20"

@@ -32,11 +32,11 @@
     "tsc:build": "tsc -b"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.6",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.1",
     "rimraf": "^6.0.1",
-    "rollup": "^4.19.0",
-    "tslib": "^2.6.3"
+    "rollup": "^4.24.4",
+    "tslib": "^2.8.1"
   },
   "publishConfig": {
     "access": "public"
