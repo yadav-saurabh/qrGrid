@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import dts from "vite-plugin-dts";
 
-import pkg from "./package.json" assert { type: "json" };
+import pkg from "./package.json" with { type: "json" };
 
 const INPUTS = ["src/index.ts", "src/canvas/index.ts", "src/svg/index.ts"];
 const EXTERNALS = [
