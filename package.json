@@ -41,6 +41,9 @@
     "packages/*",
     "examples/*"
   ],
+  "overrides": {
+    "typescript": "~5.5.4"
+  },
   "volta": {
     "node": "22.11.0"
   }

@@ -62,5 +62,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "overrides": {
+    "typescript": "~5.5.4"
+  }
 }
