@@ -30,7 +30,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.27.9",
     "prettier": "^3.3.3",
-    "turbo": "^2.2.3"
+    "turbo": "^2.4.2"
   },
   "engines": {
     "node": ">=20"
@@ -45,6 +45,6 @@
     "typescript": "~5.5.4"
   },
   "volta": {
-    "node": "22.11.0"
+    "node": "22.14.0"
   }
 }
