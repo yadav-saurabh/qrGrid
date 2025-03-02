@@ -15,16 +15,22 @@ const size = ref(400);
 
 function getSize() {
   const width = window.innerWidth;
-  if (width < 800) {
-    return 320;
+  let itemsPerRow = 0;
+  let padding = 300;
+
+  if (width < 600) {
+    itemsPerRow = 1;
+  } else if (width < 960) {
+    itemsPerRow = 2;
+  } else if (width < 1280) {
+    itemsPerRow = 3;
+  } else {
+    itemsPerRow = 4;
   }
-  if (width < 1024) {
-    return 350;
-  }
-  if (width > 1390) {
-    return width / 4;
-  }
-  return width / 3.5;
+
+  const availableWidth = width - padding;
+  const itemSize = availableWidth / itemsPerRow;
+  return Math.max(itemSize, 280);
 }
 
 const onWindowResize = () => {
