@@ -1,17 +1,19 @@
 import { QR, ReservedBits } from "@qrgrid/core";
+
+import {
+  DEFAULT_BG_COLOR,
+  DEFAULT_COLOR,
+  DEFAULT_SVG_SIZE,
+  FINDER_COLOR,
+} from "../constants";
+import { createSvgNode, generateSvg, setSvgAttributes } from "./utils";
 import { getSquarePath } from "@qrgrid/styles/svg";
 
-import { setSvgAttributes, createSvgNode, generateSvg } from "./utils";
-
-const DEFAULT_SVG_SIZE = 400;
-const DEFAULT_BG_COLOR = "black";
-const DEFAULT_COLOR = "white";
-
-const svg = generateSvg("coloredFinderPathQr");
-const svgFinderPath = createSvgNode(svg, "path", { fill: DEFAULT_COLOR });
+const svg = generateSvg("E 01");
+const svgFinderPath = createSvgNode(svg, "path", { fill: FINDER_COLOR });
 const svgPath = createSvgNode(svg, "path", { fill: DEFAULT_COLOR });
 
-export function generateColoredFinderPathSvgQr(qr: QR) {
+export function E_01(qr: QR) {
   const defaultSvgSize = DEFAULT_SVG_SIZE;
 
   let size = Math.floor(defaultSvgSize / (qr.gridSize + 1.5));
@@ -43,6 +45,6 @@ export function generateColoredFinderPathSvgQr(qr: QR) {
       y += size;
     }
   }
-  setSvgAttributes(svgFinderPath, { d: finderPath, fill: "#36BA98" });
+  setSvgAttributes(svgFinderPath, { d: finderPath, fill: FINDER_COLOR });
   setSvgAttributes(svgPath, { d: path });
 }

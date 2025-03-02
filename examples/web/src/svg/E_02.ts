@@ -1,16 +1,19 @@
 import { QR } from "@qrgrid/core";
-import { getCirclePath } from "@qrgrid/styles/svg";
+import { smoothModuleStyle } from "@qrgrid/styles/svg";
 
 import { setSvgAttributes, createSvgNode, generateSvg } from "./utils";
+import {
+  DEFAULT_BG_COLOR,
+  DEFAULT_COLOR,
+  DEFAULT_SVG_SIZE,
+  FINDER_COLOR,
+} from "../constants";
 
-const DEFAULT_SVG_SIZE = 400;
-const DEFAULT_BG_COLOR = "black";
-const DEFAULT_COLOR = "white";
-
-const svg = generateSvg("dotQr");
+const svg = generateSvg("E 02");
+const svgFinderPath = createSvgNode(svg, "path", { fill: FINDER_COLOR });
 const svgPath = createSvgNode(svg, "path", { fill: DEFAULT_COLOR });
 
-export function generateDotSvgQr(qr: QR) {
+export function E_02(qr: QR) {
   const defaultSvgSize = DEFAULT_SVG_SIZE;
 
   let size = Math.floor(defaultSvgSize / (qr.gridSize + 1.5));
@@ -25,11 +28,14 @@ export function generateDotSvgQr(qr: QR) {
 
   let x = size;
   let y = size;
-  let path = "";
+  let path = {
+    codeword: "",
+    finder: "",
+  };
   for (let i = 0; i < qr.data.length; i++) {
     const bit = qr.data[i];
     if (bit) {
-      path += getCirclePath(x, y, size);
+      smoothModuleStyle(path, { index: i, x, y, size }, qr);
     }
     x += size;
     if (i % qr.gridSize === qr.gridSize - 1) {
@@ -37,5 +43,6 @@ export function generateDotSvgQr(qr: QR) {
       y += size;
     }
   }
-  setSvgAttributes(svgPath, { d: path });
+  setSvgAttributes(svgFinderPath, { d: path.finder });
+  setSvgAttributes(svgPath, { d: path.codeword });
 }

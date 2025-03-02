@@ -1,17 +1,19 @@
 import { QR } from "@qrgrid/core";
-import { smoothModuleStyle } from "@qrgrid/styles/svg";
+import { dotModuleStyle } from "@qrgrid/styles/svg";
 
 import { setSvgAttributes, createSvgNode, generateSvg } from "./utils";
+import {
+  DEFAULT_BG_COLOR,
+  DEFAULT_COLOR,
+  DEFAULT_SVG_SIZE,
+  FINDER_COLOR,
+} from "../constants";
 
-const DEFAULT_SVG_SIZE = 400;
-const DEFAULT_BG_COLOR = "black";
-const DEFAULT_COLOR = "white";
-
-const svg = generateSvg("smoothEdgesQr");
-const svgFinderPath = createSvgNode(svg, "path", { fill: DEFAULT_COLOR });
+const svg = generateSvg("E 03");
+const svgFinderPath = createSvgNode(svg, "path", { fill: FINDER_COLOR });
 const svgPath = createSvgNode(svg, "path", { fill: DEFAULT_COLOR });
 
-export function generateSmoothEdgesQrSvgQr(qr: QR) {
+export function E_03(qr: QR) {
   const defaultSvgSize = DEFAULT_SVG_SIZE;
 
   let size = Math.floor(defaultSvgSize / (qr.gridSize + 1.5));
@@ -33,7 +35,7 @@ export function generateSmoothEdgesQrSvgQr(qr: QR) {
   for (let i = 0; i < qr.data.length; i++) {
     const bit = qr.data[i];
     if (bit) {
-      smoothModuleStyle(path, { index: i, x, y, size }, qr);
+      dotModuleStyle(path, { index: i, x, y, size }, qr);
     }
     x += size;
     if (i % qr.gridSize === qr.gridSize - 1) {

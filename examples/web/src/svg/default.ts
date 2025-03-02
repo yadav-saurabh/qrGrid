@@ -2,15 +2,12 @@ import { QR } from "@qrgrid/core";
 import { getSquarePath } from "@qrgrid/styles/svg";
 
 import { setSvgAttributes } from "./utils";
-
-const DEFAULT_SVG_SIZE = 400;
-const DEFAULT_BG_COLOR = "black";
-const DEFAULT_COLOR = "white";
+import { DEFAULT_BG_COLOR, DEFAULT_COLOR, DEFAULT_SVG_SIZE } from "../constants";
 
 const svg = document.getElementById("defaultQrSvg") as unknown as SVGSVGElement;
 const svgPath = svg.getElementById("defaultQrSvgPath") as SVGElement;
 
-export function generateDefaultSvgQr(qr: QR) {
+export function generateDefaultQr(qr: QR) {
   const defaultSvgSize = DEFAULT_SVG_SIZE;
 
   let size = Math.floor(defaultSvgSize / (qr.gridSize + 1.5));

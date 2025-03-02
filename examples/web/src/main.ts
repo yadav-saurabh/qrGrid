@@ -7,6 +7,7 @@ import { downloadQr as canvasDownloadQr } from "@qrgrid/styles/canvas";
 import { downloadQr as svgDownloadQr } from "@qrgrid/styles/svg";
 
 import { generateCanvas } from "./canvas/index";
+import { generateSvg } from "./svg/index";
 
 function generateQrOnCanvas(qr: QR) {
   generateCanvas(qr);
@@ -21,6 +22,7 @@ inputElement?.addEventListener("input", (event) => {
   if (input) {
     const qr = getQrData();
     generateQrOnCanvas(qr);
+    generateSvg(qr);
   }
 });
 
