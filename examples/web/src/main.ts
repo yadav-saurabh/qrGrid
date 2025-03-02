@@ -6,30 +6,10 @@ import {
 import { downloadQr as canvasDownloadQr } from "@qrgrid/styles/canvas";
 import { downloadQr as svgDownloadQr } from "@qrgrid/styles/svg";
 
-// canvas qr imports
-import { generateDefaultQr } from "./canvas/defaultQr";
-import { generateDotQr } from "./canvas/dotQr";
-import { generateColoredFinderPatternQr } from "./canvas/coloredFinderPatternQr";
-import { generateSmoothEdges } from "./canvas/smoothEdgesQr";
-import { generateGradientQr } from "./canvas/gradientQr";
-// svg qr imports
-import { generateDefaultSvgQr } from "./svg/defaultQr";
-import { generateDotSvgQr } from "./svg/dotQr";
-import { generateColoredFinderPathSvgQr } from "./svg/coloredFinderPattern";
-import { generateSmoothEdgesQrSvgQr } from "./svg/smoothEdgesQr";
+import { generateCanvas } from "./canvas/index";
 
 function generateQrOnCanvas(qr: QR) {
-  // canvas
-  generateDefaultQr(qr);
-  generateDotQr(qr);
-  generateColoredFinderPatternQr(qr);
-  generateSmoothEdges(qr);
-  generateGradientQr(qr);
-  // svg
-  generateDefaultSvgQr(qr);
-  generateDotSvgQr(qr);
-  generateColoredFinderPathSvgQr(qr);
-  generateSmoothEdgesQrSvgQr(qr);
+  generateCanvas(qr);
 }
 
 // input
@@ -64,14 +44,14 @@ svgDownloadBtn?.addEventListener("click", onSvgDownloadClick);
 
 function onDownloadClick() {
   const canvas = document.getElementById(
-    "defaultQrCanvas"
+    "defaultQrCanvas",
   ) as HTMLCanvasElement;
   canvasDownloadQr(canvas);
 }
 
 function onSvgDownloadClick() {
   const svg = document.getElementById(
-    "defaultQrSvg"
+    "defaultQrSvg",
   ) as unknown as SVGSVGElement;
   svgDownloadQr(svg);
 }
@@ -86,7 +66,7 @@ function getQrData() {
   document.getElementById("errorCorrection")!.innerText = qr.errorCorrection;
   document.getElementById("dataSize")!.innerText = qr.data.length.toString();
   document.getElementById("reservedBitSize")!.innerText = Object.keys(
-    qr.reservedBits
+    qr.reservedBits,
   ).length.toString();
   document.getElementById("segments")!.innerHTML = qr.segments
     .map((d) => `<b>${d.mode}</b>: ${d.value}`)
@@ -98,7 +78,7 @@ function getQrData() {
   document.getElementById("svgErrorCorrection")!.innerText = qr.errorCorrection;
   document.getElementById("svgDataSize")!.innerText = qr.data.length.toString();
   document.getElementById("svgReservedBitSize")!.innerText = Object.keys(
-    qr.reservedBits
+    qr.reservedBits,
   ).length.toString();
   document.getElementById("svgSegments")!.innerHTML = qr.segments
     .map((d) => `<b>${d.mode}</b>: ${d.value}`)
