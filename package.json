@@ -28,14 +28,14 @@
     "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.9",
-    "prettier": "^3.3.3",
+    "@changesets/cli": "^2.28.1",
+    "prettier": "^3.5.3",
     "turbo": "^2.4.4"
   },
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "npm@10.5.2",
+  "packageManager": "npm@11.1.0",
   "workspaces": [
     "docs",
     "packages/*",

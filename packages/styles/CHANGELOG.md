@@ -1,5 +1,13 @@
 # @qrgrid/styles
 
+## 1.3.2
+
+### Patch Changes
+
+- chore: package update
+- Updated dependencies
+  - @qrgrid/core@0.2.3
+
 ## 1.3.1
 
 ### Patch Changes

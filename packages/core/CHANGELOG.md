@@ -1,5 +1,11 @@
 # @qrgrid/core
 
+## 0.2.3
+
+### Patch Changes
+
+- chore: package update
+
 ## 0.2.2
 
 ### Patch Changes

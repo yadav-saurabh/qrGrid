@@ -1,5 +1,13 @@
 # @qrgrid/server
 
+## 1.0.0
+
+### Patch Changes
+
+- chore: package update
+- Updated dependencies
+  - @qrgrid/core@0.2.3
+
 ## 1.0.0-beta.1
 
 ### Patch Changes

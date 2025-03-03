@@ -1,6 +1,6 @@
 {
   "name": "@qrgrid/core",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "module": "src/index.ts",
   "main": "src/index.ts",
   "type": "module",
@@ -32,10 +32,10 @@
     "tsc:build": "tsc -b"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.3.0",
-    "@rollup/plugin-typescript": "^12.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.1.2",
     "rimraf": "^6.0.1",
-    "rollup": "^4.24.4",
+    "rollup": "^4.34.9",
     "tslib": "^2.8.1"
   },
   "publishConfig": {

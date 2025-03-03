@@ -1,5 +1,13 @@
 # @qrgrid/react
 
+## 1.3.4
+
+### Patch Changes
+
+- chore: package update
+- Updated dependencies
+  - @qrgrid/core@0.2.3
+
 ## 1.3.3
 
 ### Patch Changes

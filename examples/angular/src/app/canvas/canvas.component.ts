@@ -1,20 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { ErrorCorrectionLevelType } from '@qrgrid/core';
 
-import { Qr } from '@qrgrid/angular/src/canvas'; // @qrgrid/angular/canvas
-
 import { Default } from './Default.component';
 import { E_01 } from './E_01.component';
-import { E_02 } from "./E_02.component";
-import { E_03 } from "./E_03.component";
-import { E_04 } from "./E_04.component";
-import { E_05 } from "./E_05.component";
-import { E_06 } from "./E_06.component";
+import { E_02 } from './E_02.component';
+import { E_03 } from './E_03.component';
+import { E_04 } from './E_04.component';
+import { E_05 } from './E_05.component';
+import { E_06 } from './E_06.component';
 
 @Component({
   selector: 'app-canvas',
   standalone: true,
-  imports: [Qr, Default, E_01, E_02, E_03, E_04, E_05, E_06],
+  imports: [Default, E_01, E_02, E_03, E_04, E_05, E_06],
   template: `
     <Default [input]="input || ''" [errorCorrection]="errorCorrection" />
 

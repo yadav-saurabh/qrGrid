@@ -28,7 +28,7 @@ const FRONTEND_TYPE = [
     <p class="heading">{{ props.example.replace("E_", "") }}</p>
     <div class="description-container" v-if="description">
       <div class="description">
-        <div class="d-flex">
+        <!-- <div class="d-flex">
           <span class="w-45">Server:</span>
           <a
             target="_blank"
@@ -36,7 +36,7 @@ const FRONTEND_TYPE = [
           >
             <span class="link"> Express</span>
           </a>
-        </div>
+        </div> -->
 
         <div class="d-flex">
           <span class="w-45">Svg:</span>
