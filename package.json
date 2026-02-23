@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.28.1",
+    "ng-packagr": "^21.1.0",
     "prettier": "^3.5.3",
     "turbo": "^2.4.4"
   },
@@ -42,7 +43,7 @@
     "examples/*"
   ],
   "overrides": {
-    "typescript": "~5.5.4"
+    "typescript": "^5.9.3"
   },
   "volta": {
     "node": "22.14.0"

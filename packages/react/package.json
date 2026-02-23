@@ -47,11 +47,11 @@
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "@typescript-eslint/parser": "^8.25.0",
     "eslint": "^9.21.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.1",
     "rimraf": "^6.0.1",
     "rollup": "^4.34.9",
-    "typescript": "^5.8.2"
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "react": "*"
