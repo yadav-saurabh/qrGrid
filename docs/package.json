@@ -17,17 +17,17 @@
     "docs"
   ],
   "dependencies": {
-    "@qrgrid/styles": "*",
-    "@qrgrid/vue": "*"
+    "@qrgrid/styles": "workspace:*",
+    "@qrgrid/vue": "workspace:*"
   },
   "devDependencies": {
     "vite-svg-loader": "^5.1.0",
     "vitepress": "^1.4.5",
-    "vue": "^3.5.12"
+    "vue": "catalog:"
   },
   "scripts": {
     "dev": "vitepress dev",
-    "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "build": "vitepress build",
+    "preview": "vitepress preview"
   }
 }

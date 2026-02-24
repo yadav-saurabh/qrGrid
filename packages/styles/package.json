@@ -24,9 +24,6 @@
     "server",
     "angular"
   ],
-  "files": [
-    "/dist"
-  ],
   "exports": {
     ".": "./src/index.ts",
     "./common": "./src/common.ts",
@@ -38,27 +35,27 @@
     "./svg/utils": "./src/svg/utils.ts"
   },
   "scripts": {
-    "build": "npm run clean && rollup -c && npm run cp:license && npm run mod:pkg",
-    "clean": "rimraf ./dist",
-    "cp:license": "cp ../../LICENSE ./LICENSE",
-    "mod:pkg": "node ./scripts/modify-package.mjs",
+    "build": "rimraf ./dist && rollup -c && node ../../scripts/build-pkg.mjs",
     "type-check": "tsc --noEmit",
     "tsc:build": "tsc -b",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
-    "@qrgrid/core": "*"
+    "@qrgrid/core": "workspace:*"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@typescript-eslint/eslint-plugin": "^8.25.0",
-    "@typescript-eslint/parser": "^8.25.0",
-    "eslint": "^9.21.0",
-    "rimraf": "^6.0.1",
-    "rollup": "^4.34.9",
-    "typescript": "^5.9.3"
+    "@rollup/plugin-typescript": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint": "catalog:",
+    "rimraf": "catalog:",
+    "rollup": "catalog:",
+    "typescript": "catalog:"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "files": [
+    "/dist"
+  ]
 }

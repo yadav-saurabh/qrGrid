@@ -8,14 +8,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@qrgrid/styles": "*",
-    "@qrgrid/vue": "*",
-    "vue": "^3.5.13"
+    "@qrgrid/styles": "workspace:*",
+    "@qrgrid/vue": "workspace:*",
+    "vue": "catalog:"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.4",
-    "typescript": "^5.9.3",
-    "vite": "^7.3.1",
-    "vue-tsc": "^3.2.5"
+    "@vitejs/plugin-vue": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vue-tsc": "catalog:"
   }
 }

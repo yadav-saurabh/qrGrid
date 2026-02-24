@@ -7,13 +7,13 @@
     "dev": "tsx watch ./express/index.ts"
   },
   "dependencies": {
-    "@qrgrid/server": "*",
-    "@qrgrid/styles": "*",
+    "@qrgrid/server": "workspace:*",
+    "@qrgrid/styles": "workspace:*",
     "express": "^5.2.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
     "tsx": "^4.19.3",
-    "typescript": "^5.9.3"
+    "typescript": "catalog:"
   }
 }

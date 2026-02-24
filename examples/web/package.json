@@ -8,11 +8,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@qrgrid/core": "*",
-    "@qrgrid/styles": "*"
+    "@qrgrid/core": "workspace:*",
+    "@qrgrid/styles": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "typescript": "catalog:",
+    "vite": "catalog:"
   }
 }
