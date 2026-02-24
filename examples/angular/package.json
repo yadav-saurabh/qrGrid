@@ -1,6 +1,6 @@
 {
   "name": "@qrgrid/example-angular",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "prestart": "cd ../../packages/angular && ng build",
     "watch:library": "cd ../../packages/angular && ng build --watch --configuration development",

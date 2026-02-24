@@ -1,5 +1,13 @@
 # @qrgrid/vue
 
+## 1.4.6
+
+### Patch Changes
+
+- 749db39: Consolidate per-package build boilerplate into shared `scripts/build-pkg.mjs`, fix Angular export paths, and add custom publish script for dist-based publishing.
+- Updated dependencies [749db39]
+  - @qrgrid/core@0.2.4
+
 ## 1.4.5
 
 ### Patch Changes
