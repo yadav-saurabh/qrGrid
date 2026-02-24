@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ErrorCorrectionLevelType, QR, ReservedBits } from '@qrgrid/core';
 
-import { Qr } from '@qrgrid/angular/src/canvas'; // @qrgrid/angular/canvas
+import { Qr } from '@qrgrid/angular/canvas'; // @qrgrid/angular/canvas
 import { drawCircle } from '../../../../../packages/styles/src/canvas'; // @qrgrid/styles/canvas
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ErrorCorrectionLevelType } from '@qrgrid/core';
 
-import { Qr } from '@qrgrid/angular/src/svg'; // @qrgrid/angular/svg
+import { Qr } from '@qrgrid/angular/svg'; // @qrgrid/angular/svg
 
 @Component({
   selector: 'E_01',

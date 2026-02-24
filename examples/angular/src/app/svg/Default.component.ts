@@ -2,7 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { ErrorCorrectionLevelType, QR } from '@qrgrid/core';
 
 import { downloadQr } from '../../../../../packages/styles/src/svg'; // @qrgrid/styles/svg
-import { Qr } from '@qrgrid/angular/src/svg'; // @qrgrid/angular/svg
+import { Qr } from '@qrgrid/angular/svg'; // @qrgrid/angular/svg
 
 @Component({
   selector: 'Default',

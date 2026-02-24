@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ErrorCorrectionLevelType, QR, ReservedBits } from '@qrgrid/core';
 
-import { Qr, ModuleStyleFunctionParams } from '@qrgrid/angular/src/svg'; // @qrgrid/angular/svg
+import { Qr, ModuleStyleFunctionParams } from '@qrgrid/angular/svg'; // @qrgrid/angular/svg
 import {
   getFinderPatternDetails,
   isOuterFinderPattern,
