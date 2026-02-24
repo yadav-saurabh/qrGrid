@@ -1,6 +1,6 @@
 {
   "name": "@qrgrid/core",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "module": "src/index.ts",
   "main": "src/index.ts",
   "type": "module",
