@@ -26,6 +26,7 @@ export default defineConfig({
     ],
   ],
   cleanUrls: true,
+  ignoreDeadLinks: ["/examples", "/generate"],
   srcExclude: ["**/README.md"],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config

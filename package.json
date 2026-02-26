@@ -42,6 +42,10 @@
       "@parcel/watcher",
       "lmdb",
       "msgpackr-extract"
-    ]
+    ],
+    "overrides": {
+      "esbuild": ">=0.25.0",
+      "ajv": ">=8.18.0"
+    }
   }
 }

@@ -65,7 +65,7 @@
     "karma-coverage": "catalog:",
     "karma-jasmine": "catalog:",
     "karma-jasmine-html-reporter": "catalog:",
-    "ng-packagr": "^21.1.0",
+    "ng-packagr": "^21.2.0",
     "rxjs": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:",
