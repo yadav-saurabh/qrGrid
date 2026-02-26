@@ -47,6 +47,8 @@ function resolveWorkspaceDeps(deps) {
   return resolved;
 }
 
+const published = [];
+
 const publishable = packageDirs.filter((dir) => {
   const pkgPath = path.join(dir, "package.json");
   if (!fs.existsSync(pkgPath)) return false;
@@ -96,9 +98,34 @@ for (const pkgDir of publishable) {
       cwd: distDir,
       stdio: "inherit",
     });
+    published.push({ name: distPkg.name, version: distPkg.version });
   } catch {
     console.error(`Failed to publish ${distPkg.name}`);
     process.exit(1);
+  }
+}
+
+// Create GitHub releases for published packages (requires gh CLI + GITHUB_TOKEN)
+if (published.length > 0 && process.env.GITHUB_TOKEN) {
+  for (const { name, version } of published) {
+    const tag = `${name}@${version}`;
+    console.log(`\nCreating GitHub release for ${tag}`);
+    try {
+      execSync(`git tag ${tag}`, { stdio: "inherit" });
+    } catch {
+      // Tag may already exist
+    }
+    try {
+      execSync(`git push origin ${tag}`, { stdio: "inherit" });
+      execSync(
+        `gh release create ${tag} --title "${tag}" --notes "See [changelog](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/${name.replace("@qrgrid/", "")}/CHANGELOG.md) for details." --latest=false`,
+        { stdio: "inherit" },
+      );
+    } catch (e) {
+      console.warn(
+        `Warning: could not create release for ${tag}: ${e.message}`,
+      );
+    }
   }
 }
 
