@@ -118,7 +118,7 @@ if (published.length > 0 && process.env.GITHUB_TOKEN) {
     try {
       execSync(`git push origin ${tag}`, { stdio: "inherit" });
       execSync(
-        `gh release create ${tag} --title "${tag}" --notes "See [changelog](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/${name.replace("@qrgrid/", "")}/CHANGELOG.md) for details." --latest=false`,
+        `gh release create ${tag} --title "${tag}" --notes "See [changelog](https://github.com/yadav-saurabh/qrGrid/blob/main/packages/${name.replace("@qrgrid/", "")}/CHANGELOG.md) for details."`,
         { stdio: "inherit" },
       );
     } catch (e) {
