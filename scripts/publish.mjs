@@ -79,7 +79,7 @@ for (const pkgDir of publishable) {
   console.log(`\nPublishing ${distPkg.name}@${distPkg.version}`);
 
   try {
-    execSync("npm publish --access public", {
+    execSync("npm publish --access public --provenance", {
       cwd: distDir,
       stdio: "inherit",
     });
