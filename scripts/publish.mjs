@@ -76,6 +76,19 @@ for (const pkgDir of publishable) {
 
   fs.writeFileSync(distPkgPath, JSON.stringify(distPkg, null, 2) + "\n");
 
+  // Check if this version is already published
+  try {
+    execSync(`npm view ${distPkg.name}@${distPkg.version} version`, {
+      stdio: "pipe",
+    });
+    console.log(
+      `\nSkipping ${distPkg.name}@${distPkg.version} — already published`,
+    );
+    continue;
+  } catch {
+    // Not published yet, proceed
+  }
+
   console.log(`\nPublishing ${distPkg.name}@${distPkg.version}`);
 
   try {
