@@ -14,15 +14,15 @@ catalog:
   "@rollup/plugin-node-resolve": ^16.0.0
   "@rollup/plugin-typescript": ^12.1.2
   "@types/jasmine": ^6.0.0
-  "@types/node": ^25.3.0
+  "@types/node": ^25.3.1
   "@types/react": ^19.0.10
   "@types/react-dom": ^19.0.4
-  "@typescript-eslint/eslint-plugin": ^8.25.0
-  "@typescript-eslint/parser": ^8.25.0
+  "@eslint/js": ^10.0.1
   "@vitejs/plugin-vue": ^6.0.4
-  eslint: ^9.21.0
+  eslint: ^10.0.2
   eslint-plugin-react-hooks: ^7.0.1
-  eslint-plugin-react-refresh: ^0.5.1
+  eslint-plugin-react-refresh: ^0.5.2
+  typescript-eslint: ^8.56.1
   jasmine-core: ^6.1.0
   karma: ^6.4.4
   karma-chrome-launcher: ^3.2.0
@@ -35,6 +35,6 @@ catalog:
   tslib: ^2.8.1
   typescript: ^5.9.3
   vite: ^7.3.1
-  vue: ^3.5.13
+  vue: ^3.5.29
   vue-tsc: ^3.2.5
   zone.js: ^0.16.1

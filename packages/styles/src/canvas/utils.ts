@@ -32,7 +32,7 @@ export function drawCircleOutline(
   strength?: number
 ) {
   const radius = Math.floor(module.size / 2);
-  let width = strength || radius * 0.25;
+  const width = strength || radius * 0.25;
   ctx.beginPath();
   ctx.arc(module.x + radius, module.y + radius, radius, 0, 2 * Math.PI);
   ctx.arc(

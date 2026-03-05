@@ -29,7 +29,7 @@
     "build": "rimraf ./dist && rollup -c && node ../../scripts/build-pkg.mjs",
     "type-check": "tsc --noEmit",
     "tsc:build": "tsc -b",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@qrgrid/core": "workspace:*"
@@ -38,11 +38,11 @@
     "@rollup/plugin-typescript": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@typescript-eslint/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:",
+    "@eslint/js": "catalog:",
     "eslint": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
     "eslint-plugin-react-refresh": "catalog:",
+    "typescript-eslint": "catalog:",
     "rimraf": "catalog:",
     "rollup": "catalog:",
     "typescript": "catalog:"

@@ -17,6 +17,7 @@
     "docs"
   ],
   "dependencies": {
+    "@qrgrid/core": "workspace:*",
     "@qrgrid/styles": "workspace:*",
     "@qrgrid/vue": "workspace:*"
   },

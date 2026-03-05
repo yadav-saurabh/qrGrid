@@ -38,16 +38,17 @@
     "build": "rimraf ./dist && rollup -c && node ../../scripts/build-pkg.mjs",
     "type-check": "tsc --noEmit",
     "tsc:build": "tsc -b",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@qrgrid/core": "workspace:*"
   },
   "devDependencies": {
+    "@eslint/js": "catalog:",
     "@rollup/plugin-typescript": "catalog:",
-    "@typescript-eslint/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:",
     "eslint": "catalog:",
+    "globals": "^17.3.0",
+    "typescript-eslint": "catalog:",
     "rimraf": "catalog:",
     "rollup": "catalog:",
     "typescript": "catalog:"

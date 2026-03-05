@@ -7,6 +7,7 @@
     "dev": "tsx watch ./express/index.ts"
   },
   "dependencies": {
+    "@qrgrid/core": "workspace:*",
     "@qrgrid/server": "workspace:*",
     "@qrgrid/styles": "workspace:*",
     "express": "^5.2.1"

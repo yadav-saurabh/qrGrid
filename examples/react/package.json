@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@qrgrid/core": "workspace:*",
     "@qrgrid/react": "workspace:*",
     "@qrgrid/styles": "workspace:*",
     "react": "^19.0.0",
@@ -17,12 +18,12 @@
   "devDependencies": {
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@typescript-eslint/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:",
+    "@eslint/js": "catalog:",
     "@vitejs/plugin-react": "^5.1.4",
     "eslint": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
     "eslint-plugin-react-refresh": "catalog:",
+    "typescript-eslint": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:"
   }

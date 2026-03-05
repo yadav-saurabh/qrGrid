@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^21.2.0",
     "@angular/router": "^21.2.0",
     "@qrgrid/angular": "workspace:*",
+    "@qrgrid/core": "workspace:*",
     "rxjs": "catalog:",
     "tslib": "catalog:",
     "zone.js": "catalog:"

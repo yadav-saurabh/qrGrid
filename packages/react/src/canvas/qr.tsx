@@ -25,7 +25,7 @@ const DEFAULT_IMG_OVERLAP = true;
 function applyModuleStyle(
   ctx: ModuleStyleFunctionParams[0],
   module: ModuleStyleFunctionParams[1],
-  _qr: ModuleStyleFunctionParams[2]
+  _qr: ModuleStyleFunctionParams[2],
 ) {
   ctx.fillRect(module.x, module.y, module.size, module.size);
 }
@@ -40,22 +40,157 @@ function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
   // forward canvas ref to the parent component
   useImperativeHandle(ref, () => canvasRef.current!, []);
 
-  useEffect(() => {
-    if (!canvasRef?.current) {
-      return;
+  function overlappingImage(
+    module: { x: number; y: number; size: number },
+    imgArea?: { x: number; y: number; dx: number; dy: number },
+    overlap?: boolean,
+    hasBorder?: boolean,
+  ): boolean {
+    if (!imgArea || overlap === true) {
+      return false;
     }
-    generateQr();
-  }, [
-    props.input,
-    props.qrOptions?.errorCorrection,
-    props.size,
-    props.image?.src,
-    props.image?.opacity,
-    props.image?.sizePercent,
-    props.image?.overlap,
-    props.image?.border,
-    props.watchKey,
-  ]);
+
+    const moduleXEnd = module.x + module.size;
+    const moduleYEnd = module.y + module.size;
+    const border = hasBorder ? module.size : 0;
+
+    return (
+      module.x < imgArea.dx + border &&
+      module.y < imgArea.dy + border &&
+      moduleXEnd > imgArea.x - border &&
+      moduleYEnd > imgArea.y - border
+    );
+  }
+
+  // placing each modules in x,y position in the canvas using fillRect
+  function drawQrModules(
+    ctx: CanvasRenderingContext2D,
+    qr: QR,
+    size: number,
+    moduleStyleFunction: ModuleStyleFunction,
+    imgArea?: { x: number; y: number; dx: number; dy: number },
+    overlap?: boolean,
+    hasBorder?: boolean,
+  ) {
+    let x = size;
+    let y = size;
+    for (let i = 0; i < qr.data.length; i++) {
+      const bit = qr.data[i];
+      if (
+        bit &&
+        !overlappingImage({ x, y, size }, imgArea, overlap, hasBorder)
+      ) {
+        moduleStyleFunction(ctx, { index: i, x, y, size }, qr);
+      }
+      x += size;
+      if (i % qr.gridSize === qr.gridSize - 1) {
+        x = size;
+        y += size;
+      }
+    }
+  }
+
+  // background color
+  function drawBackgroundColor(ctx: CanvasRenderingContext2D) {
+    const size = canvasRef.current!.height;
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle =
+      typeof props.bgColor === "function"
+        ? props.bgColor(ctx)
+        : props.bgColor || DEFAULT_BG_COLOR;
+
+    ctx.fillRect(0, 0, size, size);
+    ctx.restore();
+  }
+
+  function drawImageInCenter(
+    ctx: CanvasRenderingContext2D,
+    qr: QR,
+    size: number,
+    moduleStyleFunction: ModuleStyleFunction,
+  ) {
+    const img = new Image();
+    img.src = props.image!.src;
+    // resolve overlap and border defaults without mutating props
+    const imageOverlap =
+      props.image!.overlap === undefined
+        ? DEFAULT_IMG_OVERLAP
+        : props.image!.overlap;
+    const imageBorder =
+      props.image!.border === undefined
+        ? DEFAULT_IMG_BORDER
+        : props.image!.border;
+    img.onload = () => {
+      const canvasSize = canvasRef.current!.height;
+      // clear previous canvas
+      ctx.clearRect(0, 0, canvasSize, canvasSize);
+      // Calculate the desired height and width while maintaining the aspect ratio
+      const maxImgSizePercent = props.image?.sizePercent || DEFAULT_IMG_SIZE;
+      const maxDimension = canvasSize * (maxImgSizePercent * 0.01);
+      let dHeight = img.width;
+      let dWidth = img.height;
+      // Calculate aspect ratio
+      const imgAspectRatio = img.width / img.height;
+      if (dWidth > dHeight) {
+        dWidth = maxDimension;
+        dHeight = maxDimension / imgAspectRatio;
+      } else {
+        dHeight = maxDimension;
+        dWidth = maxDimension * imgAspectRatio;
+      }
+      const dxLogo = (canvasSize - dWidth) / 2;
+      const dyLogo = (canvasSize - dHeight) / 2;
+
+      // draw qr module first
+      const imgArea = {
+        x: dxLogo,
+        y: dyLogo,
+        dx: dxLogo + dWidth,
+        dy: dyLogo + dHeight,
+      };
+      // qr modules
+      drawQrModules(
+        ctx,
+        qr,
+        size,
+        moduleStyleFunction,
+        imgArea,
+        imageOverlap,
+        imageBorder,
+      );
+      // draw image
+      ctx.save();
+      ctx.globalAlpha = props.image?.opacity || DEFAULT_IMG_OPACITY;
+      ctx.drawImage(img, dxLogo, dyLogo, dWidth, dHeight);
+      ctx.restore();
+      // background color
+      drawBackgroundColor(ctx);
+      // event once everything is drawn
+      if (props.onGenerated) {
+        props.onGenerated(ctx, size, qr);
+      }
+    };
+    img.onerror = () => {
+      console.error("qrgrid: Error while loading the image");
+      // qr modules
+      drawQrModules(
+        ctx,
+        qr,
+        size,
+        moduleStyleFunction,
+        undefined,
+        imageOverlap,
+        imageBorder,
+      );
+      // background color
+      drawBackgroundColor(ctx);
+      // event once everything is drawn
+      if (props.onGenerated) {
+        props.onGenerated(ctx, size, qr);
+      }
+    };
+  }
 
   /**
    * generateQr draws the QR code on a canvas
@@ -81,7 +216,7 @@ function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
       props.getQrData(qr);
     }
     // calculate module size and adjusting canvas to height and wight
-    let size = Math.floor(canvasSize / (qr.gridSize + 1.5));
+    const size = Math.floor(canvasSize / (qr.gridSize + 1.5));
     const border = Math.ceil(size * qr.gridSize - canvasSize) + size * 2;
     canvasRef.current!.height = canvasSize + border;
     canvasRef.current!.width = canvasSize + border;
@@ -113,134 +248,23 @@ function QrComponent(props: QrProps, ref: Ref<HTMLCanvasElement>) {
     }
   }
 
-  function drawImageInCenter(
-    ctx: CanvasRenderingContext2D,
-    qr: QR,
-    size: number,
-    moduleStyleFunction: ModuleStyleFunction
-  ) {
-    const img = new Image();
-    img.src = props.image!.src;
-    // set overlap and border to bool if undefined
-    props.image!.overlap =
-      props.image!.overlap === undefined
-        ? DEFAULT_IMG_OVERLAP
-        : props.image!.overlap;
-    props.image!.border =
-      props.image!.border === undefined
-        ? DEFAULT_IMG_BORDER
-        : props.image!.border;
-    img.onload = () => {
-      const canvasSize = canvasRef.current!!.height;
-      // clear previous canvas
-      ctx.clearRect(0, 0, canvasSize, canvasSize);
-      // Calculate the desired height and width while maintaining the aspect ratio
-      const maxImgSizePercent = props.image?.sizePercent || DEFAULT_IMG_SIZE;
-      const maxDimension = canvasSize * (maxImgSizePercent * 0.01);
-      let dHeight = img.width;
-      let dWidth = img.height;
-      // Calculate aspect ratio
-      const imgAspectRatio = img.width / img.height;
-      if (dWidth > dHeight) {
-        dWidth = maxDimension;
-        dHeight = maxDimension / imgAspectRatio;
-      } else {
-        dHeight = maxDimension;
-        dWidth = maxDimension * imgAspectRatio;
-      }
-      const dxLogo = (canvasSize - dWidth) / 2;
-      const dyLogo = (canvasSize - dHeight) / 2;
-
-      // draw qr module first
-      const imgArea = {
-        x: dxLogo,
-        y: dyLogo,
-        dx: dxLogo + dWidth,
-        dy: dyLogo + dHeight,
-      };
-      // qr modules
-      drawQrModules(ctx, qr, size, moduleStyleFunction, imgArea);
-      // draw image
-      ctx.save();
-      ctx.globalAlpha = props.image?.opacity || DEFAULT_IMG_OPACITY;
-      ctx.drawImage(img, dxLogo, dyLogo, dWidth, dHeight);
-      ctx.restore();
-      // background color
-      drawBackgroundColor(ctx);
-      // event once everything is drawn
-      if (props.onGenerated) {
-        props.onGenerated(ctx, size, qr);
-      }
-    };
-    img.onerror = () => {
-      console.error("qrgrid: Error while loading the image");
-      // qr modules
-      drawQrModules(ctx, qr, size, moduleStyleFunction);
-      // background color
-      drawBackgroundColor(ctx);
-      // event once everything is drawn
-      if (props.onGenerated) {
-        props.onGenerated(ctx, size, qr);
-      }
-    };
-  }
-
-  // placing each modules in x,y position in the canvas using fillRect
-  function drawQrModules(
-    ctx: CanvasRenderingContext2D,
-    qr: QR,
-    size: number,
-    moduleStyleFunction: ModuleStyleFunction,
-    imgArea?: { x: number; y: number; dx: number; dy: number }
-  ) {
-    let x = size;
-    let y = size;
-    for (let i = 0; i < qr.data.length; i++) {
-      const bit = qr.data[i];
-      if (bit && !overlappingImage({ x, y, size }, imgArea)) {
-        moduleStyleFunction(ctx, { index: i, x, y, size }, qr);
-      }
-      x += size;
-      if (i % qr.gridSize === qr.gridSize - 1) {
-        x = size;
-        y += size;
-      }
+  useEffect(() => {
+    if (!canvasRef?.current) {
+      return;
     }
-  }
-
-  function overlappingImage(
-    module: { x: number; y: number; size: number },
-    imgArea?: { x: number; y: number; dx: number; dy: number }
-  ): boolean {
-    if (!imgArea || props.image?.overlap === true) {
-      return false;
-    }
-
-    const moduleXEnd = module.x + module.size;
-    const moduleYEnd = module.y + module.size;
-    const border = props.image?.border ? module.size : 0;
-
-    return (
-      module.x < imgArea.dx + border &&
-      module.y < imgArea.dy + border &&
-      moduleXEnd > imgArea.x - border &&
-      moduleYEnd > imgArea.y - border
-    );
-  }
-
-  // background color
-  function drawBackgroundColor(ctx: CanvasRenderingContext2D) {
-    const size = canvasRef.current!!.height;
-    ctx.save();
-    ctx.globalCompositeOperation = "destination-over";
-    ctx.fillStyle =
-      typeof props.bgColor === "function"
-        ? props.bgColor(ctx)
-        : props.bgColor || DEFAULT_BG_COLOR;
-
-    ctx.fillRect(0, 0, size, size);
-    ctx.restore();
-  }
+    generateQr();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally curated dependency list to avoid re-renders
+  }, [
+    props.input,
+    props.qrOptions?.errorCorrection,
+    props.size,
+    props.image?.src,
+    props.image?.opacity,
+    props.image?.sizePercent,
+    props.image?.overlap,
+    props.image?.border,
+    props.watchKey,
+  ]);
 
   return (
     <canvas

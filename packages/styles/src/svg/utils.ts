@@ -20,10 +20,10 @@ export type CornerType =
 export function getRoundCornerPath(
   module: ModuleType,
   type: CornerType[],
-  cornerSize = 0
+  cornerSize = 0,
 ) {
   const { x, y, size } = module;
-  let d = cornerSize || 0.5 * size;
+  const d = cornerSize || 0.5 * size;
   if (d > size) {
     throw new Error("cornerSize cannot be greater than size");
   }
@@ -61,7 +61,7 @@ export function getRoundCornerPath(
     ? `v-${bottomRight ? size - d - d : size - d} q0 ${-d} ${-d} ${-d}`
     : `v-${bottomRight ? size - d : size}`;
 
-  return (path += "z");
+  return path + "z";
 }
 
 /**
@@ -70,7 +70,7 @@ export function getRoundCornerPath(
 export function getCornerArcPath(
   module: ModuleType,
   type: CornerType,
-  cornerSize = 0
+  cornerSize = 0,
 ) {
   const { x, y, size } = module;
   const d = cornerSize || 0.5 * size;
@@ -97,8 +97,8 @@ export function getCornerArcPath(
  */
 export function getCirclePath(x: number, y: number, size: number) {
   const r = Math.floor(size / 2);
-  let cx = x + r;
-  let cy = y + r;
+  const cx = x + r;
+  const cy = y + r;
   return `M${cx - r} ${cy}a ${r} ${r} 0 1 0 ${r * 2} 0a ${r} ${r} 0 1 0 -${r * 2} 0`;
 }
 
@@ -109,12 +109,12 @@ export function getCircleOutlinePath(
   x: number,
   y: number,
   size: number,
-  strength?: number
+  strength?: number,
 ) {
   const r = Math.floor(size / 2);
-  let d = strength || r * 0.25;
-  let cx = x;
-  let cy = y + r;
+  const d = strength || r * 0.25;
+  const cx = x;
+  const cy = y + r;
   return `M${cx} ${cy}a ${r} ${r} 0 1 0 ${r * 2} 0 m-${d} 0a ${r - d} ${r - d} 0 0 1 -${(r - d) * 2} 0 h-${d} a ${r} ${r} 0 0 1 ${r * 2} 0 m-${d} 0a ${r - d} ${r - d} 0 0 0 -${(r - d) * 2} 0 h-${d}z`;
 }
 
@@ -189,7 +189,7 @@ function downloadFile(blob: Blob, name?: string) {
 export function downloadQr(
   svg: SVGSVGElement,
   type?: "svg" | "png" | "jpeg" | "webp",
-  name?: string
+  name?: string,
 ) {
   const svgBlob = new Blob([svg.outerHTML], {
     type: "image/svg+xml;charset=utf-8",

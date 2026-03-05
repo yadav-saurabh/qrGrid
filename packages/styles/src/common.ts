@@ -41,7 +41,7 @@ export function getNeighbor(index: number, qr: QR) {
 export function getFinderPatternDetails(size: number, qr: QR) {
   const { gridSize } = qr;
 
-  let positions = {
+  const positions = {
     inner: [
       { x: size * 3, y: size * 3 },
       { x: size * (gridSize - 4), y: size * 3 },
