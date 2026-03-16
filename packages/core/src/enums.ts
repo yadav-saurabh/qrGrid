@@ -1,36 +1,31 @@
 /**
- * exposed const to end user
+ * Public-facing constants and types for QR code generation.
  * @module
  */
 
-/**
- * Qr Code Error Correction Levels
- */
+/** QR code error correction levels. */
 export type ErrorCorrectionLevelType = "L" | "M" | "Q" | "H";
-export const ErrorCorrectionLevel: Record<
-  ErrorCorrectionLevelType,
-  ErrorCorrectionLevelType
-> = {
+
+/** Error correction level constants. */
+export const ErrorCorrectionLevel = {
   L: "L",
   M: "M",
   Q: "Q",
   H: "H",
-};
+} as const satisfies Record<ErrorCorrectionLevelType, ErrorCorrectionLevelType>;
 
-/**
- * Qr Code Modes
- */
+/** QR code encoding modes. */
 export type ModeType = "Numeric" | "AlphaNumeric" | "Byte" | "Kanji";
-export const Mode: Record<ModeType, ModeType> = {
+
+/** Encoding mode constants. */
+export const Mode = {
   Numeric: "Numeric",
   AlphaNumeric: "AlphaNumeric",
   Byte: "Byte",
   Kanji: "Kanji",
-};
+} as const satisfies Record<ModeType, ModeType>;
 
-/**
- * Reserved bits types
- */
+/** Types of reserved bit regions in the QR grid. */
 export type ReservedBitsType =
   | "FinderPattern"
   | "AlignmentPattern"
@@ -39,7 +34,9 @@ export type ReservedBitsType =
   | "VersionInfo"
   | "DarkModule"
   | "Separator";
-export const ReservedBits: Record<ReservedBitsType, ReservedBitsType> = {
+
+/** Reserved bit type constants. */
+export const ReservedBits = {
   FinderPattern: "FinderPattern",
   AlignmentPattern: "AlignmentPattern",
   TimingPattern: "TimingPattern",
@@ -47,4 +44,4 @@ export const ReservedBits: Record<ReservedBitsType, ReservedBitsType> = {
   VersionInfo: "VersionInfo",
   DarkModule: "DarkModule",
   Separator: "Separator",
-};
+} as const satisfies Record<ReservedBitsType, ReservedBitsType>;

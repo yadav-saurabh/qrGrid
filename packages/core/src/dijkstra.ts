@@ -1,40 +1,57 @@
 /**
- * function to find shortest distant in graph(segments) using dijkstra algorithm 
+ * Dijkstra's shortest path algorithm for optimizing QR segment encoding.
  * @module
  */
 
+/** Weighted directed graph represented as adjacency list with numeric weights. */
+export interface Graph {
+  [node: string]: { [neighbor: string]: number };
+}
+
+/** Result of running Dijkstra's algorithm. */
+export interface DijkstraResult {
+  /** Shortest distance from the start node to each reachable node. */
+  distances: { [node: string]: number };
+  /** Previous node in the shortest path tree (null for the start node). */
+  previous: { [node: string]: string | null };
+}
+
 /**
- * a simple priority queue implementation
+ * A simple array-backed priority queue.
+ *
+ * Sufficient for the small graphs produced during QR segment optimization
+ * (typically < 20 nodes).
  */
 class PriorityQueue<T> {
-  private data: { node: T; priority: number }[] = [];
+  private readonly items: { node: T; priority: number }[] = [];
 
-  enqueue(node: T, priority: number) {
-    this.data.push({ node, priority });
-    this.data.sort((a, b) => a.priority - b.priority);
+  /** Inserts a node with the given priority. */
+  enqueue(node: T, priority: number): void {
+    this.items.push({ node, priority });
+    this.items.sort((a, b) => a.priority - b.priority);
   }
 
+  /** Removes and returns the node with the lowest priority, or `undefined` if empty. */
   dequeue(): T | undefined {
-    return this.data.shift()?.node;
+    return this.items.shift()?.node;
   }
 
+  /** Returns `true` when the queue contains no items. */
   isEmpty(): boolean {
-    return this.data.length === 0;
+    return this.items.length === 0;
   }
 }
 
-type Graph = { [key: string]: { [key: string]: number } };
-type DijkstraReturn = {
-  distances: { [key: string]: number };
-  previous: { [key: string]: string | null };
-};
-
 /**
- * dijkstra implementation
+ * Computes shortest paths from `start` to all reachable nodes using Dijkstra's algorithm.
+ *
+ * @param graph - Weighted directed graph (adjacency list).
+ * @param start - Starting node key.
+ * @returns Shortest distances and the previous-node map for path reconstruction.
  */
-export function dijkstra(graph: Graph, start: string): DijkstraReturn {
-  const distances: { [key: string]: number } = {};
-  const previous: { [key: string]: string | null } = {};
+export function dijkstra(graph: Graph, start: string): DijkstraResult {
+  const distances: DijkstraResult["distances"] = {};
+  const previous: DijkstraResult["previous"] = {};
   const pq = new PriorityQueue<string>();
   const visited = new Set<string>();
 
@@ -45,11 +62,10 @@ export function dijkstra(graph: Graph, start: string): DijkstraReturn {
   }
   distances[start] = 0;
 
-  // Start with the starting node
   pq.enqueue(start, 0);
 
   while (!pq.isEmpty()) {
-    const currentNode = pq.dequeue() as string;
+    const currentNode = pq.dequeue()!;
 
     if (visited.has(currentNode)) {
       continue;
@@ -71,10 +87,18 @@ export function dijkstra(graph: Graph, start: string): DijkstraReturn {
   return { distances, previous };
 }
 
+/**
+ * Reconstructs the shortest path from `start` to `target` using the previous-node map.
+ *
+ * @param previous - Previous-node map produced by {@link dijkstra}.
+ * @param start - Starting node key.
+ * @param target - Target node key.
+ * @returns Ordered array of node keys from `start` to `target`, or an empty array if no path exists.
+ */
 export function getPath(
-  previous: { [key: string]: string | null },
+  previous: DijkstraResult["previous"],
   start: string,
-  target: string
+  target: string,
 ): string[] {
   const path: string[] = [];
   let currentNode: string | null = target;
@@ -84,9 +108,9 @@ export function getPath(
     currentNode = previous[currentNode];
   }
 
-  // If the start node is not in the path, it means there is no path to the target
+  // If the start node is not at the end of the reversed path, no path exists
   if (path[path.length - 1] !== start) {
-    return []; // No path found
+    return [];
   }
 
   return path.reverse();

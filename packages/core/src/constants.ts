@@ -1,165 +1,156 @@
 /**
- * constants used in generating the qr
+ * QR code specification constants and lookup tables.
  * @module
  */
 
 import { ErrorCorrectionLevel, Mode } from "./enums.js";
 
 /**
- * Alphanumeric mode character set
- * - 0 : 0
- * - 1 : 1
- * - ...
- * - A : 10
- * - B : 11
- * - ...
+ * Alphanumeric mode character set (45 characters).
+ *
+ * Characters are indexed by their position in the string:
+ * `0`=0, `1`=1, ... `9`=9, `A`=10, `B`=11, ... `Z`=35, ` `=36, `$`=37, etc.
  */
 export const ALPHANUMERIC_CHARSET =
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:";
 
-/**
- * No of modules for outer dark square of Finder Pattern: `7 x 7`
- */
-export const FINDER_PATTERN_SIZE = 7;
+/** Number of modules for the outer dark square of a Finder Pattern: 7x7. */
+export const FINDER_PATTERN_SIZE = 7 as const;
+
+/** Number of modules for the outer dark square of an Alignment Pattern: 5x5. */
+export const ALIGNMENT_PATTERN_SIZE = 5 as const;
 
 /**
- * No of modules for outer dark square of Alignment Pattern: `5 x 5`
+ * Total number of alignment patterns per subdivision count.
+ *
+ * Index is `Math.floor(version / 7)`.
+ *
+ * @example
+ * const index = Math.floor(version / 7);
+ * const total = ALIGNMENT_PATTERN_TOTALS[index];
  */
-export const ALIGNMENT_PATTERN_SIZE = 5;
+export const ALIGNMENT_PATTERN_TOTALS = [1, 6, 13, 22, 33, 46] as const;
 
 /**
- * No of alignment patterns for a given QR version
- * - v 01-06   : index 0
- * - v 07-13  : index 1
- * - v 14-20 : index 2
- * - ...
- * @example // to get the value of a specific version
- * index = floor(version / 7)
- * ALIGNMENT_PATTERN_TOTALS[index]
- */
-export const ALIGNMENT_PATTERN_TOTALS = [1, 6, 13, 22, 33, 46];
-
-/**
- * ALIGNMENT_PATTERN_DIFFS
+ * Step size between alignment pattern centers for each QR version (1-40).
+ *
+ * Index is `version - 1`. Version 1 has no alignment patterns (value 0).
  */
 export const ALIGNMENT_PATTERN_DIFFS = [
   0, 12, 16, 20, 24, 28, 16, 18, 20, 22, 24, 26, 28, 20, 22, 24, 24, 26, 28, 28,
   22, 24, 24, 26, 26, 28, 28, 24, 24, 26, 26, 26, 28, 28, 24, 26, 26, 26, 28,
   28,
-];
+] as const;
+
+/** Mode indicator is always 4 bits. */
+export const MODE_INDICATOR_BITS = 4 as const;
 
 /**
- * Mode Indicator Total `4 bits`
- */
-export const MODE_INDICATOR_BITS = 4;
-
-/**
- * Mode Indicator values for different modes
- * - Numeric:       0001 (0x1)
- * - AlphaNumeric:  0010 (0x2)
- * - Byte:          0100 (0x4)
- * - Kanji:         1000 (0x8)
+ * 4-bit mode indicator values.
+ *
+ * - Numeric:      0001 (0x1)
+ * - AlphaNumeric: 0010 (0x2)
+ * - Byte:         0100 (0x4)
+ * - Kanji:        1000 (0x8)
  */
 export const MODE_INDICATOR = {
   [Mode.Numeric]: 0b0001,
   [Mode.AlphaNumeric]: 0b0010,
   [Mode.Byte]: 0b0100,
   [Mode.Kanji]: 0b1000,
-};
+} as const;
 
 /**
- * get version range of the qr based on the character count
- * - index 0 : v < 9
- * - index 1 : v < 26
- * - index 2 : v < 40
+ * Maximum QR version for each character count indicator size range.
+ *
+ * - Index 0: versions 1-9
+ * - Index 1: versions 10-26
+ * - Index 2: versions 27-40
  */
-export const CHARACTER_COUNT_MAX_VERSION = [9, 26, 40];
+export const CHARACTER_COUNT_MAX_VERSION = [9, 26, 40] as const;
 
 /**
- * Number of bits in Character Count Indicator for different mode and Qr version
- * - v 01-09 : index 0
- * - v 10-26 : index 1
- * - v 27-40 : index 2
- * @example // to get the value of a specific mode and version
- * index = 0
- * if version > 9
- *   index = 1
- * if version > 26
- *   index = 2
- * CHARACTER_COUNT_INDICATOR[Mode][index]
+ * Number of bits in the Character Count Indicator, indexed by mode and version range.
+ *
+ * - Index 0: versions 1-9
+ * - Index 1: versions 10-26
+ * - Index 2: versions 27-40
+ *
+ * @example
+ * let index = 0;
+ * if (version > 26) index = 2;
+ * else if (version > 9) index = 1;
+ * const bits = CHARACTER_COUNT_INDICATOR[mode][index];
  */
 export const CHARACTER_COUNT_INDICATOR = {
   [Mode.Numeric]: [10, 12, 14],
   [Mode.AlphaNumeric]: [9, 11, 13],
   [Mode.Byte]: [8, 16, 16],
   [Mode.Kanji]: [8, 10, 12],
-};
+} as const;
 
 /**
- * Number of bits for a mode
- * - Numeric      : 10 bits 3 character
- * - AlphaNumeric : 11 bits 2 character
- * - Byte         : 8 bits per character
- * - Kanji        : 13 bits per character
+ * Bit lengths for encoding data in each mode.
+ *
+ * - Numeric:      [4, 7, 10] bits for 1, 2, 3 digits respectively
+ * - AlphaNumeric: [6, 11] bits for 1, 2 characters respectively
+ * - Byte:         [8] bits per character
+ * - Kanji:        [13] bits per character
  */
 export const MODE_BITS = {
   [Mode.Numeric]: [4, 7, 10],
   [Mode.AlphaNumeric]: [6, 11],
   [Mode.Byte]: [8],
   [Mode.Kanji]: [13],
-};
+} as const;
 
-/**
- * Number of bits for a error correction level indicator
- */
+/** 2-bit error correction level indicators used in format information. */
 export const ERROR_CORRECTION_BITS = {
   [ErrorCorrectionLevel.L]: 0b01,
   [ErrorCorrectionLevel.M]: 0b00,
   [ErrorCorrectionLevel.Q]: 0b11,
   [ErrorCorrectionLevel.H]: 0b10,
-};
+} as const;
 
-// QR Code mask patterns
+/** The 8 QR code mask pattern functions, each taking (row, col) and returning whether to flip. */
 export const MASK_PATTERNS = [
-  (i: number, j: number) => (i + j) % 2 === 0,
-  (i: number, _: number) => i % 2 === 0,
-  (_: number, j: number) => j % 3 === 0,
-  (i: number, j: number) => (i + j) % 3 === 0,
-  (i: number, j: number) => (Math.floor(i / 2) + Math.floor(j / 3)) % 2 === 0,
-  (i: number, j: number) => ((i * j) % 2) + ((i * j) % 3) === 0,
-  (i: number, j: number) => (((i * j) % 2) + ((i * j) % 3)) % 2 === 0,
-  (i: number, j: number) => (((i + j) % 2) + ((i * j) % 3)) % 2 === 0,
-];
+  (row: number, col: number): boolean => (row + col) % 2 === 0,
+  (row: number, _col: number): boolean => row % 2 === 0,
+  (_row: number, col: number): boolean => col % 3 === 0,
+  (row: number, col: number): boolean => (row + col) % 3 === 0,
+  (row: number, col: number): boolean =>
+    (Math.floor(row / 2) + Math.floor(col / 3)) % 2 === 0,
+  (row: number, col: number): boolean =>
+    ((row * col) % 2) + ((row * col) % 3) === 0,
+  (row: number, col: number): boolean =>
+    (((row * col) % 2) + ((row * col) % 3)) % 2 === 0,
+  (row: number, col: number): boolean =>
+    (((row + col) % 2) + ((row * col) % 3)) % 2 === 0,
+] as const;
 
 /**
- * Pad Codewords
- * - 11101100 (0xEC) : index 0
- * - 00010001 (0x11) : index 1
+ * Pad codewords used to fill remaining data capacity.
+ *
+ * - 0xEC (11101100)
+ * - 0x11 (00010001)
  */
-export const PAD_CODEWORDS = [0xec, 0x11];
+export const PAD_CODEWORDS = [0xec, 0x11] as const;
 
 /**
- * Number of data Codewords for Qr version
- * - v 1 : index 0
- * - v 2 : index 1
- * - v 3 : index 2
- * - ...
- * @example // to get the value of a specific version
- *   index = version - 1
- *   codewords = CODEWORDS[index]
+ * Total codewords (data + error correction) for each QR version (1-40).
+ *
+ * Index is `version - 1`.
  */
 export const CODEWORDS = [
   26, 44, 70, 100, 134, 172, 196, 242, 292, 346, 404, 466, 532, 581, 655, 733,
   815, 901, 991, 1085, 1156, 1258, 1364, 1474, 1588, 1706, 1828, 1921, 2051,
   2185, 2323, 2465, 2611, 2761, 2876, 3034, 3196, 3362, 3532, 3706,
-];
+] as const;
 
 /**
- * Number of data Codewords for different error correction level and Qr version
- * @example // to get the value of a specific mode and version
- *   index = version - 1
- *   errorCorrectionLevel = ErrorCorrectionLevel.M
- *   errorCOrrectionBlock = ERROR_CORRECTION_BLOCK[errorCorrectionLevel][index]
+ * Error correction codeword count by EC level and version.
+ *
+ * Usage: `ERROR_CORRECTION_CODEWORDS[ecLevel][version - 1]`
  */
 export const ERROR_CORRECTION_CODEWORDS = {
   [ErrorCorrectionLevel.L]: [
@@ -182,14 +173,12 @@ export const ERROR_CORRECTION_CODEWORDS = {
     532, 588, 650, 700, 750, 816, 900, 960, 1050, 1110, 1200, 1260, 1350, 1440,
     1530, 1620, 1710, 1800, 1890, 1980, 2100, 2220, 2310, 2430,
   ],
-};
+} as const;
 
 /**
- * Number of data Codewords for different error correction level and version
- * @example // to get the value of a specific mode and version
- *   index = version - 1
- *   errorCorrectionLevel = ErrorCorrectionLevel.M
- *   errorCOrrectionBlock = ERROR_CORRECTION_BLOCK[errorCorrectionLevel][index]
+ * Number of error correction blocks by EC level and version.
+ *
+ * Usage: `ERROR_CORRECTION_BLOCK[ecLevel][version - 1]`
  */
 export const ERROR_CORRECTION_BLOCK = {
   [ErrorCorrectionLevel.L]: [
@@ -208,4 +197,4 @@ export const ERROR_CORRECTION_BLOCK = {
     1, 1, 2, 4, 4, 4, 5, 6, 8, 8, 11, 11, 16, 16, 18, 16, 19, 21, 25, 25, 25,
     34, 30, 32, 35, 37, 40, 42, 45, 48, 51, 54, 57, 60, 63, 66, 70, 74, 77, 81,
   ],
-};
+} as const;
